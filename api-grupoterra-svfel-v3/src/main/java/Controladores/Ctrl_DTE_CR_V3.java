@@ -394,7 +394,12 @@ public class Ctrl_DTE_CR_V3 implements Serializable {
                 List<Adjunto> files = new ArrayList<>();
                 
                 Cliente_Rest_Jasper cliente_rest_jasper = new Cliente_Rest_Jasper();
-                InputStream inputstream = cliente_rest_jasper.reporte_cr_pdf(id_dte.toString());
+                InputStream inputstream;
+                if (ambiente.equals("PY")) {
+                    inputstream = cliente_rest_jasper.reporte_cr_pdf(id_dte.toString());
+                } else {
+                    inputstream = cliente_rest_jasper.reporte_cr_pdf_prod(id_dte.toString());
+                }
                 File TargetFile = new File("/FELSV3/pdf/felsv_cr_" + id_dte + ".pdf");
                 FileUtils.copyInputStreamToFile(inputstream, TargetFile);
                 
@@ -448,7 +453,12 @@ public class Ctrl_DTE_CR_V3 implements Serializable {
                 documento_impresion.setCopies(3);
                 
                 Cliente_Rest_Printer cliente_rest_printer = new Cliente_Rest_Printer("user", "apirestutils");
-                String resul_printer = cliente_rest_printer.printDocumentBase64(new Gson().toJson(documento_impresion));
+                String resul_printer;
+                if (ambiente.equals("PY")) {
+                    resul_printer = cliente_rest_printer.printDocumentBase64(new Gson().toJson(documento_impresion));
+                } else {
+                    resul_printer = cliente_rest_printer.printDocumentBase64_prod(new Gson().toJson(documento_impresion));
+                }
                 // System.out.println("JSON-IMPRESION: " + new Gson().toJson(documento_impresion));
                 // System.out.println("Notificación Impresión: " + resul_printer);
             } else {

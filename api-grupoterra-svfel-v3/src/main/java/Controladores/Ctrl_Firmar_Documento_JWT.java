@@ -14,15 +14,21 @@ public class Ctrl_Firmar_Documento_JWT implements Serializable {
     public Ctrl_Firmar_Documento_JWT() {
     }
 
-    public Json_Firmado firmardocumento(String emisor_nit, String json_sin_firmar) {
+    public Json_Firmado firmardocumento(String ambiente, String emisor_nit, String json_sin_firmar) {
         Json_Firmado resultado = null;
 
         try {
             Cliente_Rest_Firma cliente_rest = new Cliente_Rest_Firma();
-            String json_firmado = cliente_rest.firmardocumento(json_sin_firmar);
+            String json_firmado;
+            if (ambiente.equals("PY")) {
+                json_firmado = cliente_rest.firmardocumento(json_sin_firmar);
+            } else {
+                json_firmado = cliente_rest.firmardocumento_prod(json_sin_firmar);
+            }
             
             Type listType = new TypeToken<Json_Firmado>() {
             }.getType();
+            
             resultado = new Gson().fromJson(json_firmado, listType);
         } catch (Exception ex) {
             resultado = null;

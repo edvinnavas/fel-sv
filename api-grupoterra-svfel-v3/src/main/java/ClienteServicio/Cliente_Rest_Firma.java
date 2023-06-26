@@ -15,6 +15,8 @@ public class Cliente_Rest_Firma implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final String BASE_URI = "http://FirmaJWT-FELSV:8013/firmardocumento/";
+    private static final String BASE_URI_PROD = "http://FirmaJWT-FELSV-PROD:8013/firmardocumento/";
+    
     private ClientConfig clientConfig;
     private Client client;
 
@@ -33,6 +35,25 @@ public class Cliente_Rest_Firma implements Serializable {
 
         try {
             WebTarget webTarget = client.target(BASE_URI);
+            Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
+            Response response = invocationBuilder.post(Entity.json(data));
+            if (response.getStatus() == 200) {
+                resultado = response.readEntity(String.class);
+            } else {
+                resultado = response.getStatus() + ": " + response.getStatusInfo();
+            }
+        } catch (Exception ex) {
+            resultado = "ERROR: " + ex.toString();
+        }
+
+        return resultado;
+    }
+    
+    public String firmardocumento_prod(String data) {
+        String resultado = "";
+
+        try {
+            WebTarget webTarget = client.target(BASE_URI_PROD);
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             Response response = invocationBuilder.post(Entity.json(data));
             if (response.getStatus() == 200) {

@@ -364,10 +364,12 @@ public class Ctrl_DTE_INVALIDACION_V3 implements Serializable {
                 adjunto_json.setPath(null);
                 files.add(adjunto_json);
 
+                String MCU_JDE_I = ctrl_base_datos.ObtenerString("SELECT TRIM(F.FEMCU) FROM " + esquema + ".F5542FEL@" + dblink + " F WHERE TRIM(F.FEKCOO)='" + KCOO_JDE + "' AND F.FEDOCO=" + DOCO_JDE + " AND F.FEDCT='" + DCT_JDE + "'", conn);
+                String DCTO_JDE_I = ctrl_base_datos.ObtenerString("SELECT F.FEDCTO FROM " + esquema + ".F5542FEL@" + dblink + " F WHERE TRIM(F.FEKCOO)='" + KCOO_JDE + "' AND F.FEDOCO=" + DOCO_JDE + " AND F.FEDCT='" + DCT_JDE + "'", conn);
                 Mensaje_Correo mensaje_correo = new Mensaje_Correo();
-                String send_to = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CUENTA_CORREO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CUENTA_CORREO))) CUENTAS_CORREO FROM NOTIFIACION_CORREO_V3 F WHERE F.ACTIVO=1", conn);
+                String send_to = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES F WHERE F.ACTIVO=1 AND F.MCU_JDE='" + MCU_JDE_I + "' AND F.DCTO_JDE='" + DCTO_JDE_I + "'", conn);
                 mensaje_correo.setRecipients(send_to);
-                String send_to_cc = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CUENTA_CORREO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CUENTA_CORREO))) CUENTAS_CORREO FROM NOTIFIACION_CORREO_V3 F WHERE F.ACTIVO=2", conn);
+                String send_to_cc = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES F WHERE F.ACTIVO=2 AND F.MCU_JDE='" + MCU_JDE_I + "' AND F.DCTO_JDE='" + DCTO_JDE_I + "'", conn);
                 mensaje_correo.setCc(send_to_cc);
                 mensaje_correo.setSubject("Anulación DTE.");
                 mensaje_correo.setBody(null);
@@ -391,10 +393,12 @@ public class Ctrl_DTE_INVALIDACION_V3 implements Serializable {
                 adjunto_json.setPath(null);
                 files.add(adjunto_json);
 
+                String MCU_JDE_I = ctrl_base_datos.ObtenerString("SELECT TRIM(F.FEMCU) FROM " + esquema + ".F5542FEL@" + dblink + " F WHERE TRIM(F.FEKCOO)='" + KCOO_JDE + "' AND F.FEDOCO=" + DOCO_JDE + " AND F.FEDCT='" + DCT_JDE + "'", conn);
+                String DCTO_JDE_I = ctrl_base_datos.ObtenerString("SELECT F.FEDCTO FROM " + esquema + ".F5542FEL@" + dblink + " F WHERE TRIM(F.FEKCOO)='" + KCOO_JDE + "' AND F.FEDOCO=" + DOCO_JDE + " AND F.FEDCT='" + DCT_JDE + "'", conn);
                 Mensaje_Correo mensaje_correo = new Mensaje_Correo();
-                String send_to = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CUENTA_CORREO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CUENTA_CORREO))) CUENTAS_CORREO FROM NOTIFIACION_CORREO_V3 F WHERE F.ACTIVO=1", conn);
+                String send_to = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES F WHERE F.ACTIVO=1 AND F.MCU_JDE='" + MCU_JDE_I + "' AND F.DCTO_JDE='" + DCTO_JDE_I + "'", conn);
                 mensaje_correo.setRecipients(send_to);
-                String send_to_cc = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CUENTA_CORREO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CUENTA_CORREO))) CUENTAS_CORREO FROM NOTIFIACION_CORREO_V3 F WHERE F.ACTIVO=2", conn);
+                String send_to_cc = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES F WHERE F.ACTIVO=2 AND F.MCU_JDE='" + MCU_JDE_I + "' AND F.DCTO_JDE='" + DCTO_JDE_I + "'", conn);
                 mensaje_correo.setCc(send_to_cc);
                 mensaje_correo.setSubject("Error Anulación DTE.");
                 mensaje_correo.setBody(null);

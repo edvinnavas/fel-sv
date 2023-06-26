@@ -481,7 +481,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                     Long ID_CAT_015_IEC = Long.valueOf("9");
                     Long ID_CAT_014_IEC = Long.valueOf("56");
 
-                    Number PRECIOUNIIEC_TEMP = PRECIOUNIIEC.doubleValue() / CANTIDAD;
+                    // Number PRECIOUNIIEC_TEMP = PRECIOUNIIEC.doubleValue() / CANTIDAD;
                     VENTAEXENTA = 0.00;
                     VENTAGRAVADA = PRECIOUNIIEC;
                     NOGRAVADO = 0.00;

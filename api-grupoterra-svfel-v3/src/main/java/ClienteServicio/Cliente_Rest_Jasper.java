@@ -198,5 +198,173 @@ public class Cliente_Rest_Jasper implements Serializable {
 
         return resultado;
     }
+    
+    public InputStream reporte_ccf_pdf_prod(String id_dte) {
+        InputStream resultado;
 
+        try {
+            WebTarget webTarget = this.client.target(BASE_URI)
+                    .path("reports/FELSV/DTEs_PROD/Formato_CCF.pdf")
+                    .queryParam("id_dte", id_dte)
+                    .queryParam("j_username", j_username)
+                    .queryParam("j_password", j_password);
+            Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
+            Response response = invocationBuilder.get();
+            if (response.getStatus() == 200) {
+                resultado = response.readEntity(InputStream.class);
+            } else {
+                resultado = null;
+            }
+        } catch (Exception ex) {
+            resultado = null;
+            System.out.println("1,ERROR (" + this.getClass().getName() + " - reporte_ccf_pdf):" + ex.toString());
+        }
+
+        return resultado;
+    }
+    
+    public InputStream reporte_nc_pdf_prod(String id_dte) {
+        InputStream resultado;
+
+        try {
+            WebTarget webTarget = this.client.target(BASE_URI)
+                    .path("reports/FELSV/DTEs_PROD/Formato_NC.pdf")
+                    .queryParam("id_dte", id_dte)
+                    .queryParam("j_username", j_username)
+                    .queryParam("j_password", j_password);
+            Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
+            Response response = invocationBuilder.get();
+            if (response.getStatus() == 200) {
+                resultado = response.readEntity(InputStream.class);
+            } else {
+                resultado = null;
+            }
+        } catch (Exception ex) {
+            resultado = null;
+            System.out.println("1,ERROR (" + this.getClass().getName() + " - reporte_nc_pdf):" + ex.toString());
+        }
+
+        return resultado;
+    }
+    
+    public InputStream reporte_nd_pdf_prod(String id_dte) {
+        InputStream resultado;
+
+        try {
+            WebTarget webTarget = this.client.target(BASE_URI)
+                    .path("reports/FELSV/DTEs_PROD/Formato_ND.pdf")
+                    .queryParam("id_dte", id_dte)
+                    .queryParam("j_username", j_username)
+                    .queryParam("j_password", j_password);
+            Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
+            Response response = invocationBuilder.get();
+            if (response.getStatus() == 200) {
+                resultado = response.readEntity(InputStream.class);
+            } else {
+                resultado = null;
+            }
+        } catch (Exception ex) {
+            resultado = null;
+            System.out.println("1,ERROR (" + this.getClass().getName() + " - reporte_nd_pdf):" + ex.toString());
+        }
+
+        return resultado;
+    }
+    
+    public InputStream reporte_f_pdf_prod(String id_dte) {
+        InputStream resultado;
+
+        try {
+            WebTarget webTarget = this.client.target(BASE_URI)
+                    .path("reports/FELSV/DTEs_PROD/Formato_F.pdf")
+                    .queryParam("id_dte", id_dte)
+                    .queryParam("j_username", j_username)
+                    .queryParam("j_password", j_password);
+            Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
+            Response response = invocationBuilder.get();
+            if (response.getStatus() == 200) {
+                resultado = response.readEntity(InputStream.class);
+            } else {
+                resultado = null;
+            }
+        } catch (Exception ex) {
+            resultado = null;
+            System.out.println("1,ERROR (" + this.getClass().getName() + " - reporte_f_pdf):" + ex.toString());
+        }
+
+        return resultado;
+    }
+    
+    public InputStream reporte_fex_pdf_prod(String id_dte) {
+        InputStream resultado;
+
+        try {
+            WebTarget webTarget = this.client.target(BASE_URI)
+                    .path("reports/FELSV/DTEs_PROD/Formato_FEX.pdf")
+                    .queryParam("id_dte", id_dte)
+                    .queryParam("j_username", j_username)
+                    .queryParam("j_password", j_password);
+            Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
+            Response response = invocationBuilder.get();
+            if (response.getStatus() == 200) {
+                resultado = response.readEntity(InputStream.class);
+            } else {
+                resultado = null;
+            }
+        } catch (Exception ex) {
+            resultado = null;
+            System.out.println("1,ERROR (" + this.getClass().getName() + " - reporte_fex_pdf):" + ex.toString());
+        }
+
+        return resultado;
+    }
+    
+    public InputStream reporte_nr_pdf_prod(String id_dte) {
+        InputStream resultado;
+
+        try {
+            WebTarget webTarget = this.client.target(BASE_URI)
+                    .path("reports/FELSV/DTEs_PROD/Formato_NR.pdf")
+                    .queryParam("id_dte", id_dte)
+                    .queryParam("j_username", j_username)
+                    .queryParam("j_password", j_password);
+            Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
+            Response response = invocationBuilder.get();
+            if (response.getStatus() == 200) {
+                resultado = response.readEntity(InputStream.class);
+            } else {
+                resultado = null;
+            }
+        } catch (Exception ex) {
+            resultado = null;
+            System.out.println("1,ERROR (" + this.getClass().getName() + " - reporte_nr_pdf):" + ex.toString());
+        }
+
+        return resultado;
+    }
+    
+    public InputStream reporte_cr_pdf_prod(String id_dte) {
+        InputStream resultado;
+
+        try {
+            WebTarget webTarget = this.client.target(BASE_URI)
+                    .path("reports/FELSV/DTEs_PROD/Formato_CR.pdf")
+                    .queryParam("id_dte", id_dte)
+                    .queryParam("j_username", j_username)
+                    .queryParam("j_password", j_password);
+            Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
+            Response response = invocationBuilder.get();
+            if (response.getStatus() == 200) {
+                resultado = response.readEntity(InputStream.class);
+            } else {
+                resultado = null;
+            }
+        } catch (Exception ex) {
+            resultado = null;
+            System.out.println("1,ERROR (" + this.getClass().getName() + " - reporte_ccf_pdf):" + ex.toString());
+        }
+
+        return resultado;
+    }
+    
 }

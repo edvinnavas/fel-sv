@@ -251,9 +251,9 @@ public class Ctrl_DTE_V3 implements Serializable {
             stmt.close();
 
             // EXTRAE COMPROBANTES DE RETENCION DESDE JDE.
-            cadenasql = "SELECT DISTINCT F.CRKCO, F.CRN001, F.CRURCD, F.CRN001, F.CRURCD, F.CRMCU, F.CRAN8, F.CRSHAN, 'USD' CRCRCD, F.CRDIVJ, '" + STCD + "' STCD, '-' CRSREF01, '-' CRSREF02, '-' CRSREF03, '-' CRSREF04, '-' CRSREF05, 'F5504001' TABLA, TRIM(F.CRGL01) NRTXA1, NVL(TRIM(G.ABAC30),'-') ABAC30 "
+            cadenasql = "SELECT DISTINCT F.CRKCO, F.CRN001, F.CRURCD, F.CRN001, F.CRURCD, F.CRMCU, F.CRAN8, F.CRSHAN, 'USD' CRCRCD, F.CRURDT, '" + STCD + "' STCD, '-' CRSREF01, '-' CRSREF02, '-' CRSREF03, '-' CRSREF04, '-' CRSREF05, 'F5504001' TABLA, TRIM(F.CRGL01) NRTXA1, NVL(TRIM(G.ABAC30),'-') ABAC30 "
                     + "FROM " + esquema + ".F5504001@" + dblink + " F LEFT JOIN " + esquema + ".F0101@" + dblink + " G ON (F.CRAN8=G.ABAN8) "
-                    + "WHERE (TRIM(F.CRKCO) IN (SELECT C.KCOO_JDE FROM EMISOR_KCOO_V3 C)) AND (F.CRN001 > 0) AND (TRIM(F.CREV01) IN ('N')) AND (F.CRDIVJ >= " + ivd + ")";
+                    + "WHERE (TRIM(F.CRKCO) IN (SELECT C.KCOO_JDE FROM EMISOR_KCOO_V3 C)) AND (F.CRN001 > 0) AND (TRIM(F.CREV01) IN ('N')) AND (F.CRURDT >= " + ivd + ")";
             stmt = conn.createStatement();
             // System.out.println(cadenasql);
             rs = stmt.executeQuery(cadenasql);
@@ -339,7 +339,12 @@ public class Ctrl_DTE_V3 implements Serializable {
 
             // EXTRAE NOTAS DE REMISIÓN - IATA DESDE JDE.
             Cliente_Rest_IATA cliente_rest_iata = new Cliente_Rest_IATA();
-            String json_iata = cliente_rest_iata.genticketszq();
+            String json_iata;
+            if (ambiente.equals("PY")) {
+                json_iata = cliente_rest_iata.genticketszq();
+            } else {
+                json_iata = cliente_rest_iata.genticketszq_prod();
+            }
 
             List<NR_ZQ_IATA> lista_nr_zq_iata = new ArrayList<>();
             try {

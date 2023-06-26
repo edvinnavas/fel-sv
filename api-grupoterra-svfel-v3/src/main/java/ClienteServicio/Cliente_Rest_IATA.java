@@ -15,6 +15,7 @@ public class Cliente_Rest_IATA implements Serializable {
 
     // private static final String BASE_URI = "http://192.200.107.149:8283/RestNotaRemisionIATA/services/genticketszq";
     private static final String BASE_URI = "http://10.254.7.203:8283/RestNotaRemisionIATA/services/genticketszq";
+    private static final String BASE_URI_PROD = "http://10.254.7.203:8283/RestNotaRemisionIATA/services/genticketszq";
     private ClientConfig clientConfig;
     private Client client;
 
@@ -33,6 +34,27 @@ public class Cliente_Rest_IATA implements Serializable {
 
         try {
             WebTarget webTarget = this.client.target(BASE_URI).path("getTicketsZQ");
+            Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
+            Response response = invocationBuilder.get();
+            // System.out.println("CONEXION Cliente_Rest_IATA: " + response.getStatus());
+            if (response.getStatus() == 200) {
+                resultado = response.readEntity(String.class);
+            } else {
+                resultado = response.getStatus() + ": " + response.getStatusInfo();
+            }
+        } catch (Exception ex) {
+            resultado = null;
+            System.out.println("1,ERROR (" + this.getClass().getName() + " - genticketszq):" + ex.toString());
+        }
+
+        return resultado;
+    }
+    
+    public String genticketszq_prod() {
+        String resultado;
+
+        try {
+            WebTarget webTarget = this.client.target(BASE_URI_PROD).path("getTicketsZQ");
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
             Response response = invocationBuilder.get();
             // System.out.println("CONEXION Cliente_Rest_IATA: " + response.getStatus());

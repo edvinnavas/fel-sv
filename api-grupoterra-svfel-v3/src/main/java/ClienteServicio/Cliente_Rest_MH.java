@@ -25,6 +25,8 @@ public class Cliente_Rest_MH implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final String BASE_URI = "https://apitest.dtes.mh.gob.sv";
+    private static final String BASE_URI_PROD = "https://api.dtes.mh.gob.sv";
+    
     private ClientConfig clientConfig;
     private Client client;
 
@@ -74,11 +76,16 @@ public class Cliente_Rest_MH implements Serializable {
         }
     }
 
-    public String autenticar(String user, String pwd) {
+    public String autenticar(String ambiente, String user, String pwd) {
         String resultado = "";
 
         try {
-            WebTarget webTarget = client.target(BASE_URI).path("seguridad/auth");
+            WebTarget webTarget;
+            if (ambiente.equals("PY")) {
+                webTarget = client.target(BASE_URI).path("seguridad/auth");
+            } else {
+                webTarget = client.target(BASE_URI_PROD).path("seguridad/auth");
+            }
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             MultivaluedMap<String, String> formData = new MultivaluedHashMap<>();
             formData.add("user", user);
@@ -96,11 +103,16 @@ public class Cliente_Rest_MH implements Serializable {
         return resultado;
     }
 
-    public String recepciondte(String token, String documento) {
+    public String recepciondte(String ambiente, String token, String documento) {
         String resultado = "";
 
         try {
-            WebTarget webTarget = client.target(BASE_URI).path("fesv/recepciondte");
+            WebTarget webTarget;
+            if (ambiente.equals("PY")) {
+                webTarget = client.target(BASE_URI).path("fesv/recepciondte");
+            } else {
+                webTarget = client.target(BASE_URI_PROD).path("fesv/recepciondte");
+            }
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             invocationBuilder.header("Authorization", token);
             Response response = invocationBuilder.post(Entity.json(documento));
@@ -117,11 +129,16 @@ public class Cliente_Rest_MH implements Serializable {
         return resultado;
     }
 
-    public String anulardte(String token, String documento) {
+    public String anulardte(String ambiente, String token, String documento) {
         String resultado = "";
 
         try {
-            WebTarget webTarget = client.target(BASE_URI).path("fesv/anulardte");
+            WebTarget webTarget;
+            if (ambiente.equals("PY")) {
+                webTarget = client.target(BASE_URI).path("fesv/anulardte");
+            } else {
+                webTarget = client.target(BASE_URI_PROD).path("fesv/anulardte");
+            }
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             invocationBuilder.header("Authorization", token);
             Response response = invocationBuilder.post(Entity.json(documento));
