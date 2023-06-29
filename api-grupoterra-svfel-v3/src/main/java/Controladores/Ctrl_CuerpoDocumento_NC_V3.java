@@ -203,7 +203,7 @@ public class Ctrl_CuerpoDocumento_NC_V3 implements Serializable {
                         + VENTAEXENTA + ","
                         + VENTAGRAVADA + ")";
                 Statement stmt1 = conn.createStatement();
-                System.out.println(cadenasql);
+                // System.out.println(cadenasql);
                 stmt1.executeUpdate(cadenasql);
                 stmt1.close();
 
@@ -227,7 +227,7 @@ public class Ctrl_CuerpoDocumento_NC_V3 implements Serializable {
                                 + ID_CAT_015_TRIBUTO + ","
                                 + TRIBUTO_VALOR + ")";
                         stmt1 = conn.createStatement();
-                        System.out.println(cadenasql);
+                        // System.out.println(cadenasql);
                         stmt1.executeUpdate(cadenasql);
                         stmt1.close();
                     }
@@ -250,7 +250,7 @@ public class Ctrl_CuerpoDocumento_NC_V3 implements Serializable {
                                     + ID_CAT_015_TRIBUTO_EIVAC + ","
                                     + TRIBUTO_VALOR + ")";
                             stmt1 = conn.createStatement();
-                            System.out.println(cadenasql);
+                            // System.out.println(cadenasql);
                             stmt1.executeUpdate(cadenasql);
                             stmt1.close();
                         }
@@ -289,7 +289,7 @@ public class Ctrl_CuerpoDocumento_NC_V3 implements Serializable {
                                 + ID_CAT_015_TRIBUTO + ","
                                 + TRIBUTO_VALOR + ")";
                         Statement stmt2 = conn.createStatement();
-                        System.out.println(cadenasql);
+                        // System.out.println(cadenasql);
                         stmt2.executeUpdate(cadenasql);
                         stmt2.close();
                     }
@@ -337,7 +337,7 @@ public class Ctrl_CuerpoDocumento_NC_V3 implements Serializable {
                             + VENTAEXENTA + ","
                             + VENTAGRAVADA + ")";
                     stmt1 = conn.createStatement();
-                    System.out.println(cadenasql);
+                    // System.out.println(cadenasql);
                     stmt1.executeUpdate(cadenasql);
                     stmt1.close();
 
@@ -361,7 +361,7 @@ public class Ctrl_CuerpoDocumento_NC_V3 implements Serializable {
                                     + ID_CAT_015_TRIBUTO + ","
                                     + TRIBUTO_VALOR + ")";
                             stmt1 = conn.createStatement();
-                            System.out.println(cadenasql);
+                            // System.out.println(cadenasql);
                             stmt1.executeUpdate(cadenasql);
                             stmt1.close();
                         }
@@ -384,7 +384,7 @@ public class Ctrl_CuerpoDocumento_NC_V3 implements Serializable {
                                         + ID_CAT_015_TRIBUTO_EIVAC + ","
                                         + TRIBUTO_VALOR + ")";
                                 stmt1 = conn.createStatement();
-                                System.out.println(cadenasql);
+                                // System.out.println(cadenasql);
                                 stmt1.executeUpdate(cadenasql);
                                 stmt1.close();
                             }
@@ -435,7 +435,7 @@ public class Ctrl_CuerpoDocumento_NC_V3 implements Serializable {
                                 + VENTAEXENTA + ","
                                 + VENTAGRAVADA + ")";
                         stmt1 = conn.createStatement();
-                        System.out.println(cadenasql);
+                        // System.out.println(cadenasql);
                         stmt1.executeUpdate(cadenasql);
                         stmt1.close();
 
@@ -459,7 +459,7 @@ public class Ctrl_CuerpoDocumento_NC_V3 implements Serializable {
                                     + ID_CAT_015_TRIBUTO + ","
                                     + TRIBUTO_VALOR + ")";
                             stmt1 = conn.createStatement();
-                            System.out.println(cadenasql);
+                            // System.out.println(cadenasql);
                             stmt1.executeUpdate(cadenasql);
                             stmt1.close();
                         }
@@ -482,7 +482,7 @@ public class Ctrl_CuerpoDocumento_NC_V3 implements Serializable {
                                         + ID_CAT_015_TRIBUTO_EIVAC + ","
                                         + TRIBUTO_VALOR + ")";
                                 stmt1 = conn.createStatement();
-                                System.out.println(cadenasql);
+                                // System.out.println(cadenasql);
                                 stmt1.executeUpdate(cadenasql);
                                 stmt1.close();
                             }
@@ -530,7 +530,7 @@ public class Ctrl_CuerpoDocumento_NC_V3 implements Serializable {
                             + VENTAEXENTA + ","
                             + VENTAGRAVADA + ")";
                     stmt1 = conn.createStatement();
-                    System.out.println(cadenasql);
+                    // System.out.println(cadenasql);
                     stmt1.executeUpdate(cadenasql);
                     stmt1.close();
 
@@ -554,7 +554,7 @@ public class Ctrl_CuerpoDocumento_NC_V3 implements Serializable {
                                     + ID_CAT_015_TRIBUTO + ","
                                     + TRIBUTO_VALOR + ")";
                             stmt1 = conn.createStatement();
-                            System.out.println(cadenasql);
+                            // System.out.println(cadenasql);
                             stmt1.executeUpdate(cadenasql);
                             stmt1.close();
                         }
@@ -577,7 +577,7 @@ public class Ctrl_CuerpoDocumento_NC_V3 implements Serializable {
                                         + ID_CAT_015_TRIBUTO_EIVAC + ","
                                         + TRIBUTO_VALOR + ")";
                                 stmt1 = conn.createStatement();
-                                System.out.println(cadenasql);
+                                // System.out.println(cadenasql);
                                 stmt1.executeUpdate(cadenasql);
                                 stmt1.close();
                             }

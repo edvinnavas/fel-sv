@@ -80,7 +80,7 @@ public class Ctrl_Resumen_CR_V3 implements Serializable {
                     + TOTALIVARETENIDO + ",'"
                     + TOTALIVARETENIDOLETRAS + "')";
             Statement stmt = conn.createStatement();
-            System.out.println(cadenasql);
+            // System.out.println(cadenasql);
             stmt.executeUpdate(cadenasql);
             stmt.close();
 

@@ -64,7 +64,7 @@ public class Ctrl_Identificacion_INVALIDACION_V3 implements Serializable {
                     + CODIGOGENERACION + "',"
                     + "TO_DATE('" + FECHA_HORA_ANULACION + "','YYYY/MM/DD HH24:MI:SS')" + ")";
             Statement stmt = conn.createStatement();
-            System.out.println(cadenasql);
+            // System.out.println(cadenasql);
             stmt.executeUpdate(cadenasql);
             stmt.close();
 

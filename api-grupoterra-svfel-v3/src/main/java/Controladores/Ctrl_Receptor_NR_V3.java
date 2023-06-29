@@ -140,7 +140,7 @@ public class Ctrl_Receptor_NR_V3 implements Serializable {
                     + CORREO + "',"
                     + ID_CAT_025 + ")";
             Statement stmt = conn.createStatement();
-            System.out.println(cadenasql);
+            // System.out.println(cadenasql);
             stmt.executeUpdate(cadenasql);
             stmt.close();
             
@@ -224,7 +224,7 @@ public class Ctrl_Receptor_NR_V3 implements Serializable {
                     + CORREO_SHAN + "',"
                     + ID_CAT_025_SHAN + ")";
             stmt = conn.createStatement();
-            System.out.println(cadenasql);
+            // System.out.println(cadenasql);
             stmt.executeUpdate(cadenasql);
             stmt.close();
             

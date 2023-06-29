@@ -82,7 +82,7 @@ public class Ctrl_Extension_FEX_V3 implements Serializable {
                     + OBSERVACIONES + "',"
                     + PLACAVEHICULO + ")";
             Statement stmt = conn.createStatement();
-            System.out.println(cadenasql);
+            // System.out.println(cadenasql);
             stmt.executeUpdate(cadenasql);
             stmt.close();
             

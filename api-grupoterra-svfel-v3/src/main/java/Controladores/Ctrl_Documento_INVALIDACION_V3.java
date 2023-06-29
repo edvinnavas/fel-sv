@@ -142,7 +142,7 @@ public class Ctrl_Documento_INVALIDACION_V3 implements Serializable {
                     + TELEFONO + "','"
                     + CORREO + "')";
             Statement stmt = conn.createStatement();
-            System.out.println(cadenasql);
+            // System.out.println(cadenasql);
             stmt.executeUpdate(cadenasql);
             stmt.close();
 

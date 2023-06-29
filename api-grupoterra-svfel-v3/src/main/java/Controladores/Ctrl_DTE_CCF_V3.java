@@ -401,12 +401,14 @@ public class Ctrl_DTE_CCF_V3 implements Serializable {
                 
                 Cliente_Rest_Jasper cliente_rest_jasper = new Cliente_Rest_Jasper();
                 InputStream inputstream;
+                File TargetFile;
                 if (ambiente.equals("PY")) {
                      inputstream = cliente_rest_jasper.reporte_ccf_pdf(id_dte.toString());
+                     TargetFile = new File("/FELSV3/pdf/felsv_ccf_" + id_dte + ".pdf");
                 } else {
                     inputstream = cliente_rest_jasper.reporte_ccf_pdf_prod(id_dte.toString());
+                    TargetFile = new File("/FELSV3/pdf_pd/felsv_ccf_" + id_dte + ".pdf");
                 }
-                File TargetFile = new File("/FELSV3/pdf/felsv_ccf_" + id_dte + ".pdf");
                 FileUtils.copyInputStreamToFile(inputstream, TargetFile);
                 
                 Adjunto adjunto = new Adjunto();

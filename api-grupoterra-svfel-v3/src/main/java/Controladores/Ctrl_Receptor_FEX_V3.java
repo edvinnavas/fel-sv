@@ -117,7 +117,7 @@ public class Ctrl_Receptor_FEX_V3 implements Serializable {
                     + TELEFONO + "','"
                     + CORREO + "')";
             Statement stmt = conn.createStatement();
-            System.out.println(cadenasql);
+            // System.out.println(cadenasql);
             stmt.executeUpdate(cadenasql);
             stmt.close();
 
@@ -185,7 +185,7 @@ public class Ctrl_Receptor_FEX_V3 implements Serializable {
                     + TELEFONO_SHAN + "','"
                     + CORREO_SHAN + "')";
             stmt = conn.createStatement();
-            System.out.println(cadenasql);
+            // System.out.println(cadenasql);
             stmt.executeUpdate(cadenasql);
             stmt.close();
 

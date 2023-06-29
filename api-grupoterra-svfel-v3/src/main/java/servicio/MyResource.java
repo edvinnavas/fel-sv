@@ -84,14 +84,14 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_ccf_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes_ccf.get(d), "ccf", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes_ccf.get(d), "ccf", gson.toJson(dte_ccf_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes_ccf.get(d), "ccf", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes_ccf.get(d), "ccf", gson.toJson(dte_ccf_v3));
                 /****************************************************************************************************
                  * FIRMAR JSON CON JWT CCF.                                                                         *
                  ****************************************************************************************************/
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_ccf_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes_ccf.get(d), "ccf", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes_ccf.get(d), "ccf", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
                 /****************************************************************************************************
                  * ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA CCF.                                                  *
                  ****************************************************************************************************/
@@ -101,7 +101,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_ccf_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes_ccf.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes_ccf.get(d), "ccf", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes_ccf.get(d), "ccf", "JSON-DTE:: " + new Gson().toJson(json_dte));
                 /****************************************************************************************************
                  * GENERAR TOKEN MINISTERIO DE HACIENDA CCF.                                                        *
                  ****************************************************************************************************/
@@ -110,7 +110,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes_ccf.get(d), "ccf", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes_ccf.get(d), "ccf", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
                 /****************************************************************************************************
                  * RESPUESTA DEL MINISTERIO DE HACIENDA CCF.                                                        *
                  ****************************************************************************************************/
@@ -119,7 +119,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_ccf_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes_ccf.get(d));
-                driver.guardar_en_archivo(no_dtes_ccf.get(d), "ccf", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes_ccf.get(d), "ccf", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
             
             /****************************************************************************************************
@@ -140,14 +140,14 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_nc_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes_nc.get(d), "nc", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes_nc.get(d), "nc", gson.toJson(dte_nc_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes_nc.get(d), "nc", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes_nc.get(d), "nc", gson.toJson(dte_nc_v3));
                 /****************************************************************************************************
                  * FIRMAR JSON CON JWT NC.                                                                          *
                  ****************************************************************************************************/
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_nc_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes_nc.get(d), "nc", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes_nc.get(d), "nc", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
                 /****************************************************************************************************
                  * ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA NC.                                                   *
                  ****************************************************************************************************/
@@ -157,7 +157,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_nc_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes_nc.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes_nc.get(d), "nc", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes_nc.get(d), "nc", "JSON-DTE:: " + new Gson().toJson(json_dte));
                 /****************************************************************************************************
                  * GENERAR TOKEN MINISTERIO DE HACIENDA NC.                                                         *
                  ****************************************************************************************************/
@@ -166,7 +166,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes_nc.get(d), "nc", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes_nc.get(d), "nc", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
                 /****************************************************************************************************
                  * RESPUESTA DEL MINISTERIO DE HACIENDA NC.                                                         *
                  ****************************************************************************************************/
@@ -175,7 +175,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_nc_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes_nc.get(d));
-                driver.guardar_en_archivo(no_dtes_nc.get(d), "nc", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes_nc.get(d), "nc", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
             
             /****************************************************************************************************
@@ -196,14 +196,14 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_nd_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes_nd.get(d), "nd", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes_nd.get(d), "nd", gson.toJson(dte_nd_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes_nd.get(d), "nd", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes_nd.get(d), "nd", gson.toJson(dte_nd_v3));
                 /****************************************************************************************************
                  * FIRMAR JSON CON JWT ND.                                                                          *
                  ****************************************************************************************************/
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_nd_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes_nd.get(d), "nd", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes_nd.get(d), "nd", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
                 /****************************************************************************************************
                  * ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA ND.                                                   *
                  ****************************************************************************************************/
@@ -213,7 +213,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_nd_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes_nd.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes_nd.get(d), "nd", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes_nd.get(d), "nd", "JSON-DTE:: " + new Gson().toJson(json_dte));
                 /****************************************************************************************************
                  * GENERAR TOKEN MINISTERIO DE HACIENDA ND.                                                         *
                  ****************************************************************************************************/
@@ -222,7 +222,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes_nd.get(d), "nd", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes_nd.get(d), "nd", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
                 /****************************************************************************************************
                  * RESPUESTA DEL MINISTERIO DE HACIENDA ND.                                                         *
                  ****************************************************************************************************/
@@ -231,7 +231,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_nd_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes_nd.get(d));
-                driver.guardar_en_archivo(no_dtes_nd.get(d), "nd", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes_nd.get(d), "nd", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
             
             /****************************************************************************************************
@@ -252,14 +252,14 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_f_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes_f.get(d), "f", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes_f.get(d), "f", gson.toJson(dte_f_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes_f.get(d), "f", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes_f.get(d), "f", gson.toJson(dte_f_v3));
                 /****************************************************************************************************
                  * FIRMAR JSON CON JWT F.                                                                           *
                  ****************************************************************************************************/
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_f_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes_f.get(d), "f", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes_f.get(d), "f", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
                 /****************************************************************************************************
                  * ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA F.                                                    *
                  ****************************************************************************************************/
@@ -269,7 +269,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_f_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes_f.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes_f.get(d), "f", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes_f.get(d), "f", "JSON-DTE:: " + new Gson().toJson(json_dte));
                 /****************************************************************************************************
                  * GENERAR TOKEN MINISTERIO DE HACIENDA F.                                                          *
                  ****************************************************************************************************/
@@ -278,7 +278,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes_f.get(d), "f", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes_f.get(d), "f", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
                 /****************************************************************************************************
                  * RESPUESTA DEL MINISTERIO DE HACIENDA F.                                                          *
                  ****************************************************************************************************/
@@ -287,7 +287,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_f_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes_f.get(d));
-                driver.guardar_en_archivo(no_dtes_f.get(d), "f", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes_f.get(d), "f", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
             
             /****************************************************************************************************
@@ -308,14 +308,14 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_fex_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes_fex.get(d), "fex", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes_fex.get(d), "fex", gson.toJson(dte_fex_v3));
+                driver.guardar_en_archivo(ambiente,no_dtes_fex.get(d), "fex", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes_fex.get(d), "fex", gson.toJson(dte_fex_v3));
                 /****************************************************************************************************
                  * FIRMAR JSON CON JWT FEX.                                                                         *
                  ****************************************************************************************************/
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_fex_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes_fex.get(d), "fex", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes_fex.get(d), "fex", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
                 /****************************************************************************************************
                  * ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA FEX.                                                  *
                  ****************************************************************************************************/
@@ -325,7 +325,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_fex_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes_fex.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes_fex.get(d), "fex", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes_fex.get(d), "fex", "JSON-DTE:: " + new Gson().toJson(json_dte));
                 /****************************************************************************************************
                  * GENERAR TOKEN MINISTERIO DE HACIENDA FEX.                                                        *
                  ****************************************************************************************************/
@@ -334,7 +334,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes_fex.get(d), "fex", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes_fex.get(d), "fex", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
                 /****************************************************************************************************
                  * RESPUESTA DEL MINISTERIO DE HACIENDA FEX.                                                        *
                  ****************************************************************************************************/
@@ -343,7 +343,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_fex_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes_fex.get(d));
-                driver.guardar_en_archivo(no_dtes_fex.get(d), "fex", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes_fex.get(d), "fex", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
             
             /****************************************************************************************************
@@ -364,14 +364,14 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_nr_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes_nr.get(d), "nr", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes_nr.get(d), "nr", gson.toJson(dte_nr_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes_nr.get(d), "nr", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes_nr.get(d), "nr", gson.toJson(dte_nr_v3));
                 /****************************************************************************************************
                  * FIRMAR JSON CON JWT NR.                                                                          *
                  ****************************************************************************************************/
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_nr_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes_nr.get(d), "nr", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes_nr.get(d), "nr", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
                 /****************************************************************************************************
                  * ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA NR.                                                   *
                  ****************************************************************************************************/
@@ -381,7 +381,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_nr_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes_nr.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes_nr.get(d), "nr", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes_nr.get(d), "nr", "JSON-DTE:: " + new Gson().toJson(json_dte));
                 /****************************************************************************************************
                  * GENERAR TOKEN MINISTERIO DE HACIENDA NR.                                                         *
                  ****************************************************************************************************/
@@ -390,7 +390,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes_nr.get(d), "nr", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes_nr.get(d), "nr", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
                 /****************************************************************************************************
                  * RESPUESTA DEL MINISTERIO DE HACIENDA NR.                                                         *
                  ****************************************************************************************************/
@@ -399,7 +399,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_nr_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes_nr.get(d));
-                driver.guardar_en_archivo(no_dtes_nr.get(d), "nr", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes_nr.get(d), "nr", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
             
             /****************************************************************************************************
@@ -420,14 +420,14 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_cr_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes_cr.get(d), "cr", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes_cr.get(d), "cr", gson.toJson(dte_cr_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes_cr.get(d), "cr", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes_cr.get(d), "cr", gson.toJson(dte_cr_v3));
                 /****************************************************************************************************
                  * FIRMAR JSON CON JWT CR.                                                                          *
                  ****************************************************************************************************/
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_cr_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes_cr.get(d), "cr", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes_cr.get(d), "cr", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
                 /****************************************************************************************************
                  * ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA CR.                                                   *
                  ****************************************************************************************************/
@@ -437,7 +437,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_cr_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes_cr.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes_cr.get(d), "cr", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes_cr.get(d), "cr", "JSON-DTE:: " + new Gson().toJson(json_dte));
                 /****************************************************************************************************
                  * GENERAR TOKEN MINISTERIO DE HACIENDA CR.                                                         *
                  ****************************************************************************************************/
@@ -446,7 +446,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes_cr.get(d), "cr", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes_cr.get(d), "cr", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
                 /****************************************************************************************************
                  * RESPUESTA DEL MINISTERIO DE HACIENDA CR.                                                         *
                  ****************************************************************************************************/
@@ -455,7 +455,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_cr_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes_cr.get(d));
-                driver.guardar_en_archivo(no_dtes_cr.get(d), "cr", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes_cr.get(d), "cr", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
 
         } catch (Exception ex) {
@@ -526,13 +526,13 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_ccf_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes.get(d), "ccf", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes.get(d), "ccf", gson.toJson(dte_ccf_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "ccf", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "ccf", gson.toJson(dte_ccf_v3));
 
                 // FIRMAR JSON CON JWT.
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_ccf_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes.get(d), "ccf", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "ccf", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
 
                 // ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA.
                 JsonDTE json_dte = new JsonDTE();
@@ -541,7 +541,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_ccf_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes.get(d), "ccf", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "ccf", "JSON-DTE:: " + new Gson().toJson(json_dte));
 
                 // GENERAR TOKEN MINISTERIO DE HACIENDA.
                 Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
@@ -549,7 +549,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes.get(d), "ccf", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "ccf", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
 
                 // RESPUESTA DEL MINISTERIO DE HACIENDA.
                 String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
@@ -557,7 +557,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_ccf_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
-                driver.guardar_en_archivo(no_dtes.get(d), "ccf", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "ccf", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
 
             resultado = "ID-DTE PROCESADOS: " + no_dtes.toString();
@@ -597,13 +597,13 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_ccf_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes.get(d), "ccf", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes.get(d), "ccf", gson.toJson(dte_ccf_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "ccf", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "ccf", gson.toJson(dte_ccf_v3));
 
                 // FIRMAR JSON CON JWT.
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_ccf_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes.get(d), "ccf", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "ccf", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
 
                 // ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA.
                 JsonDTE json_dte = new JsonDTE();
@@ -612,7 +612,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_ccf_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes.get(d), "ccf", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "ccf", "JSON-DTE:: " + new Gson().toJson(json_dte));
 
                 // GENERAR TOKEN MINISTERIO DE HACIENDA.
                 Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
@@ -620,7 +620,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes.get(d), "ccf", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "ccf", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
 
                 // RESPUESTA DEL MINISTERIO DE HACIENDA.
                 String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
@@ -628,7 +628,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_ccf_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
-                driver.guardar_en_archivo(no_dtes.get(d), "ccf", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "ccf", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
 
             resultado = "ID-DTE PROCESADOS: " + no_dtes.toString();
@@ -680,13 +680,13 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_nc_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes.get(d), "nc", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes.get(d), "nc", gson.toJson(dte_nc_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nc", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "nc", gson.toJson(dte_nc_v3));
 
                 // FIRMAR JSON CON JWT.
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_nc_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes.get(d), "nc", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nc", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
 
                 // ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA.
                 JsonDTE json_dte = new JsonDTE();
@@ -695,7 +695,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_nc_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes.get(d), "nc", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nc", "JSON-DTE:: " + new Gson().toJson(json_dte));
 
                 // GENERAR TOKEN MINISTERIO DE HACIENDA.
                 Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
@@ -703,7 +703,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes.get(d), "nc", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nc", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
 
                 // RESPUESTA DEL MINISTERIO DE HACIENDA.
                 String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
@@ -711,7 +711,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_nc_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
-                driver.guardar_en_archivo(no_dtes.get(d), "nc", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nc", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
 
             resultado = "ID-DTE PROCESADOS: " + no_dtes.toString();
@@ -751,13 +751,13 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_nc_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes.get(d), "nc", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes.get(d), "nc", gson.toJson(dte_nc_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nc", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "nc", gson.toJson(dte_nc_v3));
 
                 // FIRMAR JSON CON JWT.
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_nc_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes.get(d), "nc", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nc", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
 
                 // ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA.
                 JsonDTE json_dte = new JsonDTE();
@@ -766,7 +766,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_nc_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes.get(d), "nc", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nc", "JSON-DTE:: " + new Gson().toJson(json_dte));
 
                 // GENERAR TOKEN MINISTERIO DE HACIENDA.
                 Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
@@ -774,7 +774,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes.get(d), "nc", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nc", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
 
                 // RESPUESTA DEL MINISTERIO DE HACIENDA.
                 String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
@@ -782,7 +782,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_nc_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
-                driver.guardar_en_archivo(no_dtes.get(d), "nc", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nc", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
 
             resultado = "ID-DTE PROCESADOS: " + no_dtes.toString();
@@ -834,13 +834,13 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_nd_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes.get(d), "nd", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes.get(d), "nd", gson.toJson(dte_nd_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nd", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "nd", gson.toJson(dte_nd_v3));
 
                 // FIRMAR JSON CON JWT.
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_nd_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes.get(d), "nd", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nd", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
 
                 // ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA.
                 JsonDTE json_dte = new JsonDTE();
@@ -849,7 +849,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_nd_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes.get(d), "nd", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nd", "JSON-DTE:: " + new Gson().toJson(json_dte));
 
                 // GENERAR TOKEN MINISTERIO DE HACIENDA.
                 Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
@@ -857,7 +857,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes.get(d), "nd", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nd", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
 
                 // RESPUESTA DEL MINISTERIO DE HACIENDA.
                 String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
@@ -865,7 +865,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_nd_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
-                driver.guardar_en_archivo(no_dtes.get(d), "nd", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nd", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
 
             resultado = "ID-DTE PROCESADOS: " + no_dtes.toString();
@@ -905,13 +905,13 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_nd_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes.get(d), "nd", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes.get(d), "nd", gson.toJson(dte_nd_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nd", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "nd", gson.toJson(dte_nd_v3));
 
                 // FIRMAR JSON CON JWT.
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_nd_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes.get(d), "nd", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nd", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
 
                 // ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA.
                 JsonDTE json_dte = new JsonDTE();
@@ -920,7 +920,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_nd_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes.get(d), "nd", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nd", "JSON-DTE:: " + new Gson().toJson(json_dte));
 
                 // GENERAR TOKEN MINISTERIO DE HACIENDA.
                 Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
@@ -928,7 +928,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes.get(d), "nd", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nd", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
 
                 // RESPUESTA DEL MINISTERIO DE HACIENDA.
                 String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
@@ -936,7 +936,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_nd_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
-                driver.guardar_en_archivo(no_dtes.get(d), "nd", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nd", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
 
             resultado = "ID-DTE PROCESADOS: " + no_dtes.toString();
@@ -988,13 +988,13 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_f_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes.get(d), "f", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes.get(d), "f", gson.toJson(dte_f_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "f", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "f", gson.toJson(dte_f_v3));
 
                 // FIRMAR JSON CON JWT.
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_f_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes.get(d), "f", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "f", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
 
                 // ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA.
                 JsonDTE json_dte = new JsonDTE();
@@ -1003,7 +1003,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_f_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes.get(d), "f", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "f", "JSON-DTE:: " + new Gson().toJson(json_dte));
 
                 // GENERAR TOKEN MINISTERIO DE HACIENDA.
                 Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
@@ -1011,7 +1011,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes.get(d), "f", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "f", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
 
                 // RESPUESTA DEL MINISTERIO DE HACIENDA.
                 String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
@@ -1019,7 +1019,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_f_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
-                driver.guardar_en_archivo(no_dtes.get(d), "f", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "f", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
 
             resultado = "ID-DTE PROCESADOS: " + no_dtes.toString();
@@ -1059,13 +1059,13 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_f_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes.get(d), "f", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes.get(d), "f", gson.toJson(dte_f_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "f", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "f", gson.toJson(dte_f_v3));
 
                 // FIRMAR JSON CON JWT.
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_f_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes.get(d), "f", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "f", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
 
                 // ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA.
                 JsonDTE json_dte = new JsonDTE();
@@ -1074,7 +1074,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_f_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes.get(d), "f", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "f", "JSON-DTE:: " + new Gson().toJson(json_dte));
 
                 // GENERAR TOKEN MINISTERIO DE HACIENDA.
                 Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
@@ -1082,7 +1082,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes.get(d), "f", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "f", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
 
                 // RESPUESTA DEL MINISTERIO DE HACIENDA.
                 String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
@@ -1090,7 +1090,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_f_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
-                driver.guardar_en_archivo(no_dtes.get(d), "f", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "f", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
 
             resultado = "ID-DTE PROCESADOS: " + no_dtes.toString();
@@ -1142,13 +1142,13 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_fex_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes.get(d), "fex", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes.get(d), "fex", gson.toJson(dte_fex_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "fex", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "fex", gson.toJson(dte_fex_v3));
 
                 // FIRMAR JSON CON JWT.
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_fex_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes.get(d), "fex", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "fex", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
 
                 // ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA.
                 JsonDTE json_dte = new JsonDTE();
@@ -1157,7 +1157,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_fex_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes.get(d), "fex", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "fex", "JSON-DTE:: " + new Gson().toJson(json_dte));
 
                 // GENERAR TOKEN MINISTERIO DE HACIENDA.
                 Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
@@ -1165,7 +1165,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes.get(d), "fex", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "fex", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
 
                 // RESPUESTA DEL MINISTERIO DE HACIENDA.
                 String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
@@ -1173,7 +1173,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_fex_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
-                driver.guardar_en_archivo(no_dtes.get(d), "fex", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "fex", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
 
             resultado = "ID-DTE PROCESADOS: " + no_dtes.toString();
@@ -1213,13 +1213,13 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_fex_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes.get(d), "fex", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes.get(d), "fex", gson.toJson(dte_fex_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "fex", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "fex", gson.toJson(dte_fex_v3));
 
                 // FIRMAR JSON CON JWT.
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_fex_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes.get(d), "fex", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "fex", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
 
                 // ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA.
                 JsonDTE json_dte = new JsonDTE();
@@ -1228,7 +1228,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_fex_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes.get(d), "fex", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "fex", "JSON-DTE:: " + new Gson().toJson(json_dte));
 
                 // GENERAR TOKEN MINISTERIO DE HACIENDA.
                 Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
@@ -1236,7 +1236,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes.get(d), "fex", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "fex", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
 
                 // RESPUESTA DEL MINISTERIO DE HACIENDA.
                 String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
@@ -1244,7 +1244,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_fex_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
-                driver.guardar_en_archivo(no_dtes.get(d), "fex", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "fex", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
 
             resultado = "ID-DTE PROCESADOS: " + no_dtes.toString();
@@ -1296,13 +1296,13 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_nr_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes.get(d), "nr", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes.get(d), "nr", gson.toJson(dte_nr_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nr", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "nr", gson.toJson(dte_nr_v3));
 
                 // FIRMAR JSON CON JWT.
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_nr_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes.get(d), "nr", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nr", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
 
                 // ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA.
                 JsonDTE json_dte = new JsonDTE();
@@ -1311,7 +1311,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_nr_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes.get(d), "nr", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nr", "JSON-DTE:: " + new Gson().toJson(json_dte));
 
                 // GENERAR TOKEN MINISTERIO DE HACIENDA.
                 Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
@@ -1319,7 +1319,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes.get(d), "nr", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nr", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
 
                 // RESPUESTA DEL MINISTERIO DE HACIENDA.
                 String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
@@ -1327,7 +1327,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_nr_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
-                driver.guardar_en_archivo(no_dtes.get(d), "nr", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nr", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
 
             resultado = "ID-DTE PROCESADOS: " + no_dtes.toString();
@@ -1367,13 +1367,13 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_nr_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes.get(d), "nr", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes.get(d), "nr", gson.toJson(dte_nr_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nr", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "nr", gson.toJson(dte_nr_v3));
 
                 // FIRMAR JSON CON JWT.
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_nr_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes.get(d), "nr", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nr", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
 
                 // ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA.
                 JsonDTE json_dte = new JsonDTE();
@@ -1382,7 +1382,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_nr_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes.get(d), "nr", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nr", "JSON-DTE:: " + new Gson().toJson(json_dte));
 
                 // GENERAR TOKEN MINISTERIO DE HACIENDA.
                 Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
@@ -1390,7 +1390,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes.get(d), "nr", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nr", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
 
                 // RESPUESTA DEL MINISTERIO DE HACIENDA.
                 String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
@@ -1398,7 +1398,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_nr_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
-                driver.guardar_en_archivo(no_dtes.get(d), "nr", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "nr", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
 
             resultado = "ID-DTE PROCESADOS: " + no_dtes.toString();
@@ -1450,13 +1450,13 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_cr_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes.get(d), "cr", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes.get(d), "cr", gson.toJson(dte_cr_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "cr", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "cr", gson.toJson(dte_cr_v3));
 
                 // FIRMAR JSON CON JWT.
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_cr_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes.get(d), "cr", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "cr", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
 
                 // ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA.
                 JsonDTE json_dte = new JsonDTE();
@@ -1465,7 +1465,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_cr_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes.get(d), "cr", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "cr", "JSON-DTE:: " + new Gson().toJson(json_dte));
 
                 // GENERAR TOKEN MINISTERIO DE HACIENDA.
                 Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
@@ -1473,7 +1473,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes.get(d), "cr", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "cr", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
 
                 // RESPUESTA DEL MINISTERIO DE HACIENDA.
                 String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
@@ -1481,7 +1481,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_cr_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
-                driver.guardar_en_archivo(no_dtes.get(d), "cr", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "cr", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
 
             resultado = "ID-DTE PROCESADOS: " + no_dtes.toString();
@@ -1521,13 +1521,13 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_cr_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes.get(d), "cr", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes.get(d), "cr", gson.toJson(dte_cr_v3));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "cr", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "cr", gson.toJson(dte_cr_v3));
 
                 // FIRMAR JSON CON JWT.
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_cr_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes.get(d), "cr", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "cr", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
 
                 // ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA.
                 JsonDTE json_dte = new JsonDTE();
@@ -1536,7 +1536,7 @@ public class MyResource implements Serializable {
                 json_dte.setTipoDte(dte_cr_v3.getIdentificacion().getTipoDte());
                 json_dte.setIdEnvio(no_dtes.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes.get(d), "cr", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "cr", "JSON-DTE:: " + new Gson().toJson(json_dte));
 
                 // GENERAR TOKEN MINISTERIO DE HACIENDA.
                 Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
@@ -1544,7 +1544,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes.get(d), "cr", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "cr", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
 
                 // RESPUESTA DEL MINISTERIO DE HACIENDA.
                 String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
@@ -1552,7 +1552,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_cr_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
-                driver.guardar_en_archivo(no_dtes.get(d), "cr", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "cr", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
 
             resultado = "ID-DTE PROCESADOS: " + no_dtes.toString();
@@ -1592,13 +1592,13 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_invalidacion_v3)
                         + "}";
-                driver.guardar_en_archivo(no_dtes.get(d), "anulardte", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(no_dtes.get(d), "anulardte", dte_sin_firmar);
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "anulardte", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "anulardte", dte_sin_firmar);
 
                 // FIRMAR JSON CON JWT.
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_invalidacion_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(no_dtes.get(d), "anulardte", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "anulardte", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
 
                 // ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA.
                 JsonDTE json_dte = new JsonDTE();
@@ -1606,7 +1606,7 @@ public class MyResource implements Serializable {
                 json_dte.setAmbiente(dte_invalidacion_v3.getIdentificacion().getAmbiente());
                 json_dte.setIdEnvio(no_dtes.get(d));
                 json_dte.setDocumento(dte_firmado.getBody());
-                driver.guardar_en_archivo(no_dtes.get(d), "anulardte", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "anulardte", "JSON-DTE:: " + new Gson().toJson(json_dte));
 
                 // GENERAR TOKEN MINISTERIO DE HACIENDA.
                 Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
@@ -1614,7 +1614,7 @@ public class MyResource implements Serializable {
                 Type listType1 = new TypeToken<TokenMH>() {
                 }.getType();
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
-                driver.guardar_en_archivo(no_dtes.get(d), "anulardte", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "anulardte", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
 
                 // RESPUESTA DEL MINISTERIO DE HACIENDA.
                 String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
@@ -1622,7 +1622,7 @@ public class MyResource implements Serializable {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_invalidacion_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
-                driver.guardar_en_archivo(no_dtes.get(d), "anulardte", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "anulardte", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
             }
 
             resultado = "ID-DTE PROCESADOS: " + no_dtes.toString();

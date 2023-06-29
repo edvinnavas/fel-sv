@@ -209,7 +209,7 @@ public class Ctrl_Resumen_CCF_V3 implements Serializable {
                     + PAGOS_PERIODO + ","
                     + NUMPAGOELECTRONICO + ")";
             Statement stmt = conn.createStatement();
-            System.out.println(cadenasql);
+            // System.out.println(cadenasql);
             stmt.executeUpdate(cadenasql);
             stmt.close();
 
@@ -234,7 +234,7 @@ public class Ctrl_Resumen_CCF_V3 implements Serializable {
                         + ID_CAT_015 + ","
                         + VALOR + ")";
                 Statement stmt1 = conn.createStatement();
-                System.out.println(cadenasql);
+                // System.out.println(cadenasql);
                 stmt1.executeUpdate(cadenasql);
                 stmt1.close();
             }

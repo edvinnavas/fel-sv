@@ -42,6 +42,7 @@ public class Cliente_Rest_Jasper implements Serializable {
                     .queryParam("j_password", j_password);
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             Response response = invocationBuilder.get();
+            // System.out.println("CONEXION JASPER-REST-API-CCF: " + response.getStatus());
             if (response.getStatus() == 200) {
                 resultado = response.readEntity(InputStream.class);
             } else {
@@ -66,6 +67,7 @@ public class Cliente_Rest_Jasper implements Serializable {
                     .queryParam("j_password", j_password);
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             Response response = invocationBuilder.get();
+            // System.out.println("CONEXION JASPER-REST-API-NC: " + response.getStatus());
             if (response.getStatus() == 200) {
                 resultado = response.readEntity(InputStream.class);
             } else {
@@ -90,6 +92,7 @@ public class Cliente_Rest_Jasper implements Serializable {
                     .queryParam("j_password", j_password);
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             Response response = invocationBuilder.get();
+            // System.out.println("CONEXION JASPER-REST-API-ND: " + response.getStatus());
             if (response.getStatus() == 200) {
                 resultado = response.readEntity(InputStream.class);
             } else {
@@ -114,6 +117,7 @@ public class Cliente_Rest_Jasper implements Serializable {
                     .queryParam("j_password", j_password);
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             Response response = invocationBuilder.get();
+            // System.out.println("CONEXION JASPER-REST-API-F: " + response.getStatus());
             if (response.getStatus() == 200) {
                 resultado = response.readEntity(InputStream.class);
             } else {
@@ -138,6 +142,7 @@ public class Cliente_Rest_Jasper implements Serializable {
                     .queryParam("j_password", j_password);
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             Response response = invocationBuilder.get();
+            // System.out.println("CONEXION JASPER-REST-API-FEX: " + response.getStatus());
             if (response.getStatus() == 200) {
                 resultado = response.readEntity(InputStream.class);
             } else {
@@ -162,6 +167,7 @@ public class Cliente_Rest_Jasper implements Serializable {
                     .queryParam("j_password", j_password);
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             Response response = invocationBuilder.get();
+            // System.out.println("CONEXION JASPER-REST-API-NR: " + response.getStatus());
             if (response.getStatus() == 200) {
                 resultado = response.readEntity(InputStream.class);
             } else {
@@ -186,6 +192,7 @@ public class Cliente_Rest_Jasper implements Serializable {
                     .queryParam("j_password", j_password);
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             Response response = invocationBuilder.get();
+            // System.out.println("CONEXION JASPER-REST-API-CR: " + response.getStatus());
             if (response.getStatus() == 200) {
                 resultado = response.readEntity(InputStream.class);
             } else {
@@ -210,6 +217,7 @@ public class Cliente_Rest_Jasper implements Serializable {
                     .queryParam("j_password", j_password);
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             Response response = invocationBuilder.get();
+            // System.out.println("CONEXION JASPER-REST-API-CCF-PROD: " + response.getStatus());
             if (response.getStatus() == 200) {
                 resultado = response.readEntity(InputStream.class);
             } else {
@@ -234,6 +242,7 @@ public class Cliente_Rest_Jasper implements Serializable {
                     .queryParam("j_password", j_password);
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             Response response = invocationBuilder.get();
+            // System.out.println("CONEXION JASPER-REST-API-NC-PROD: " + response.getStatus());
             if (response.getStatus() == 200) {
                 resultado = response.readEntity(InputStream.class);
             } else {
@@ -258,6 +267,7 @@ public class Cliente_Rest_Jasper implements Serializable {
                     .queryParam("j_password", j_password);
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             Response response = invocationBuilder.get();
+            // System.out.println("CONEXION JASPER-REST-API-ND-PROD: " + response.getStatus());
             if (response.getStatus() == 200) {
                 resultado = response.readEntity(InputStream.class);
             } else {
@@ -282,6 +292,7 @@ public class Cliente_Rest_Jasper implements Serializable {
                     .queryParam("j_password", j_password);
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             Response response = invocationBuilder.get();
+            // System.out.println("CONEXION JASPER-REST-API-F-PROD: " + response.getStatus());
             if (response.getStatus() == 200) {
                 resultado = response.readEntity(InputStream.class);
             } else {
@@ -306,6 +317,7 @@ public class Cliente_Rest_Jasper implements Serializable {
                     .queryParam("j_password", j_password);
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             Response response = invocationBuilder.get();
+            // System.out.println("CONEXION JASPER-REST-API-FEX-PROD: " + response.getStatus());
             if (response.getStatus() == 200) {
                 resultado = response.readEntity(InputStream.class);
             } else {
@@ -330,6 +342,7 @@ public class Cliente_Rest_Jasper implements Serializable {
                     .queryParam("j_password", j_password);
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             Response response = invocationBuilder.get();
+            // System.out.println("CONEXION JASPER-REST-API-NR-PROD: " + response.getStatus());
             if (response.getStatus() == 200) {
                 resultado = response.readEntity(InputStream.class);
             } else {
@@ -354,6 +367,7 @@ public class Cliente_Rest_Jasper implements Serializable {
                     .queryParam("j_password", j_password);
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             Response response = invocationBuilder.get();
+            // System.out.println("CONEXION JASPER-REST-API-CR-PROD: " + response.getStatus());
             if (response.getStatus() == 200) {
                 resultado = response.readEntity(InputStream.class);
             } else {

@@ -210,7 +210,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                         + NOGRAVADO + ","
                         + IVAITEM + ")";
                 Statement stmt1 = conn.createStatement();
-                System.out.println(cadenasql);
+                // System.out.println(cadenasql);
                 stmt1.executeUpdate(cadenasql);
                 stmt1.close();
 
@@ -234,7 +234,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                                 + ID_CAT_015_TRIBUTO + ","
                                 + TRIBUTO_VALOR + ")";
                         stmt1 = conn.createStatement();
-                        System.out.println(cadenasql);
+                        // System.out.println(cadenasql);
                         stmt1.executeUpdate(cadenasql);
                         stmt1.close();
                     }
@@ -243,7 +243,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                         if (ID_CAT_015_TRIBUTO.equals(Long.valueOf("1"))) {
                             cadenasql = "UPDATE CUERPO_DOCU_F_V3 SET IVAITEM=" + TRIBUTO_VALOR + " WHERE ID_DTE=" + ID_DTE + " AND ID_CUERPO_DOCUMENTO=" + ID_CUERPO_DOCUMENTO;
                             stmt1 = conn.createStatement();
-                            System.out.println(cadenasql);
+                            // System.out.println(cadenasql);
                             stmt1.executeUpdate(cadenasql);
                             stmt1.close();
 
@@ -270,7 +270,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
 
                             cadenasql = "UPDATE CUERPO_DOCU_F_V3 SET PRECIOUNI=" + PRECIOUNI_TEMP + ", MONTODESCU=" + MONTODESCU_TEMP + ", VENTAGRAVADA=" + VENTAGRAVADA_TEMP + " WHERE ID_DTE=" + ID_DTE + " AND ID_CUERPO_DOCUMENTO=" + ID_CUERPO_DOCUMENTO;
                             stmt1 = conn.createStatement();
-                            System.out.println(cadenasql);
+                            // System.out.println(cadenasql);
                             stmt1.executeUpdate(cadenasql);
                             stmt1.close();
                         }
@@ -294,7 +294,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                                     + ID_CAT_015_TRIBUTO_EIVAC + ","
                                     + TRIBUTO_VALOR + ")";
                             stmt1 = conn.createStatement();
-                            System.out.println(cadenasql);
+                            // System.out.println(cadenasql);
                             stmt1.executeUpdate(cadenasql);
                             stmt1.close();
                         }
@@ -333,7 +333,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                                 + ID_CAT_015_TRIBUTO + ","
                                 + TRIBUTO_VALOR + ")";
                         Statement stmt2 = conn.createStatement();
-                        System.out.println(cadenasql);
+                        // System.out.println(cadenasql);
                         stmt2.executeUpdate(cadenasql);
                         stmt2.close();
                     }
@@ -388,7 +388,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                             + NOGRAVADO + ","
                             + IVAITEM + ")";
                     stmt1 = conn.createStatement();
-                    System.out.println(cadenasql);
+                    // System.out.println(cadenasql);
                     stmt1.executeUpdate(cadenasql);
                     stmt1.close();
 
@@ -412,7 +412,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                                     + ID_CAT_015_TRIBUTO + ","
                                     + TRIBUTO_VALOR + ")";
                             stmt1 = conn.createStatement();
-                            System.out.println(cadenasql);
+                            // System.out.println(cadenasql);
                             stmt1.executeUpdate(cadenasql);
                             stmt1.close();
                         }
@@ -421,7 +421,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                             if (ID_CAT_015_TRIBUTO.equals(Long.valueOf("1"))) {
                                 cadenasql = "UPDATE CUERPO_DOCU_F_V3 SET IVAITEM=" + TRIBUTO_VALOR + " WHERE ID_DTE=" + ID_DTE + " AND ID_CUERPO_DOCUMENTO=" + ID_CUERPO_DOCUMENTO;
                                 stmt1 = conn.createStatement();
-                                System.out.println(cadenasql);
+                                // System.out.println(cadenasql);
                                 stmt1.executeUpdate(cadenasql);
                                 stmt1.close();
 
@@ -441,7 +441,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
 
                                 cadenasql = "UPDATE CUERPO_DOCU_F_V3 SET PRECIOUNI=" + PRECIOUNIFLETE_TEMP_TEMP + ", VENTAGRAVADA=" + VENTAGRAVADA_TEMP + " WHERE ID_DTE=" + ID_DTE + " AND ID_CUERPO_DOCUMENTO=" + ID_CUERPO_DOCUMENTO;
                                 stmt1 = conn.createStatement();
-                                System.out.println(cadenasql);
+                                // System.out.println(cadenasql);
                                 stmt1.executeUpdate(cadenasql);
                                 stmt1.close();
                             }
@@ -465,7 +465,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                                         + ID_CAT_015_TRIBUTO_EIVAC + ","
                                         + TRIBUTO_VALOR + ")";
                                 stmt1 = conn.createStatement();
-                                System.out.println(cadenasql);
+                                // System.out.println(cadenasql);
                                 stmt1.executeUpdate(cadenasql);
                                 stmt1.close();
                             }
@@ -522,7 +522,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                             + NOGRAVADO + ","
                             + IVAITEM + ")";
                     stmt1 = conn.createStatement();
-                    System.out.println(cadenasql);
+                    // System.out.println(cadenasql);
                     stmt1.executeUpdate(cadenasql);
                     stmt1.close();
 
@@ -546,7 +546,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                                 + ID_CAT_015_TRIBUTO + ","
                                 + TRIBUTO_VALOR + ")";
                         stmt1 = conn.createStatement();
-                        System.out.println(cadenasql);
+                        // System.out.println(cadenasql);
                         stmt1.executeUpdate(cadenasql);
                         stmt1.close();
                     }
@@ -555,7 +555,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                         if (ID_CAT_015_TRIBUTO.equals(Long.valueOf("1"))) {
                             cadenasql = "UPDATE CUERPO_DOCU_F_V3 SET IVAITEM=" + TRIBUTO_VALOR + " WHERE ID_DTE=" + ID_DTE + " AND ID_CUERPO_DOCUMENTO=" + ID_CUERPO_DOCUMENTO;
                             stmt1 = conn.createStatement();
-                            System.out.println(cadenasql);
+                            // System.out.println(cadenasql);
                             stmt1.executeUpdate(cadenasql);
                             stmt1.close();
 
@@ -575,7 +575,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
 
                             cadenasql = "UPDATE CUERPO_DOCU_F_V3 SET PRECIOUNI=" + VENTAGRAVADA_TEMP + ", VENTAGRAVADA=" + VENTAGRAVADA_TEMP + " WHERE ID_DTE=" + ID_DTE + " AND ID_CUERPO_DOCUMENTO=" + ID_CUERPO_DOCUMENTO;
                             stmt1 = conn.createStatement();
-                            System.out.println(cadenasql);
+                            // System.out.println(cadenasql);
                             stmt1.executeUpdate(cadenasql);
                             stmt1.close();
                         }
@@ -599,7 +599,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                                     + ID_CAT_015_TRIBUTO_EIVAC + ","
                                     + TRIBUTO_VALOR + ")";
                             stmt1 = conn.createStatement();
-                            System.out.println(cadenasql);
+                            // System.out.println(cadenasql);
                             stmt1.executeUpdate(cadenasql);
                             stmt1.close();
                         }
@@ -653,7 +653,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                             + NOGRAVADO + ","
                             + IVAITEM + ")";
                     stmt1 = conn.createStatement();
-                    System.out.println(cadenasql);
+                    // System.out.println(cadenasql);
                     stmt1.executeUpdate(cadenasql);
                     stmt1.close();
 
@@ -677,7 +677,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                                     + ID_CAT_015_TRIBUTO + ","
                                     + TRIBUTO_VALOR + ")";
                             stmt1 = conn.createStatement();
-                            System.out.println(cadenasql);
+                            // System.out.println(cadenasql);
                             stmt1.executeUpdate(cadenasql);
                             stmt1.close();
                         }
@@ -686,7 +686,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                             if (ID_CAT_015_TRIBUTO.equals(Long.valueOf("1"))) {
                                 cadenasql = "UPDATE CUERPO_DOCU_F_V3 SET IVAITEM=" + TRIBUTO_VALOR + " WHERE ID_DTE=" + ID_DTE + " AND ID_CUERPO_DOCUMENTO=" + ID_CUERPO_DOCUMENTO;
                                 stmt1 = conn.createStatement();
-                                System.out.println(cadenasql);
+                                // System.out.println(cadenasql);
                                 stmt1.executeUpdate(cadenasql);
                                 stmt1.close();
 
@@ -706,7 +706,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
 
                                 cadenasql = "UPDATE CUERPO_DOCU_F_V3 SET PRECIOUNI=" + PRECIOUNIPROMO_TEMP_TEMP + ", VENTAGRAVADA=" + VENTAGRAVADA_TEMP + " WHERE ID_DTE=" + ID_DTE + " AND ID_CUERPO_DOCUMENTO=" + ID_CUERPO_DOCUMENTO;
                                 stmt1 = conn.createStatement();
-                                System.out.println(cadenasql);
+                                // System.out.println(cadenasql);
                                 stmt1.executeUpdate(cadenasql);
                                 stmt1.close();
                             }
@@ -730,7 +730,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                                         + ID_CAT_015_TRIBUTO_EIVAC + ","
                                         + TRIBUTO_VALOR + ")";
                                 stmt1 = conn.createStatement();
-                                System.out.println(cadenasql);
+                                // System.out.println(cadenasql);
                                 stmt1.executeUpdate(cadenasql);
                                 stmt1.close();
                             }

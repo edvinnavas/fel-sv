@@ -87,7 +87,7 @@ public class Ctrl_Apendice_NC_V3 implements Serializable {
                     + ETIQUETA + "','"
                     + VALOR + "')";
             Statement stmt = conn.createStatement();
-            System.out.println(cadenasql);
+            // System.out.println(cadenasql);
             stmt.executeUpdate(cadenasql);
             stmt.close();
             
@@ -112,7 +112,7 @@ public class Ctrl_Apendice_NC_V3 implements Serializable {
                     + ETIQUETA + "','"
                     + VALOR + "')";
             stmt = conn.createStatement();
-            System.out.println(cadenasql);
+            // System.out.println(cadenasql);
             stmt.executeUpdate(cadenasql);
             stmt.close();
             
@@ -144,7 +144,7 @@ public class Ctrl_Apendice_NC_V3 implements Serializable {
                     + ETIQUETA + "','"
                     + VALOR + "')";
             stmt = conn.createStatement();
-            System.out.println(cadenasql);
+            // System.out.println(cadenasql);
             stmt.executeUpdate(cadenasql);
             stmt.close();
             

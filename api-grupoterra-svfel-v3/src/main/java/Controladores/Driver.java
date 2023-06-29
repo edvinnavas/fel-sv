@@ -14,12 +14,16 @@ public class Driver implements Serializable {
     public Driver() {
     }
 
-    public String guardar_en_archivo(Long id_dte, String tipo_documento, String cadena) {
+    public String guardar_en_archivo(String ambiente, Long id_dte, String tipo_documento, String cadena) {
         String resultado = "";
 
         try {
-            // String path_file = "C:\\\\FELSV3\\py\\";
-            String path_file = "/FELSV3/py/";
+            String path_file = "";
+            if (ambiente.equals("PY")) {
+                path_file = "/FELSV3/py/";
+            } else {
+                path_file = "/FELSV3/pd/";
+            }
             File directorio = new File(path_file);
             directorio.mkdir();
 
@@ -28,18 +32,22 @@ public class Driver implements Serializable {
             pw_request.println(new Date() + ":: " + cadena);
             fichero.close();
         } catch (Exception ex) {
-
+            System.out.println(ex.toString());
         }
 
         return resultado;
     }
     
-    public String guardar_en_archivo_json(Long id_dte, String tipo_documento, String cadena) {
+    public String guardar_en_archivo_json(String ambiente, Long id_dte, String tipo_documento, String cadena) {
         String resultado = "";
 
         try {
-            // String path_file = "C:\\\\FELSV3\\py\\";
-            String path_file = "/FELSV3/json/";
+            String path_file = "";
+            if (ambiente.equals("PY")) {
+                path_file = "/FELSV3/json/";
+            } else {
+                path_file = "/FELSV3/json_pd/";
+            }
             File directorio = new File(path_file);
             directorio.mkdir();
 
@@ -48,7 +56,7 @@ public class Driver implements Serializable {
             pw_request.println(cadena);
             fichero.close();
         } catch (Exception ex) {
-
+            System.out.println(ex.toString());
         }
 
         return resultado;

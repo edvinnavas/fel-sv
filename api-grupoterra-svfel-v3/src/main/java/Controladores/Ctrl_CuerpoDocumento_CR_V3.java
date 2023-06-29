@@ -120,7 +120,7 @@ public class Ctrl_CuerpoDocumento_CR_V3 implements Serializable {
                         + IVARETENIDO + ",'"
                         + DESCRIPCION + "')";
                 Statement stmt1 = conn.createStatement();
-                System.out.println(cadenasql);
+                // System.out.println(cadenasql);
                 stmt1.executeUpdate(cadenasql);
                 stmt1.close();
             }

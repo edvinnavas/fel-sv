@@ -102,7 +102,7 @@ public class Ctrl_DocumentoRelacionando_ND_V3 implements Serializable {
                             + NUMERODOCUMENTO + "',"
                             + "TO_DATE('" + FECHAEMISION + "','YYYY/MM/DD HH24:MI:SS')" + ")";
                     Statement stmt = conn.createStatement();
-                    System.out.println(cadenasql);
+                    // System.out.println(cadenasql);
                     stmt.executeUpdate(cadenasql);
                     stmt.close();
                     
