@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -527,65 +528,12 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                     stmt1.close();
 
                     // EXTRAE EL IMPUESTO APLICADO A LA LINEA DEL IEC.
-                    NUM_TRIBUTO = 1;
-                    // Long ID_CAT_015_TRIBUTO = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_015 C WHERE C.VALOR_JDE LIKE '%[" + rs.getString(9) + "]%'", conn);
-                    Long ID_CAT_015_TRIBUTO = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_015 C WHERE C.VALOR_JDE LIKE '%[EIVAK]%'", conn);
-                    // Number TRIBUTO_VALOR = ctrl_base_datos.ObtenerDouble("SELECT F.TATXR1/100000 FROM " + esquema + ".F4008@" + dblink + " F WHERE TRIM(F.TATXA1)='" + rs.getString(9) + "' AND F.TAITM=0", conn);
-                    Number TRIBUTO_VALOR = ctrl_base_datos.ObtenerDouble("SELECT F.TATXR1/100000 FROM " + esquema + ".F4008@" + dblink + " F WHERE TRIM(F.TATXA1)='EIVAK' AND F.TAITM=0", conn);
-                    TRIBUTO_VALOR = VENTAGRAVADA.doubleValue() * TRIBUTO_VALOR.doubleValue();
-                    if (TRIBUTO_VALOR.doubleValue() > 0.00) {
-                        cadenasql = "INSERT INTO CUERPO_TRIBUTO_F_V3 ( "
-                                + "ID_DTE, "
-                                + "ID_CUERPO_DOCUMENTO, "
-                                + "NUM_TRIBUTO, "
-                                + "ID_CAT_015, "
-                                + "VALOR) VALUES ("
-                                + ID_DTE + ","
-                                + ID_CUERPO_DOCUMENTO + ","
-                                + NUM_TRIBUTO + ","
-                                + ID_CAT_015_TRIBUTO + ","
-                                + TRIBUTO_VALOR + ")";
-                        stmt1 = conn.createStatement();
-                        // System.out.println(cadenasql);
-                        stmt1.executeUpdate(cadenasql);
-                        stmt1.close();
-                    }
-
-                    if (ID_CAT_015_TRIBUTO != null) {
-                        if (ID_CAT_015_TRIBUTO.equals(Long.valueOf("1"))) {
-                            cadenasql = "UPDATE CUERPO_DOCU_F_V3 SET IVAITEM=" + TRIBUTO_VALOR + " WHERE ID_DTE=" + ID_DTE + " AND ID_CUERPO_DOCUMENTO=" + ID_CUERPO_DOCUMENTO;
-                            stmt1 = conn.createStatement();
-                            // System.out.println(cadenasql);
-                            stmt1.executeUpdate(cadenasql);
-                            stmt1.close();
-
-                            /* Number PRECIOUNIIEC_TEMP_TEMP;
-                            if (PRECIOUNIIEC_TEMP.doubleValue() > 0.00) {
-                                PRECIOUNIIEC_TEMP_TEMP = PRECIOUNIIEC_TEMP.doubleValue() + (TRIBUTO_VALOR.doubleValue() / CANTIDAD);
-                            } else {
-                                PRECIOUNIIEC_TEMP_TEMP = 0.00;
-                            } */
-
-                            Number VENTAGRAVADA_TEMP;
-                            if (VENTAGRAVADA.doubleValue() > 0.00) {
-                                VENTAGRAVADA_TEMP = VENTAGRAVADA.doubleValue() + TRIBUTO_VALOR.doubleValue();
-                            } else {
-                                VENTAGRAVADA_TEMP = 0.00;
-                            }
-
-                            cadenasql = "UPDATE CUERPO_DOCU_F_V3 SET PRECIOUNI=" + VENTAGRAVADA_TEMP + ", VENTAGRAVADA=" + VENTAGRAVADA_TEMP + " WHERE ID_DTE=" + ID_DTE + " AND ID_CUERPO_DOCUMENTO=" + ID_CUERPO_DOCUMENTO;
-                            stmt1 = conn.createStatement();
-                            // System.out.println(cadenasql);
-                            stmt1.executeUpdate(cadenasql);
-                            stmt1.close();
-                        }
-                    }
-
-                    /* if (rs.getString(9).trim().equals("EIVAC")) {
+                    NUM_TRIBUTO = 0;
+                    if (rs.getString(8).equals("Y")) {
                         NUM_TRIBUTO++;
-                        Long ID_CAT_015_TRIBUTO_EIVAC = Long.valueOf("18");
-                        Number TRIBUTO_VALOR_EIVAC = ctrl_base_datos.ObtenerDouble("SELECT F.TATXR2/100000 FROM " + esquema + ".F4008@" + dblink + " F WHERE TRIM(F.TATXA1)='" + rs.getString(9) + "' AND F.TAITM=0", conn);
-                        TRIBUTO_VALOR = VENTAGRAVADA.doubleValue() * TRIBUTO_VALOR_EIVAC.doubleValue();
+                        Long ID_CAT_015_TRIBUTO = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_015 C WHERE C.VALOR_JDE LIKE '%[" + rs.getString(9) + "]%'", conn);
+                        Number TRIBUTO_VALOR = ctrl_base_datos.ObtenerDouble("SELECT F.TATXR1/100000 FROM " + esquema + ".F4008@" + dblink + " F WHERE TRIM(F.TATXA1)='" + rs.getString(9) + "' AND F.TAITM=0", conn);
+                        TRIBUTO_VALOR = VENTAGRAVADA.doubleValue() * TRIBUTO_VALOR.doubleValue();
                         if (TRIBUTO_VALOR.doubleValue() > 0.00) {
                             cadenasql = "INSERT INTO CUERPO_TRIBUTO_F_V3 ( "
                                     + "ID_DTE, "
@@ -596,14 +544,60 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                                     + ID_DTE + ","
                                     + ID_CUERPO_DOCUMENTO + ","
                                     + NUM_TRIBUTO + ","
-                                    + ID_CAT_015_TRIBUTO_EIVAC + ","
+                                    + ID_CAT_015_TRIBUTO + ","
                                     + TRIBUTO_VALOR + ")";
                             stmt1 = conn.createStatement();
                             // System.out.println(cadenasql);
                             stmt1.executeUpdate(cadenasql);
                             stmt1.close();
                         }
-                    } */
+
+                        if (ID_CAT_015_TRIBUTO != null) {
+                            if (ID_CAT_015_TRIBUTO.equals(Long.valueOf("1"))) {
+                                cadenasql = "UPDATE CUERPO_DOCU_F_V3 SET IVAITEM=" + TRIBUTO_VALOR + " WHERE ID_DTE=" + ID_DTE + " AND ID_CUERPO_DOCUMENTO=" + ID_CUERPO_DOCUMENTO;
+                                stmt1 = conn.createStatement();
+                                // System.out.println(cadenasql);
+                                stmt1.executeUpdate(cadenasql);
+                                stmt1.close();
+
+                                if (VENTAGRAVADA.doubleValue() > 0.00) {
+                                    VENTAGRAVADA = VENTAGRAVADA.doubleValue() + (TRIBUTO_VALOR.doubleValue() / CANTIDAD);
+                                } else {
+                                    VENTAGRAVADA = 0.00;
+                                }
+
+                                cadenasql = "UPDATE CUERPO_DOCU_F_V3 SET PRECIOUNI=" + VENTAGRAVADA + ", VENTAGRAVADA=" + VENTAGRAVADA + " WHERE ID_DTE=" + ID_DTE + " AND ID_CUERPO_DOCUMENTO=" + ID_CUERPO_DOCUMENTO;
+                                stmt1 = conn.createStatement();
+                                // System.out.println(cadenasql);
+                                stmt1.executeUpdate(cadenasql);
+                                stmt1.close();
+                            }
+                        }
+
+                        if (rs.getString(9).trim().equals("EIVAC")) {
+                            NUM_TRIBUTO++;
+                            Long ID_CAT_015_TRIBUTO_EIVAC = Long.valueOf("18");
+                            Number TRIBUTO_VALOR_EIVAC = ctrl_base_datos.ObtenerDouble("SELECT F.TATXR2/100000 FROM " + esquema + ".F4008@" + dblink + " F WHERE TRIM(F.TATXA1)='" + rs.getString(9) + "' AND F.TAITM=0", conn);
+                            TRIBUTO_VALOR = VENTAGRAVADA.doubleValue() * TRIBUTO_VALOR_EIVAC.doubleValue();
+                            if (TRIBUTO_VALOR.doubleValue() > 0.00) {
+                                cadenasql = "INSERT INTO CUERPO_TRIBUTO_F_V3 ( "
+                                        + "ID_DTE, "
+                                        + "ID_CUERPO_DOCUMENTO, "
+                                        + "NUM_TRIBUTO, "
+                                        + "ID_CAT_015, "
+                                        + "VALOR) VALUES ("
+                                        + ID_DTE + ","
+                                        + ID_CUERPO_DOCUMENTO + ","
+                                        + NUM_TRIBUTO + ","
+                                        + ID_CAT_015_TRIBUTO_EIVAC + ","
+                                        + TRIBUTO_VALOR + ")";
+                                stmt1 = conn.createStatement();
+                                // System.out.println(cadenasql);
+                                stmt1.executeUpdate(cadenasql);
+                                stmt1.close();
+                            }
+                        }
+                    }
                 }
 
                 // EXTRAE LA PROMOCIÓN DEL PRODUCTO SI APLICA.
@@ -741,16 +735,25 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
             rs.close();
             stmt.close();
 
-            cadenasql = "SELECT F.ID_DTE, F.ID_CUERPO_DOCUMENTO, F.VENTAGRAVADA FROM CUERPO_DOCU_F_V3 F WHERE F.ID_DTE=" + id_dte + " ORDER BY F.ID_DTE, F.ID_CUERPO_DOCUMENTO";
+            cadenasql = "SELECT F.ID_DTE, F.ID_CUERPO_DOCUMENTO, F.VENTAGRAVADA, F.IVAITEM FROM CUERPO_DOCU_F_V3 F WHERE F.ID_DTE=" + id_dte + " ORDER BY F.ID_DTE, F.ID_CUERPO_DOCUMENTO";
             stmt = conn.createStatement();
             rs = stmt.executeQuery(cadenasql);
             while (rs.next()) {
                 Integer no_impuestos = ctrl_base_datos.ObtenerEntero("SELECT COUNT(*) NUMERO FROM CUERPO_TRIBUTO_F_V3 F WHERE F.ID_DTE=" + rs.getString(1) + " AND F.ID_CUERPO_DOCUMENTO=" + rs.getString(2), conn);
                 if (no_impuestos == 0) {
-                    cadenasql = "UPDATE CUERPO_DOCU_F_V3 SET VENTAEXENTA=" + rs.getDouble(3) + ", VENTAGRAVADA=0.00 WHERE ID_DTE=" + rs.getString(1) + " AND ID_CUERPO_DOCUMENTO=" + rs.getString(2);
+                    cadenasql = "UPDATE CUERPO_DOCU_F_V3 SET VENTAEXENTA=" + rs.getDouble(3) + ", VENTAGRAVADA=0.00, IVAITEM=0.00 WHERE ID_DTE=" + rs.getString(1) + " AND ID_CUERPO_DOCUMENTO=" + rs.getString(2);
                     Statement stmt1 = conn.createStatement();
                     stmt1.executeUpdate(cadenasql);
                     stmt1.close();
+                } else {
+                    if (rs.getDouble(3) > 0.00 && rs.getDouble(4) == 0.00) {
+                        Double IVAITEM = rs.getDouble(3) - (rs.getDouble(3) / 1.13);
+                        DecimalFormat decimalFormat = new DecimalFormat("############0.00");
+                        cadenasql = "UPDATE CUERPO_DOCU_F_V3 SET IVAITEM=" + decimalFormat.format(IVAITEM) + " WHERE ID_DTE=" + rs.getString(1) + " AND ID_CUERPO_DOCUMENTO=" + rs.getString(2);
+                        Statement stmt1 = conn.createStatement();
+                        stmt1.executeUpdate(cadenasql);
+                        stmt1.close();
+                    }
                 }
             }
             rs.close();

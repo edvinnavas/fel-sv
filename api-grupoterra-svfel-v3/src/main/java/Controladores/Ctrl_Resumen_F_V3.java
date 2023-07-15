@@ -134,7 +134,7 @@ public class Ctrl_Resumen_F_V3 implements Serializable {
                 NUMERO_PARTES[1] = "00";
             }
             String TOTALLETRAS = driver.cantidadConLetra(TOTALPAGAR_LONG.toString()).toUpperCase() + " DOLARES CON " + NUMERO_PARTES[1] + "/100";
-            Number TOTALIVA = ctrl_base_datos.ObtenerDouble("SELECT NVL(SUM(F.VALOR),0.00) VALOR FROM CUERPO_TRIBUTO_F_V3 F WHERE F.ID_CAT_015=1 AND F.ID_DTE=" + ID_DTE, conn);
+            Number TOTALIVA = ctrl_base_datos.ObtenerDouble("SELECT SUM(A.IVAITEM) VALOR FROM CUERPO_DOCU_F_V3 A WHERE A.ID_DTE=" + ID_DTE, conn);
             Number SALDOFAVOR = 0.00;
             Long ID_CAT_016 = Long.valueOf("2");
             Long ID_CAT_017 = null;
