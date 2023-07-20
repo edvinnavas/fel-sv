@@ -482,7 +482,7 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                     Long ID_CAT_015_IEC = Long.valueOf("9");
                     Long ID_CAT_014_IEC = Long.valueOf("56");
 
-                    // Number PRECIOUNIIEC_TEMP = PRECIOUNIIEC.doubleValue() / CANTIDAD;
+                    Number PRECIOUNIIEC_TEMP = PRECIOUNIIEC.doubleValue() / CANTIDAD;
                     VENTAEXENTA = 0.00;
                     VENTAGRAVADA = PRECIOUNIIEC;
                     NOGRAVADO = 0.00;
@@ -560,13 +560,21 @@ public class Ctrl_CuerpoDocumento_F_V3 implements Serializable {
                                 stmt1.executeUpdate(cadenasql);
                                 stmt1.close();
 
-                                if (VENTAGRAVADA.doubleValue() > 0.00) {
-                                    VENTAGRAVADA = VENTAGRAVADA.doubleValue() + (TRIBUTO_VALOR.doubleValue() / CANTIDAD);
+                                Number PRECIOUNIIEC_TEMP_TEMP;
+                                if (PRECIOUNIIEC_TEMP .doubleValue() > 0.00) {
+                                    PRECIOUNIIEC_TEMP_TEMP = PRECIOUNIIEC_TEMP.doubleValue() + (TRIBUTO_VALOR.doubleValue() / CANTIDAD);
                                 } else {
-                                    VENTAGRAVADA = 0.00;
+                                    PRECIOUNIIEC_TEMP_TEMP = 0.00;
                                 }
 
-                                cadenasql = "UPDATE CUERPO_DOCU_F_V3 SET PRECIOUNI=" + VENTAGRAVADA + ", VENTAGRAVADA=" + VENTAGRAVADA + " WHERE ID_DTE=" + ID_DTE + " AND ID_CUERPO_DOCUMENTO=" + ID_CUERPO_DOCUMENTO;
+                                Number VENTAGRAVADA_TEMP;
+                                if (VENTAGRAVADA.doubleValue() > 0.00) {
+                                    VENTAGRAVADA_TEMP = VENTAGRAVADA.doubleValue() + TRIBUTO_VALOR.doubleValue();
+                                } else {
+                                    VENTAGRAVADA_TEMP = 0.00;
+                                }
+
+                                cadenasql = "UPDATE CUERPO_DOCU_F_V3 SET PRECIOUNI=" + VENTAGRAVADA_TEMP + ", VENTAGRAVADA=" + VENTAGRAVADA_TEMP + " WHERE ID_DTE=" + ID_DTE + " AND ID_CUERPO_DOCUMENTO=" + ID_CUERPO_DOCUMENTO;
                                 stmt1 = conn.createStatement();
                                 // System.out.println(cadenasql);
                                 stmt1.executeUpdate(cadenasql);

@@ -66,9 +66,16 @@ public class Ctrl_Identificacion_NR_V3 implements Serializable {
             stmt.close();
             String CODIGOGENERACION = UUID.randomUUID().toString().toUpperCase();
             Long ID_CAT_003 = Long.valueOf("1");
-            Long ID_CAT_004 = Long.valueOf("1");
-            Long ID_CAT_005 = null;
-            String MOTIVOCONTIN = null;
+            Long ID_CAT_004 = ctrl_base_datos.ObtenerLong("SELECT F.CONTINGENCIA FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA='" + MCU_JDE + "'", conn);
+            Long ID_CAT_005;
+            String MOTIVOCONTIN;
+            if(ID_CAT_004.equals(Long.valueOf("2"))) {
+                ID_CAT_005 = Long.valueOf("2");
+                MOTIVOCONTIN = "No disponibilidad de sistema del emisor.";
+            } else {
+                ID_CAT_005 = null;
+                MOTIVOCONTIN = null;
+            }
             // String FECHA_HORA_EMISION = ctrl_base_datos.ObtenerString("SELECT TO_CHAR(CURRENT_DATE,'YYYY/MM/DD') || ' ' || TO_CHAR(CURRENT_TIMESTAMP,'HH24:MI:SS') FECHA_HORA_EMISION FROM DUAL", conn);
             String FECHA_HORA_EMISION = ctrl_base_datos.ObtenerString("SELECT TO_CHAR(TO_DATE(TO_CHAR(" + IVD_JDE + " + 1900000,'9999999'),'YYYYDDD'),'YYYY/MM/DD') || ' ' || TO_CHAR(CURRENT_TIMESTAMP,'HH24:MI:SS') FECHA_HORA_EMISION FROM DUAL", conn);
             String TIPOMONEDA = CRCD_JDE;
