@@ -71,7 +71,7 @@ public class Ctrl_Identificacion_NC_V3 implements Serializable {
             String MOTIVOCONTIN;
             if(ID_CAT_004.equals(Long.valueOf("2"))) {
                 ID_CAT_005 = Long.valueOf("2");
-                MOTIVOCONTIN = "No disponibilidad de sistema del emisor.";
+                MOTIVOCONTIN = "'No disponibilidad de sistema del emisor.'";
             } else {
                 ID_CAT_005 = null;
                 MOTIVOCONTIN = null;

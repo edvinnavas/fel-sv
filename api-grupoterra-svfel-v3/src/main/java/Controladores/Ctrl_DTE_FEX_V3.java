@@ -391,7 +391,7 @@ public class Ctrl_DTE_FEX_V3 implements Serializable {
                     + "</body>"
                     + "</html>";
 
-            if (respuesta_recepciondte_mh.getCodigoMsg().trim().equals("001") || respuesta_recepciondte_mh.getCodigoMsg().trim().equals("002")) {
+            if (respuesta_recepciondte_mh.getCodigoMsg().trim().equals("001") || respuesta_recepciondte_mh.getCodigoMsg().trim().equals("002") || respuesta_recepciondte_mh.getCodigoMsg().trim().equals("CCC")) {
                 List<Adjunto> files = new ArrayList<>();
                 
                 Cliente_Rest_Jasper cliente_rest_jasper = new Cliente_Rest_Jasper();
