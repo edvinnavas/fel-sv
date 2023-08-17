@@ -2,6 +2,7 @@ package servicio;
 
 import ClienteServicio.Cliente_Rest_MH;
 import Controladores.Ctrl_DTE_CCF_V3;
+import Controladores.Ctrl_DTE_CONTINGENCIA_V3;
 import Controladores.Ctrl_DTE_CR_V3;
 import Controladores.Ctrl_DTE_FEX_V3;
 import Controladores.Ctrl_DTE_NC_V3;
@@ -13,6 +14,7 @@ import Controladores.Ctrl_DTE_V3;
 import Controladores.Ctrl_Firmar_Documento_JWT;
 import Controladores.Driver;
 import Entidades.DTE_CCF_V3;
+import Entidades.DTE_CONTIGENCIA_V3;
 import Entidades.DTE_CR_V3;
 import Entidades.DTE_FEX_V3;
 import Entidades.DTE_NC_V3;
@@ -2210,6 +2212,55 @@ public class MyResource implements Serializable {
             resultado = "ID-DTE PROCESADOS: " + no_dtes.toString();
         } catch (Exception ex) {
             System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:anulardte_v3()|ERROR:" + ex.toString());
+        }
+
+        return resultado;
+    }
+    
+    @Path("contingencia-v3/{ambiente}/{KCOO_JDE}/{MCU_JDE}/{id_emisor}/{fecha_hora_inicio}/{fecha_hora_fin}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String contingencia_v3(
+            @PathParam("ambiente") String ambiente,
+            @PathParam("KCOO_JDE") String KCOO_JDE, 
+            @PathParam("MCU_JDE") String MCU_JDE,
+            @PathParam("id_emisor") Long id_emisor, 
+            @PathParam("fecha_hora_inicio") String fecha_hora_inicio, 
+            @PathParam("fecha_hora_fin") String fecha_hora_fin) {
+
+        Driver driver = new Driver();
+        String resultado = "";
+
+        try {
+            // EXTRAER DOCUMENTOS DESDE JDE HACIA FEL_TEST.
+            Ctrl_DTE_CONTINGENCIA_V3 ctrl_dte_contingencia_v3 = new Ctrl_DTE_CONTINGENCIA_V3();
+            List<Long> no_contin = ctrl_dte_contingencia_v3.extraer_evento_contingencia_v3(ambiente, KCOO_JDE, MCU_JDE, id_emisor, fecha_hora_inicio, fecha_hora_fin);
+            
+            for (Integer d = 0; d < no_contin.size(); d++) {
+                // GENERAR JSON SIN FIRMAR.
+                DTE_CONTIGENCIA_V3 dte_contingencia_v3 = ctrl_dte_contingencia_v3.generar_json_contingencia_v3(ambiente, id_emisor);
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                String dte_sin_firmar = "{"
+                        + "\"nit\":\"" + dte_contingencia_v3.getEmisor().getNit() + "\","
+                        + "\"activo\":true,"
+                        + "\"passwordPri\":\"UNOSV2021*\","
+                        + "\"dteJson\":" + gson.toJson(dte_contingencia_v3)
+                        + "}";
+                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_contin.get(d), "contin", gson.toJson(dte_contingencia_v3));
+                System.out.println("JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                
+                /****************************************************************************************************
+                 * FIRMAR JSON CON JWT CONTIN.                                                                          *
+                 ****************************************************************************************************/
+                Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
+                Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_contingencia_v3.getEmisor().getNit(), dte_sin_firmar);
+                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                
+                resultado = new Gson().toJson(dte_firmado);
+            }
+        } catch (Exception ex) {
+            System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:contingencia_v3()|ERROR:" + ex.toString());
         }
 
         return resultado;

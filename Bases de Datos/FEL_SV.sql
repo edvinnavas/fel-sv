@@ -261,6 +261,18 @@ SELECT F.* FROM IDENTIFICACION_INVALIDACION_V3 F WHERE F.ID_DTE IN (1);
 SELECT F.* FROM DOCUMENTO_INVALIDACION_V3 F WHERE F.ID_DTE IN (1);
 SELECT F.* FROM MOTIVO_INVALIDACION_V3 F WHERE F.ID_DTE IN (1);
 -- ***************************************************************************************************************************
+-- *          EVENTO DE CONTINGENCIA.                                                                                        *
+-- ***************************************************************************************************************************
+SELECT F.* FROM EVENTO_CONTINGENCIA_V3 F ORDER BY F.ID_CONTINGENCIA DESC;
+SELECT F.* FROM IDENTIFICACION_CONTINGENCIA_V3 F ORDER BY F.ID_CONTINGENCIA DESC;
+SELECT F.* FROM DETALLE_DTE_CONTINGENCIA_V3 F ORDER BY F.ID_CONTINGENCIA DESC;
+SELECT F.* FROM MOTIVO_CONTINGENCIA_V3 F ORDER BY F.ID_CONTINGENCIA DESC;
+
+SELECT F.* FROM EVENTO_CONTINGENCIA_V3 F WHERE F.ID_CONTINGENCIA IN (1);
+SELECT F.* FROM IDENTIFICACION_CONTINGENCIA_V3 F WHERE F.ID_CONTINGENCIA IN (1);
+SELECT F.* FROM DETALLE_DTE_CONTINGENCIA_V3 F WHERE F.ID_CONTINGENCIA IN (1);
+SELECT F.* FROM MOTIVO_CONTINGENCIA_V3 F WHERE F.ID_CONTINGENCIA IN (1);
+-- ***************************************************************************************************************************
 -- *          CONSULTA JDE-FELSV.                                                                                            *
 -- ***************************************************************************************************************************
 SELECT F.* FROM PRODDTA.F5542FEL@JDEPD F;

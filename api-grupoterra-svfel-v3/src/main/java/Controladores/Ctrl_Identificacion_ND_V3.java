@@ -65,14 +65,16 @@ public class Ctrl_Identificacion_ND_V3 implements Serializable {
             stmt.executeUpdate(cadenasql);
             stmt.close();
             String CODIGOGENERACION = UUID.randomUUID().toString().toUpperCase();
-            Long ID_CAT_003 = Long.valueOf("1");
+            Long ID_CAT_003;
             Long ID_CAT_004 = ctrl_base_datos.ObtenerLong("SELECT F.CONTINGENCIA FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA='" + MCU_JDE + "'", conn);
             Long ID_CAT_005;
             String MOTIVOCONTIN;
             if(ID_CAT_004.equals(Long.valueOf("2"))) {
+                ID_CAT_003 = Long.valueOf("2");
                 ID_CAT_005 = Long.valueOf("2");
                 MOTIVOCONTIN = "'No disponibilidad de sistema del emisor.'";
             } else {
+                ID_CAT_003 = Long.valueOf("1");
                 ID_CAT_005 = null;
                 MOTIVOCONTIN = null;
             }
