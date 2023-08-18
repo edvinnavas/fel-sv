@@ -4,7 +4,7 @@ import ClienteServicio.Cliente_Rest_SendMail;
 import Entidades.Adjunto;
 import Entidades.DTE_CONTIGENCIA_V3;
 import Entidades.Mensaje_Correo;
-import Entidades.RESPUESTA_RECEPCIONDTE_MH;
+import Entidades.RESPUESTA_CONTINGENCIA_MH;
 import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileInputStream;
@@ -159,7 +159,7 @@ public class Ctrl_DTE_CONTINGENCIA_V3 implements Serializable {
         return resultado;
     }
 
-    public void registro_db_respuesta_mh(String ambiente, RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh, Long id_dte) {
+    public void registro_db_respuesta_mh(String ambiente, RESPUESTA_CONTINGENCIA_MH respuesta_contingencia_mh, Long id_contigencia) {
         Connection conn = null;
 
         try {
@@ -178,39 +178,21 @@ public class Ctrl_DTE_CONTINGENCIA_V3 implements Serializable {
 
             conn.setAutoCommit(false);
 
-            String cadenasql = "UPDATE DTE_INVALIDACION_V3 SET "
-                    + "RESPONSE_VERSION=" + respuesta_recepciondte_mh.getVersion() + ", "
-                    + "RESPONSE_AMBIENTE='" + respuesta_recepciondte_mh.getAmbiente() + "', "
-                    + "RESPONSE_VERSIONAPP=" + respuesta_recepciondte_mh.getVersionApp() + ", "
-                    + "RESPONSE_ESTADO='" + respuesta_recepciondte_mh.getEstado() + "', "
-                    + "RESPONSE_CODIGOGENERACION='" + respuesta_recepciondte_mh.getCodigoGeneracion() + "', "
-                    + "RESPONSE_NUMVALIDACION='" + respuesta_recepciondte_mh.getSelloRecibido() + "', "
-                    + "RESPONSE_FHPROCESAMIENTO='" + respuesta_recepciondte_mh.getFhProcesamiento() + "', "
-                    + "RESPONSE_CODIGOMSG='" + respuesta_recepciondte_mh.getCodigoMsg() + "', "
-                    + "RESPONSE_DESCRIPCIONMSG='" + respuesta_recepciondte_mh.getDescripcionMsg() + "', "
-                    + "RESPONSE_OBSERVACIONES='" + respuesta_recepciondte_mh.getObservaciones().toString() + "', "
-                    + "RESPONSE_CLASIFICAMSG='" + respuesta_recepciondte_mh.getClasificaMsg() + "' "
+            String cadenasql = "UPDATE EVENTO_CONTINGENCIA_V3 SET "
+                    + "RESPONSE_ESTADO='" + respuesta_contingencia_mh.getEstado() + "', "
+                    + "RESPONSE_FECHA_HORA='" + respuesta_contingencia_mh.getFechaHora() + "', "
+                    + "RESPONSE_MENSAJE='" + respuesta_contingencia_mh.getMensaje() + "', "
+                    + "RESPONSE_SELLO_RECIBIDO='" + respuesta_contingencia_mh.getSelloRecibido() + "', "
+                    + "RESPONSE_OBSERVACIONES='" + respuesta_contingencia_mh.getObservaciones().toString() + "' "
                     + "WHERE "
-                    + "ID_DTE=" + id_dte;
+                    + "ID_CONTINGENCIA=" + id_contigencia;
             Statement stmt = conn.createStatement();
             // System.out.println(cadenasql);
             stmt.executeUpdate(cadenasql);
             stmt.close();
-
-            String KCOO_JDE = ctrl_base_datos.ObtenerString("SELECT F.KCOO_JDE FROM DTE_INVALIDACION_V3 F WHERE F.ID_DTE=" + id_dte, conn);
-            String DOCO_JDE = ctrl_base_datos.ObtenerString("SELECT F.DOCO_JDE FROM DTE_INVALIDACION_V3 F WHERE F.ID_DTE=" + id_dte, conn);
-            String DCTO_JDE = ctrl_base_datos.ObtenerString("SELECT F.DCTO_JDE FROM DTE_INVALIDACION_V3 F WHERE F.ID_DTE=" + id_dte, conn);
-            String DOC_JDE = ctrl_base_datos.ObtenerString("SELECT F.DOC_JDE FROM DTE_INVALIDACION_V3 F WHERE F.ID_DTE=" + id_dte, conn);
-            String DCT_JDE = ctrl_base_datos.ObtenerString("SELECT F.DCT_JDE FROM DTE_INVALIDACION_V3 F WHERE F.ID_DTE=" + id_dte, conn);
-
-            cadenasql = "UPDATE " + esquema + ".F5542FEL@" + dblink + " SET "
-                    + "FERCD='" + respuesta_recepciondte_mh.getCodigoMsg().trim() + "' "
-                    + "WHERE FEKCOO='" + KCOO_JDE + "' AND FEDOCO=" + DOCO_JDE + " AND FEDCTO='" + DCTO_JDE + "' AND FEDOC=" + DOC_JDE + " AND FEDCT='" + DCT_JDE + "'";
-            stmt = conn.createStatement();
-            // System.out.println(cadenasql);
-            stmt.executeUpdate(cadenasql);
-            stmt.close();
-
+            
+            String CODIGOGENERACION = ctrl_base_datos.ObtenerString("SELECT F.CODIGOGENERACION FROM IDENTIFICACION_CONTINGENCIA_V3 F WHERE F.ID_CONTINGENCIA=" + id_contigencia, conn);
+            
             conn.commit();
             conn.setAutoCommit(true);
 
@@ -235,133 +217,67 @@ public class Ctrl_DTE_CONTINGENCIA_V3 implements Serializable {
                     + "</style>"
                     + "</head>"
                     + "<body>"
-                    + "<h2>Anulación DTE: " + respuesta_recepciondte_mh.getCodigoGeneracion() + "</h2>"
+                    + "<h2>CONTINGENCIA: " + CODIGOGENERACION + "</h2>"
                     + "<table>"
                     + "<tr>"
                     + "<th>Respuesta</th>"
                     + "<th>Valor</th>"
                     + "</tr>"
                     + "<tr>"
-                    + "<td>Versión</td>"
-                    + "<td>" + respuesta_recepciondte_mh.getVersion() + "</td>"
-                    + "</tr>"
-                    + "<tr>"
-                    + "<td>Ambiente</td>"
-                    + "<td>" + respuesta_recepciondte_mh.getAmbiente() + "</td>"
-                    + "</tr>"
-                    + "<tr>"
-                    + "<td>Versión-APP</td>"
-                    + "<td>" + respuesta_recepciondte_mh.getVersionApp() + "</td>"
-                    + "</tr>"
-                    + "<tr>"
                     + "<td>Estado</td>"
-                    + "<td>" + respuesta_recepciondte_mh.getEstado() + "</td>"
+                    + "<td>" + respuesta_contingencia_mh.getEstado() + "</td>"
                     + "</tr>"
                     + "<tr>"
-                    + "<td>Código Generación</td>"
-                    + "<td>" + respuesta_recepciondte_mh.getCodigoGeneracion() + "</td>"
+                    + "<td>Fecha-Hora</td>"
+                    + "<td>" + respuesta_contingencia_mh.getFechaHora() + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td>Mensaje</td>"
+                    + "<td>" + respuesta_contingencia_mh.getMensaje() + "</td>"
                     + "</tr>"
                     + "<tr>"
                     + "<td>Sello Recibido</td>"
-                    + "<td>" + respuesta_recepciondte_mh.getSelloRecibido() + "</td>"
-                    + "</tr>"
-                    + "<tr>"
-                    + "<td>Fecha Procesamiento</td>"
-                    + "<td>" + respuesta_recepciondte_mh.getFhProcesamiento() + "</td>"
-                    + "</tr>"
-                    + "<tr>"
-                    + "<td>Código Mensaje</td>"
-                    + "<td>" + respuesta_recepciondte_mh.getCodigoMsg() + "</td>"
-                    + "</tr>"
-                    + "<tr>"
-                    + "<td>Descripción Mensaje</td>"
-                    + "<td>" + respuesta_recepciondte_mh.getDescripcionMsg() + "</td>"
+                    + "<td>" + respuesta_contingencia_mh.getSelloRecibido() + "</td>"
                     + "</tr>"
                     + "<tr>"
                     + "<td>Observaciones</td>"
-                    + "<td>" + respuesta_recepciondte_mh.getObservaciones().toString() + "</td>"
-                    + "</tr>"
-                    + "<tr>"
-                    + "<td>Clasificación Mensaje</td>"
-                    + "<td>" + respuesta_recepciondte_mh.getClasificaMsg() + "</td>"
-                    + "</tr>"
-                    + "<tr>"
-                    + "<td>Orden-Venta</td>"
-                    + "<td>" + DCTO_JDE + "-" + DOCO_JDE + "</td>"
-                    + "</tr>"
-                    + "<tr>"
-                    + "<td>Documento-Interno</td>"
-                    + "<td>" + DCT_JDE + "-" + DOC_JDE + "</td>"
+                    + "<td>" + respuesta_contingencia_mh.getObservaciones().toString() + "</td>"
                     + "</tr>"
                     + "<tr>"
                     + "<td>Evento</td>"
-                    + "<td>Invalidación DTE</td>"
+                    + "<td>Contigencia</td>"
                     + "</tr>"
                     + "</table>"
                     + "</body>"
                     + "</html>";
+            List<Adjunto> files = new ArrayList<>();
+            File TargetFileJson = new File("/FELSV3/json/jsondte_contin_" + id_contigencia + ".json");                
 
-            if (respuesta_recepciondte_mh.getCodigoMsg().trim().equals("001") || respuesta_recepciondte_mh.getCodigoMsg().trim().equals("002")) {
-                List<Adjunto> files = new ArrayList<>();
+            Adjunto adjunto_json = new Adjunto();
+            adjunto_json.setName(CODIGOGENERACION + ".json");
+            adjunto_json.setType("application/json");
+            InputStream inputstream_mail_json = new FileInputStream(TargetFileJson);
+            byte[] bytes_json = IOUtils.toByteArray(inputstream_mail_json);
+            adjunto_json.setData(Base64.getEncoder().encodeToString(bytes_json));
+            adjunto_json.setExt("json");
+            adjunto_json.setPath(null);
+            files.add(adjunto_json);
 
-                File TargetFileJson = new File("/FELSV3/json/jsondte_invalidacion_" + id_dte + ".json");
+            Mensaje_Correo mensaje_correo = new Mensaje_Correo();
+            String send_to = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES_CONTIN F WHERE F.ACTIVO=1", conn);
+            mensaje_correo.setRecipients(send_to);
+            String send_to_cc = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES_CONTIN F WHERE F.ACTIVO=2", conn);
+            mensaje_correo.setCc(send_to_cc);
+            mensaje_correo.setSubject("Contingencia FELSV.");
+            mensaje_correo.setBody(null);
+            mensaje_correo.setFrom("replegal-unosv@uno-terra.com");
+            mensaje_correo.setBodyHtml(cuerpo_html_correo);
+            mensaje_correo.setFiles(files);
 
-                Adjunto adjunto_json = new Adjunto();
-                adjunto_json.setName(respuesta_recepciondte_mh.getCodigoGeneracion() + ".json");
-                adjunto_json.setType("application/json");
-                InputStream inputstream_mail_json = new FileInputStream(TargetFileJson);
-                byte[] bytes_json = IOUtils.toByteArray(inputstream_mail_json);
-                adjunto_json.setData(Base64.getEncoder().encodeToString(bytes_json));
-                adjunto_json.setExt("json");
-                adjunto_json.setPath(null);
-                files.add(adjunto_json);
-
-                String MCU_JDE_I = ctrl_base_datos.ObtenerString("SELECT TRIM(F.FEMCU) FROM " + esquema + ".F5542FEL@" + dblink + " F WHERE TRIM(F.FEKCOO)='" + KCOO_JDE + "' AND F.FEDOCO=" + DOCO_JDE + " AND F.FEDCT='" + DCT_JDE + "'", conn);
-                String DCTO_JDE_I = ctrl_base_datos.ObtenerString("SELECT F.FEDCTO FROM " + esquema + ".F5542FEL@" + dblink + " F WHERE TRIM(F.FEKCOO)='" + KCOO_JDE + "' AND F.FEDOCO=" + DOCO_JDE + " AND F.FEDCT='" + DCT_JDE + "'", conn);
-                Mensaje_Correo mensaje_correo = new Mensaje_Correo();
-                String send_to = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES F WHERE F.ACTIVO=1 AND F.MCU_JDE='" + MCU_JDE_I + "' AND F.DCTO_JDE='" + DCTO_JDE_I + "'", conn);
-                mensaje_correo.setRecipients(send_to);
-                String send_to_cc = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES F WHERE F.ACTIVO=2 AND F.MCU_JDE='" + MCU_JDE_I + "' AND F.DCTO_JDE='" + DCTO_JDE_I + "'", conn);
-                mensaje_correo.setCc(send_to_cc);
-                mensaje_correo.setSubject("Anulación DTE.");
-                mensaje_correo.setBody(null);
-                mensaje_correo.setFrom("replegal-unosv@uno-terra.com");
-                mensaje_correo.setBodyHtml(cuerpo_html_correo);
-                mensaje_correo.setFiles(files);
-
-                Cliente_Rest_SendMail cliente_rest_sendmail = new Cliente_Rest_SendMail();
-                String resul_envio_correo = cliente_rest_sendmail.sendmail(new Gson().toJson(mensaje_correo));
-                // System.out.println("Notificación Correo: " + resul_envio_correo);
-            } else {
-                List<Adjunto> files = new ArrayList<>();
-                File TargetFileJson = new File("/FELSV3/json/jsondte_invalidacion_" + id_dte + ".json");
-                Adjunto adjunto_json = new Adjunto();
-                adjunto_json.setName("jsondte_invalidacion_" + id_dte + ".json");
-                adjunto_json.setType("application/json");
-                InputStream inputstream_mail_json = new FileInputStream(TargetFileJson);
-                byte[] bytes_json = IOUtils.toByteArray(inputstream_mail_json);
-                adjunto_json.setData(Base64.getEncoder().encodeToString(bytes_json));
-                adjunto_json.setExt("json");
-                adjunto_json.setPath(null);
-                files.add(adjunto_json);
-
-                String MCU_JDE_I = ctrl_base_datos.ObtenerString("SELECT TRIM(F.FEMCU) FROM " + esquema + ".F5542FEL@" + dblink + " F WHERE TRIM(F.FEKCOO)='" + KCOO_JDE + "' AND F.FEDOCO=" + DOCO_JDE + " AND F.FEDCT='" + DCT_JDE + "'", conn);
-                String DCTO_JDE_I = ctrl_base_datos.ObtenerString("SELECT F.FEDCTO FROM " + esquema + ".F5542FEL@" + dblink + " F WHERE TRIM(F.FEKCOO)='" + KCOO_JDE + "' AND F.FEDOCO=" + DOCO_JDE + " AND F.FEDCT='" + DCT_JDE + "'", conn);
-                Mensaje_Correo mensaje_correo = new Mensaje_Correo();
-                String send_to = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES F WHERE F.ACTIVO=1 AND F.MCU_JDE='" + MCU_JDE_I + "' AND F.DCTO_JDE='" + DCTO_JDE_I + "'", conn);
-                mensaje_correo.setRecipients(send_to);
-                String send_to_cc = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES F WHERE F.ACTIVO=2 AND F.MCU_JDE='" + MCU_JDE_I + "' AND F.DCTO_JDE='" + DCTO_JDE_I + "'", conn);
-                mensaje_correo.setCc(send_to_cc);
-                mensaje_correo.setSubject("Error Anulación DTE.");
-                mensaje_correo.setBody(null);
-                mensaje_correo.setFrom("replegal-unosv@uno-terra.com");
-                mensaje_correo.setBodyHtml(cuerpo_html_correo);
-                mensaje_correo.setFiles(files);
-
-                Cliente_Rest_SendMail cliente_rest_sendmail = new Cliente_Rest_SendMail();
-                String resul_envio_correo = cliente_rest_sendmail.sendmail(new Gson().toJson(mensaje_correo));
-                // System.out.println("Notificación Correo: " + resul_envio_correo);
-            }
+            Cliente_Rest_SendMail cliente_rest_sendmail = new Cliente_Rest_SendMail();
+            String resul_envio_correo = cliente_rest_sendmail.sendmail(new Gson().toJson(mensaje_correo));
+            // System.out.println("Notificación Correo: " + resul_envio_correo);
+            
         } catch (Exception ex) {
             try {
                 conn.rollback();

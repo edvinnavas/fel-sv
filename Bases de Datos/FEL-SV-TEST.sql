@@ -44,6 +44,7 @@ SELECT F.* FROM EMISOR_ESTABLECIMIENTO_V3 F;
 SELECT F.* FROM NOTIFIACION_CORREO_V3 F;
 SELECT F.* FROM IMPRESORAS F;
 SELECT F.* FROM NOTIFICACIONES F;
+SELECT F.* FROM NOTIFICACIONES_CONTIN F;
 -- ***************************************************************************************************************************
 -- *          COMPROBANTE DE CRÉDITO FISCAL.                                                                                 *
 -- ***************************************************************************************************************************
@@ -323,10 +324,10 @@ SELECT F.* FROM IDENTIFICACION_CONTINGENCIA_V3 F ORDER BY F.ID_CONTINGENCIA DESC
 SELECT F.* FROM DETALLE_DTE_CONTINGENCIA_V3 F ORDER BY F.ID_CONTINGENCIA DESC;
 SELECT F.* FROM MOTIVO_CONTINGENCIA_V3 F ORDER BY F.ID_CONTINGENCIA DESC;
 
-SELECT F.* FROM EVENTO_CONTINGENCIA_V3 F WHERE F.ID_CONTINGENCIA IN (1);
-SELECT F.* FROM IDENTIFICACION_CONTINGENCIA_V3 F WHERE F.ID_CONTINGENCIA IN (1);
-SELECT F.* FROM DETALLE_DTE_CONTINGENCIA_V3 F WHERE F.ID_CONTINGENCIA IN (1);
-SELECT F.* FROM MOTIVO_CONTINGENCIA_V3 F WHERE F.ID_CONTINGENCIA IN (1);
+SELECT F.* FROM EVENTO_CONTINGENCIA_V3 F WHERE F.ID_CONTINGENCIA IN (7);
+SELECT F.* FROM IDENTIFICACION_CONTINGENCIA_V3 F WHERE F.ID_CONTINGENCIA IN (7);
+SELECT F.* FROM DETALLE_DTE_CONTINGENCIA_V3 F WHERE F.ID_CONTINGENCIA IN (7);
+SELECT F.* FROM MOTIVO_CONTINGENCIA_V3 F WHERE F.ID_CONTINGENCIA IN (7);
 -- ***************************************************************************************************************************
 -- *          TABLAS FEL-GUATEMALA.                                                                                          *
 -- ***************************************************************************************************************************

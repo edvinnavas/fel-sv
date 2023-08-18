@@ -22,8 +22,10 @@ import Entidades.DTE_ND_V3;
 import Entidades.DTE_F_V3;
 import Entidades.DTE_INVALIDACION_V3;
 import Entidades.DTE_NR_V3;
+import Entidades.JsonCONTIN;
 import Entidades.JsonDTE;
 import Entidades.Json_Firmado;
+import Entidades.RESPUESTA_CONTINGENCIA_MH;
 import Entidades.RESPUESTA_RECEPCIONDTE_MH;
 import Entidades.TokenMH;
 import com.google.gson.Gson;
@@ -2248,16 +2250,48 @@ public class MyResource implements Serializable {
                         + "}";
                 driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
                 driver.guardar_en_archivo_json(ambiente, no_contin.get(d), "contin", gson.toJson(dte_contingencia_v3));
-                System.out.println("JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                
                 /****************************************************************************************************
-                 * FIRMAR JSON CON JWT CONTIN.                                                                          *
+                 * FIRMAR JSON CON JWT CONTINGENCIA.                                                                          *
                  ****************************************************************************************************/
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
-                Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_contingencia_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                Json_Firmado json_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_contingencia_v3.getEmisor().getNit(), dte_sin_firmar);
+                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-FIRMADO:: " + new Gson().toJson(json_firmado));
+                /****************************************************************************************************
+                 * ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA CONTINGENCIA.                                                   *
+                 ****************************************************************************************************/
+                JsonCONTIN json_contin = new JsonCONTIN();
+                json_contin.setNit(dte_contingencia_v3.getEmisor().getNit());
+                json_contin.setDocumento(json_firmado.getBody());
+                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-DTE:: " + new Gson().toJson(json_contin));
+                /****************************************************************************************************
+                 * GENERAR TOKEN MINISTERIO DE HACIENDA CONTINGENCIA.                                                         *
+                 ****************************************************************************************************/
+                Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
+                String token_autenticacion = cliente_rest_mh.autenticar(ambiente, dte_contingencia_v3.getEmisor().getNit(), "UNOSV2021*");
+                Type listType1 = new TypeToken<TokenMH>() {
+                }.getType();
+                TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
+                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                /****************************************************************************************************
+                 * RESPUESTA DEL MINISTERIO DE HACIENDA CONTINGENCIA.                                                         *
+                 ****************************************************************************************************/
+                // String respuesta_mh = cliente_rest_mh.contingencia(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_contin));
+                // Type listType2 = new TypeToken<RESPUESTA_CONTINGENCIA_MH>() {
+                // }.getType();
+                // RESPUESTA_CONTINGENCIA_MH respuesta_contingencia_mh = new Gson().fromJson(respuesta_mh, listType2);
+                // ctrl_dte_contingencia_v3.registro_db_respuesta_mh(ambiente, respuesta_contingencia_mh, no_contin.get(d));
+                // driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "RESPUESTA-CONTINGENCIA-MH:: " + new Gson().toJson(respuesta_contingencia_mh));
                 
-                resultado = new Gson().toJson(dte_firmado);
+                RESPUESTA_CONTINGENCIA_MH respuesta_contingencia_mh = new RESPUESTA_CONTINGENCIA_MH();
+                respuesta_contingencia_mh.setEstado("RECIBIDO");
+                respuesta_contingencia_mh.setFechaHora("17/08/2023 16:00:00");
+                respuesta_contingencia_mh.setMensaje("Documento recibido.");
+                respuesta_contingencia_mh.setSelloRecibido("ASLKDFJ7897FAASDFASDF9829239DS87FA98SD7F");
+                respuesta_contingencia_mh.setObservaciones(new ArrayList<>());
+                ctrl_dte_contingencia_v3.registro_db_respuesta_mh(ambiente, respuesta_contingencia_mh, no_contin.get(d));
+                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "RESPUESTA-CONTINGENCIA-MH:: " + new Gson().toJson(respuesta_contingencia_mh));
+                
+                resultado = "ID-DTE PROCESADOS: " + no_contin.toString();
             }
         } catch (Exception ex) {
             System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:contingencia_v3()|ERROR:" + ex.toString());
