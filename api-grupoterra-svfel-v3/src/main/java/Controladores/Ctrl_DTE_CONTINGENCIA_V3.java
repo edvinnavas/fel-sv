@@ -275,9 +275,8 @@ public class Ctrl_DTE_CONTINGENCIA_V3 implements Serializable {
             mensaje_correo.setFiles(files);
 
             Cliente_Rest_SendMail cliente_rest_sendmail = new Cliente_Rest_SendMail();
-            String resul_envio_correo = cliente_rest_sendmail.sendmail(new Gson().toJson(mensaje_correo));
+            // String resul_envio_correo = cliente_rest_sendmail.sendmail(new Gson().toJson(mensaje_correo));
             // System.out.println("Notificación Correo: " + resul_envio_correo);
-            
         } catch (Exception ex) {
             try {
                 conn.rollback();

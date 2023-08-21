@@ -514,4 +514,47 @@ public class Ctrl_DTE_FEX_V3 implements Serializable {
         }
     }
 
+    public Long obtener_id_dte_codigo_generacion(String ambiente, String codigogeneracion) {
+        Long resultado = Long.valueOf("0");
+        Connection conn = null;
+
+        try {
+            Ctrl_Base_Datos ctrl_base_datos = new Ctrl_Base_Datos();
+            conn = ctrl_base_datos.obtener_conexion(ambiente);
+
+            String esquema;
+            String dblink;
+            if (ambiente.equals("PY")) {
+                esquema = "CRPDTA";
+                dblink = "JDEPY";
+            } else {
+                esquema = "PRODDTA";
+                dblink = "JDEPD";
+            }
+            
+            conn.setAutoCommit(false);
+            resultado = ctrl_base_datos.ObtenerLong("SELECT F.ID_DTE FROM DTE_FEX_V3 F WHERE F.RESPONSE_ESTADO='EMITIDO-CONTIGENCIA' AND F.RESPONSE_CODIGOGENERACION='" + codigogeneracion + "'", conn);
+            conn.commit();
+            conn.setAutoCommit(true);
+        } catch (Exception ex) {
+            try {
+                conn.rollback();
+                conn.setAutoCommit(true);
+                System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:obtener_id_dte_codigo_generacion()|ERROR:" + ex.toString());
+            } catch (Exception ex1) {
+                System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:obtener_id_dte_codigo_generacion()-rollback|ERROR:" + ex1.toString());
+            }
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception ex) {
+                System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:obtener_id_dte_codigo_generacion()-finally|ERROR:" + ex.toString());
+            }
+        }
+
+        return resultado;
+    }
+    
 }

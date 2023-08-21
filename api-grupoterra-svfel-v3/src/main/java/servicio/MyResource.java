@@ -24,6 +24,7 @@ import Entidades.DTE_INVALIDACION_V3;
 import Entidades.DTE_NR_V3;
 import Entidades.JsonCONTIN;
 import Entidades.JsonDTE;
+import Entidades.JsonLoteDTE;
 import Entidades.Json_Firmado;
 import Entidades.RESPUESTA_CONTINGENCIA_MH;
 import Entidades.RESPUESTA_RECEPCIONDTE_MH;
@@ -2242,29 +2243,29 @@ public class MyResource implements Serializable {
                 // GENERAR JSON SIN FIRMAR.
                 DTE_CONTIGENCIA_V3 dte_contingencia_v3 = ctrl_dte_contingencia_v3.generar_json_contingencia_v3(ambiente, id_emisor);
                 Gson gson = new GsonBuilder().serializeNulls().create();
-                String dte_sin_firmar = "{"
+                String json_conting_sin_firmar = "{"
                         + "\"nit\":\"" + dte_contingencia_v3.getEmisor().getNit() + "\","
                         + "\"activo\":true,"
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_contingencia_v3)
                         + "}";
-                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-CONTIN-NO-FIRMADO:: " + json_conting_sin_firmar);
                 driver.guardar_en_archivo_json(ambiente, no_contin.get(d), "contin", gson.toJson(dte_contingencia_v3));
                 /****************************************************************************************************
-                 * FIRMAR JSON CON JWT CONTINGENCIA.                                                                          *
+                 * FIRMAR JSON CON JWT EVENTO CONTINGENCIA.                                                         *
                  ****************************************************************************************************/
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
-                Json_Firmado json_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_contingencia_v3.getEmisor().getNit(), dte_sin_firmar);
-                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-FIRMADO:: " + new Gson().toJson(json_firmado));
+                Json_Firmado json_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_contingencia_v3.getEmisor().getNit(), json_conting_sin_firmar);
+                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-CONTIN-FIRMADO:: " + new Gson().toJson(json_firmado));
                 /****************************************************************************************************
-                 * ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA CONTINGENCIA.                                                   *
+                 * ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA EVENTO CONTINGENCIA.                                  *
                  ****************************************************************************************************/
                 JsonCONTIN json_contin = new JsonCONTIN();
                 json_contin.setNit(dte_contingencia_v3.getEmisor().getNit());
                 json_contin.setDocumento(json_firmado.getBody());
-                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-DTE:: " + new Gson().toJson(json_contin));
+                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-EVENTO-CONTIN:: " + new Gson().toJson(json_contin));
                 /****************************************************************************************************
-                 * GENERAR TOKEN MINISTERIO DE HACIENDA CONTINGENCIA.                                                         *
+                 * GENERAR TOKEN MINISTERIO DE HACIENDA EVENTO CONTINGENCIA.                                        *
                  ****************************************************************************************************/
                 Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
                 String token_autenticacion = cliente_rest_mh.autenticar(ambiente, dte_contingencia_v3.getEmisor().getNit(), "UNOSV2021*");
@@ -2273,7 +2274,7 @@ public class MyResource implements Serializable {
                 TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
                 driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
                 /****************************************************************************************************
-                 * RESPUESTA DEL MINISTERIO DE HACIENDA CONTINGENCIA.                                                         *
+                 * RESPUESTA DEL MINISTERIO DE HACIENDA EVENTO CONTINGENCIA.                                        *
                  ****************************************************************************************************/
                 // String respuesta_mh = cliente_rest_mh.contingencia(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_contin));
                 // Type listType2 = new TypeToken<RESPUESTA_CONTINGENCIA_MH>() {
@@ -2281,7 +2282,6 @@ public class MyResource implements Serializable {
                 // RESPUESTA_CONTINGENCIA_MH respuesta_contingencia_mh = new Gson().fromJson(respuesta_mh, listType2);
                 // ctrl_dte_contingencia_v3.registro_db_respuesta_mh(ambiente, respuesta_contingencia_mh, no_contin.get(d));
                 // driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "RESPUESTA-CONTINGENCIA-MH:: " + new Gson().toJson(respuesta_contingencia_mh));
-                
                 RESPUESTA_CONTINGENCIA_MH respuesta_contingencia_mh = new RESPUESTA_CONTINGENCIA_MH();
                 respuesta_contingencia_mh.setEstado("RECIBIDO");
                 respuesta_contingencia_mh.setFechaHora("17/08/2023 16:00:00");
@@ -2290,8 +2290,130 @@ public class MyResource implements Serializable {
                 respuesta_contingencia_mh.setObservaciones(new ArrayList<>());
                 ctrl_dte_contingencia_v3.registro_db_respuesta_mh(ambiente, respuesta_contingencia_mh, no_contin.get(d));
                 driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "RESPUESTA-CONTINGENCIA-MH:: " + new Gson().toJson(respuesta_contingencia_mh));
-                
-                resultado = "ID-DTE PROCESADOS: " + no_contin.toString();
+                /****************************************************************************************************
+                 * GENERAR JSON-LOTE SIN FIRMAR.                                                                    *
+                 ****************************************************************************************************/
+                List<String> lista_dtes_firmados = new ArrayList<>();
+                if (respuesta_contingencia_mh.getEstado().equals("RECIBIDO")) {
+                    for (Integer i = 0; i < dte_contingencia_v3.getDetalleDTE().size(); i++) {
+                        switch (dte_contingencia_v3.getDetalleDTE().get(i).getTipoDoc()) {
+                            case "01": {
+                                Ctrl_DTE_F_V3 ctrl_dte_f_v3 = new Ctrl_DTE_F_V3();
+                                Long id_dte_f = ctrl_dte_f_v3.obtener_id_dte_codigo_generacion(ambiente, dte_contingencia_v3.getDetalleDTE().get(i).getCodigoGeneracion());
+                                DTE_F_V3 dte_f_v3 = ctrl_dte_f_v3.generar_json_dte_f_v3(ambiente, id_dte_f);
+                                String dte_sin_firmar = "{"
+                                        + "\"nit\":\"" + dte_f_v3.getEmisor().getNit() + "\","
+                                        + "\"activo\":true,"
+                                        + "\"passwordPri\":\"UNOSV2021*\","
+                                        + "\"dteJson\":" + gson.toJson(dte_f_v3)
+                                        + "}";
+                                ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
+                                Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_f_v3.getEmisor().getNit(), dte_sin_firmar);
+                                lista_dtes_firmados.add(dte_firmado.getBody());
+                                break;
+                            }
+                            case "03": {
+                                Ctrl_DTE_CCF_V3 ctrl_dte_ccf_v3 = new Ctrl_DTE_CCF_V3();
+                                Long id_dte_ccf = ctrl_dte_ccf_v3.obtener_id_dte_codigo_generacion(ambiente, dte_contingencia_v3.getDetalleDTE().get(i).getCodigoGeneracion());
+                                DTE_CCF_V3 dte_ccf_v3 = ctrl_dte_ccf_v3.generar_json_dte_ccf_v3(ambiente, id_dte_ccf);
+                                String dte_sin_firmar = "{"
+                                        + "\"nit\":\"" + dte_ccf_v3.getEmisor().getNit() + "\","
+                                        + "\"activo\":true,"
+                                        + "\"passwordPri\":\"UNOSV2021*\","
+                                        + "\"dteJson\":" + gson.toJson(dte_ccf_v3)
+                                        + "}";
+                                ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
+                                Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_ccf_v3.getEmisor().getNit(), dte_sin_firmar);
+                                lista_dtes_firmados.add(dte_firmado.getBody());
+                                break;
+                            }
+                            case "04": {
+                                Ctrl_DTE_NR_V3 ctrl_dte_nr_v3 = new Ctrl_DTE_NR_V3();
+                                Long id_dte_nr = ctrl_dte_nr_v3.obtener_id_dte_codigo_generacion(ambiente, dte_contingencia_v3.getDetalleDTE().get(i).getCodigoGeneracion());
+                                DTE_NR_V3 dte_nr_v3 = ctrl_dte_nr_v3.generar_json_dte_nr_v3(ambiente, id_dte_nr);
+                                String dte_sin_firmar = "{"
+                                        + "\"nit\":\"" + dte_nr_v3.getEmisor().getNit() + "\","
+                                        + "\"activo\":true,"
+                                        + "\"passwordPri\":\"UNOSV2021*\","
+                                        + "\"dteJson\":" + gson.toJson(dte_nr_v3)
+                                        + "}";
+                                ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
+                                Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_nr_v3.getEmisor().getNit(), dte_sin_firmar);
+                                lista_dtes_firmados.add(dte_firmado.getBody());
+                                break;
+                            }
+                            case "05": {
+                                Ctrl_DTE_NC_V3 ctrl_dte_nc_v3 = new Ctrl_DTE_NC_V3();
+                                Long id_dte_nc = ctrl_dte_nc_v3.obtener_id_dte_codigo_generacion(ambiente, dte_contingencia_v3.getDetalleDTE().get(i).getCodigoGeneracion());
+                                DTE_NC_V3 dte_nc_v3 = ctrl_dte_nc_v3.generar_json_dte_nc_v3(ambiente, id_dte_nc);
+                                String dte_sin_firmar = "{"
+                                        + "\"nit\":\"" + dte_nc_v3.getEmisor().getNit() + "\","
+                                        + "\"activo\":true,"
+                                        + "\"passwordPri\":\"UNOSV2021*\","
+                                        + "\"dteJson\":" + gson.toJson(dte_nc_v3)
+                                        + "}";
+                                ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
+                                Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_nc_v3.getEmisor().getNit(), dte_sin_firmar);
+                                lista_dtes_firmados.add(dte_firmado.getBody());
+                                break;
+                            }
+                            case "06": {
+                                Ctrl_DTE_ND_V3 ctrl_dte_nd_v3 = new Ctrl_DTE_ND_V3();
+                                Long id_dte_nd = ctrl_dte_nd_v3.obtener_id_dte_codigo_generacion(ambiente, dte_contingencia_v3.getDetalleDTE().get(i).getCodigoGeneracion());
+                                DTE_ND_V3 dte_nd_v3 = ctrl_dte_nd_v3.generar_json_dte_nd_v3(ambiente, id_dte_nd);
+                                String dte_sin_firmar = "{"
+                                        + "\"nit\":\"" + dte_nd_v3.getEmisor().getNit() + "\","
+                                        + "\"activo\":true,"
+                                        + "\"passwordPri\":\"UNOSV2021*\","
+                                        + "\"dteJson\":" + gson.toJson(dte_nd_v3)
+                                        + "}";
+                                ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
+                                Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_nd_v3.getEmisor().getNit(), dte_sin_firmar);
+                                lista_dtes_firmados.add(dte_firmado.getBody());
+                                break;
+                            }
+                            case "07": {
+                                Ctrl_DTE_CR_V3 ctrl_dte_cr_v3 = new Ctrl_DTE_CR_V3();
+                                Long id_dte_cr = ctrl_dte_cr_v3.obtener_id_dte_codigo_generacion(ambiente, dte_contingencia_v3.getDetalleDTE().get(i).getCodigoGeneracion());
+                                DTE_CR_V3 dte_cr_v3 = ctrl_dte_cr_v3.generar_json_dte_cr_v3(ambiente, id_dte_cr);
+                                String dte_sin_firmar = "{"
+                                        + "\"nit\":\"" + dte_cr_v3.getEmisor().getNit() + "\","
+                                        + "\"activo\":true,"
+                                        + "\"passwordPri\":\"UNOSV2021*\","
+                                        + "\"dteJson\":" + gson.toJson(dte_cr_v3)
+                                        + "}";
+                                ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
+                                Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_cr_v3.getEmisor().getNit(), dte_sin_firmar);
+                                lista_dtes_firmados.add(dte_firmado.getBody());
+                                break;
+                            }
+                            case "11": {
+                                Ctrl_DTE_FEX_V3 ctrl_dte_fex_v3 = new Ctrl_DTE_FEX_V3();
+                                Long id_dte_fex = ctrl_dte_fex_v3.obtener_id_dte_codigo_generacion(ambiente, dte_contingencia_v3.getDetalleDTE().get(i).getCodigoGeneracion());
+                                DTE_FEX_V3 dte_fex_v3 = ctrl_dte_fex_v3.generar_json_dte_fex_v3(ambiente, id_dte_fex);
+                                String dte_sin_firmar = "{"
+                                        + "\"nit\":\"" + dte_fex_v3.getEmisor().getNit() + "\","
+                                        + "\"activo\":true,"
+                                        + "\"passwordPri\":\"UNOSV2021*\","
+                                        + "\"dteJson\":" + gson.toJson(dte_fex_v3)
+                                        + "}";
+                                ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
+                                Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_fex_v3.getEmisor().getNit(), dte_sin_firmar);
+                                lista_dtes_firmados.add(dte_firmado.getBody());
+                                break;
+                            }
+                        }
+                    }
+                }
+                JsonLoteDTE json_lote_dte = new JsonLoteDTE();
+                json_lote_dte.setAmbiente(dte_contingencia_v3.getIdentificacion().getAmbiente());
+                json_lote_dte.setIdEnvio(no_contin.get(d));
+                json_lote_dte.setVersion(dte_contingencia_v3.getIdentificacion().getVersion().intValue());
+                json_lote_dte.setNitEmisor(dte_contingencia_v3.getEmisor().getNit());
+                json_lote_dte.setDocumentos(lista_dtes_firmados);
+                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-LOTE-DTE:: " + new Gson().toJson(json_lote_dte));
+
+                resultado = gson.toJson(json_lote_dte);
             }
         } catch (Exception ex) {
             System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:contingencia_v3()|ERROR:" + ex.toString());
