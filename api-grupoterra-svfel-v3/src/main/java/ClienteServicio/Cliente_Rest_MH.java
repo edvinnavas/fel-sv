@@ -180,5 +180,31 @@ public class Cliente_Rest_MH implements Serializable {
 
         return resultado;
     }
+    
+    public String recepcionlote(String ambiente, String token, String documento) {
+        String resultado = "";
+
+        try {
+            WebTarget webTarget;
+            if (ambiente.equals("PY")) {
+                webTarget = client.target(BASE_URI).path("fesv/recepcionlote");
+            } else {
+                webTarget = client.target(BASE_URI_PROD).path("fesv/recepcionlote");
+            }
+            Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
+            invocationBuilder.header("Authorization", token);
+            Response response = invocationBuilder.post(Entity.json(documento));
+
+            if (response.getStatus() == 200 || response.getStatus() == 400) {
+                resultado = response.readEntity(String.class);
+            } else {
+                resultado = response.getStatus() + ": " + response.getStatusInfo();
+            }
+        } catch (Exception ex) {
+            resultado = "ERROR: " + ex.toString();
+        }
+
+        return resultado;
+    }
 
 }

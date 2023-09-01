@@ -27,6 +27,7 @@ import Entidades.JsonDTE;
 import Entidades.JsonLoteDTE;
 import Entidades.Json_Firmado;
 import Entidades.RESPUESTA_CONTINGENCIA_MH;
+import Entidades.RESPUESTA_LOTE_DTE_MH;
 import Entidades.RESPUESTA_RECEPCIONDTE_MH;
 import Entidades.TokenMH;
 import com.google.gson.Gson;
@@ -36,6 +37,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -2405,15 +2407,38 @@ public class MyResource implements Serializable {
                         }
                     }
                 }
+                /****************************************************************************************************
+                 * GENERAICION JSON-LOTE-DTE CONTINGENCIA.                                                          *
+                 ****************************************************************************************************/
                 JsonLoteDTE json_lote_dte = new JsonLoteDTE();
                 json_lote_dte.setAmbiente(dte_contingencia_v3.getIdentificacion().getAmbiente());
-                json_lote_dte.setIdEnvio(no_contin.get(d));
+                json_lote_dte.setIdEnvio(UUID.randomUUID().toString().toUpperCase());
                 json_lote_dte.setVersion(dte_contingencia_v3.getIdentificacion().getVersion().intValue());
                 json_lote_dte.setNitEmisor(dte_contingencia_v3.getEmisor().getNit());
                 json_lote_dte.setDocumentos(lista_dtes_firmados);
                 driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-LOTE-DTE:: " + new Gson().toJson(json_lote_dte));
-
-                resultado = gson.toJson(json_lote_dte);
+                /****************************************************************************************************
+                 * RESPUESTA DEL MINISTERIO DE HACIENDA EVENTO CONTINGENCIA.                                        *
+                 ****************************************************************************************************/
+                // String respuesta_mh = cliente_rest_mh.recepcionlote(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_lote_dte));
+                // Type listType3 = new TypeToken<RESPUESTA_LOTE_DTE_MH>() {
+                // }.getType();
+                // RESPUESTA_LOTE_DTE_MH respuesta_lote_dte_mh = new Gson().fromJson(respuesta_mh, listType3);
+                // ctrl_dte_contingencia_v3.registro_db_respuesta_mh(ambiente, respuesta_contingencia_mh, no_contin.get(d));
+                // driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "RESPUESTA-LOTE-DTE-MH:: " + new Gson().toJson(respuesta_lote_dte_mh));
+                RESPUESTA_LOTE_DTE_MH respuesta_lote_dte_mh = new RESPUESTA_LOTE_DTE_MH();
+                respuesta_lote_dte_mh.setVersion(2);
+                respuesta_lote_dte_mh.setAmbiente("00");
+                respuesta_lote_dte_mh.setVersionApp(2);
+                respuesta_lote_dte_mh.setEstado("PROCESADO");
+                respuesta_lote_dte_mh.setIdEnvio(json_lote_dte.getIdEnvio());
+                respuesta_lote_dte_mh.setFhProcesamiento("01/09/2023 09:00:00");
+                respuesta_lote_dte_mh.setCodigoLote(json_lote_dte.getIdEnvio());
+                respuesta_lote_dte_mh.setCodigoMsg("000");
+                respuesta_lote_dte_mh.setDescripcionMsg("LOTE RECIBIDO, VALIDADO Y PROCESADO.");
+                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "RESPUESTA-ENVIO-LOTE-DTE-MH:: " + new Gson().toJson(respuesta_lote_dte_mh));
+                
+                resultado = gson.toJson(respuesta_lote_dte_mh);
             }
         } catch (Exception ex) {
             System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:contingencia_v3()|ERROR:" + ex.toString());

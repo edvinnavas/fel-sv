@@ -8,12 +8,12 @@ public class JsonLoteDTE implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String ambiente;
-    private Number idEnvio;
+    private String idEnvio;
     private Integer version;
     private String nitEmisor;
     private List<String> documentos;
 
-    public JsonLoteDTE(String ambiente, Number idEnvio, Integer version, String nitEmisor, List<String> documentos) {
+    public JsonLoteDTE(String ambiente, String idEnvio, Integer version, String nitEmisor, List<String> documentos) {
         this.ambiente = ambiente;
         this.idEnvio = idEnvio;
         this.version = version;
@@ -32,11 +32,11 @@ public class JsonLoteDTE implements Serializable {
         this.ambiente = ambiente;
     }
 
-    public Number getIdEnvio() {
+    public String getIdEnvio() {
         return idEnvio;
     }
 
-    public void setIdEnvio(Number idEnvio) {
+    public void setIdEnvio(String idEnvio) {
         this.idEnvio = idEnvio;
     }
 
