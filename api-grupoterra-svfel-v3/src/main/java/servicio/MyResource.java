@@ -2251,21 +2251,21 @@ public class MyResource implements Serializable {
                         + "\"passwordPri\":\"UNOSV2021*\","
                         + "\"dteJson\":" + gson.toJson(dte_contingencia_v3)
                         + "}";
-                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-CONTIN-NO-FIRMADO:: " + json_conting_sin_firmar);
+                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-EVENTO-CONTIN-NO-FIRMADO:: " + json_conting_sin_firmar);
                 driver.guardar_en_archivo_json(ambiente, no_contin.get(d), "contin", gson.toJson(dte_contingencia_v3));
                 /****************************************************************************************************
                  * FIRMAR JSON CON JWT EVENTO CONTINGENCIA.                                                         *
                  ****************************************************************************************************/
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
                 Json_Firmado json_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_contingencia_v3.getEmisor().getNit(), json_conting_sin_firmar);
-                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-CONTIN-FIRMADO:: " + new Gson().toJson(json_firmado));
+                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-EVENTO-CONTIN-FIRMADO:: " + new Gson().toJson(json_firmado));
                 /****************************************************************************************************
                  * ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA EVENTO CONTINGENCIA.                                  *
                  ****************************************************************************************************/
                 JsonCONTIN json_contin = new JsonCONTIN();
                 json_contin.setNit(dte_contingencia_v3.getEmisor().getNit());
                 json_contin.setDocumento(json_firmado.getBody());
-                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-EVENTO-CONTIN:: " + new Gson().toJson(json_contin));
+                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-EVENTO-CONTIN-MH:: " + new Gson().toJson(json_contin));
                 /****************************************************************************************************
                  * GENERAR TOKEN MINISTERIO DE HACIENDA EVENTO CONTINGENCIA.                                        *
                  ****************************************************************************************************/
@@ -2286,12 +2286,12 @@ public class MyResource implements Serializable {
                 // driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "RESPUESTA-CONTINGENCIA-MH:: " + new Gson().toJson(respuesta_contingencia_mh));
                 RESPUESTA_CONTINGENCIA_MH respuesta_contingencia_mh = new RESPUESTA_CONTINGENCIA_MH();
                 respuesta_contingencia_mh.setEstado("RECIBIDO");
-                respuesta_contingencia_mh.setFechaHora("17/08/2023 16:00:00");
+                respuesta_contingencia_mh.setFechaHora("01/09/2023 09:00:00");
                 respuesta_contingencia_mh.setMensaje("Documento recibido.");
                 respuesta_contingencia_mh.setSelloRecibido("ASLKDFJ7897FAASDFASDF9829239DS87FA98SD7F");
                 respuesta_contingencia_mh.setObservaciones(new ArrayList<>());
                 ctrl_dte_contingencia_v3.registro_db_respuesta_mh(ambiente, respuesta_contingencia_mh, no_contin.get(d));
-                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "RESPUESTA-CONTINGENCIA-MH:: " + new Gson().toJson(respuesta_contingencia_mh));
+                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "RESPUESTA-EVENTO-CONTIN-MH:: " + new Gson().toJson(respuesta_contingencia_mh));
                 /****************************************************************************************************
                  * GENERAR JSON-LOTE SIN FIRMAR.                                                                    *
                  ****************************************************************************************************/
@@ -2416,7 +2416,7 @@ public class MyResource implements Serializable {
                 json_lote_dte.setVersion(dte_contingencia_v3.getIdentificacion().getVersion().intValue());
                 json_lote_dte.setNitEmisor(dte_contingencia_v3.getEmisor().getNit());
                 json_lote_dte.setDocumentos(lista_dtes_firmados);
-                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-LOTE-DTE:: " + new Gson().toJson(json_lote_dte));
+                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "JSON-LOTE-DTE-MH:: " + new Gson().toJson(json_lote_dte));
                 /****************************************************************************************************
                  * RESPUESTA DEL MINISTERIO DE HACIENDA EVENTO CONTINGENCIA.                                        *
                  ****************************************************************************************************/
@@ -2436,7 +2436,7 @@ public class MyResource implements Serializable {
                 respuesta_lote_dte_mh.setCodigoLote(json_lote_dte.getIdEnvio());
                 respuesta_lote_dte_mh.setCodigoMsg("000");
                 respuesta_lote_dte_mh.setDescripcionMsg("LOTE RECIBIDO, VALIDADO Y PROCESADO.");
-                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "RESPUESTA-ENVIO-LOTE-DTE-MH:: " + new Gson().toJson(respuesta_lote_dte_mh));
+                driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "RESPUESTA-LOTE-DTE-MH:: " + new Gson().toJson(respuesta_lote_dte_mh));
                 
                 resultado = gson.toJson(respuesta_lote_dte_mh);
             }
