@@ -421,7 +421,12 @@ public class Ctrl_DTE_F_V3 implements Serializable {
                 adjunto.setPath(null);
                 files.add(adjunto);
                 
-                File TargetFileJson = new File("/FELSV3/json/jsondte_f_" + id_dte + ".json");
+                File TargetFileJson;
+                if (ambiente.equals("PY")) {
+                    TargetFileJson = new File("/FELSV3/json/jsondte_f_" + id_dte + ".json");
+                } else {
+                    TargetFileJson = new File("/FELSV3/json_pd/jsondte_f_" + id_dte + ".json");
+                }
                 
                 Adjunto adjunto_json = new Adjunto();
                 adjunto_json.setName(respuesta_recepciondte_mh.getCodigoGeneracion() + ".json");
@@ -471,7 +476,12 @@ public class Ctrl_DTE_F_V3 implements Serializable {
                 // System.out.println("Notificación Impresión: " + resul_printer);
             } else {
                 List<Adjunto> files = new ArrayList<>();
-                File TargetFileJson = new File("/FELSV3/json/jsondte_f_" + id_dte + ".json");
+                File TargetFileJson;
+                if (ambiente.equals("PY")) {
+                    TargetFileJson = new File("/FELSV3/json/jsondte_f_" + id_dte + ".json");
+                } else {
+                    TargetFileJson = new File("/FELSV3/json_pd/jsondte_f_" + id_dte + ".json");
+                }
                 Adjunto adjunto_json = new Adjunto();
                 adjunto_json.setName("jsondte_f_" + id_dte + ".json");
                 adjunto_json.setType("application/json");

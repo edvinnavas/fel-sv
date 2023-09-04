@@ -5,6 +5,7 @@ import Entidades.Adjunto;
 import Entidades.DTE_CONTIGENCIA_V3;
 import Entidades.Mensaje_Correo;
 import Entidades.RESPUESTA_CONTINGENCIA_MH;
+import Entidades.RESPUESTA_LOTE_DTE_MH;
 import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileInputStream;
@@ -251,7 +252,13 @@ public class Ctrl_DTE_CONTINGENCIA_V3 implements Serializable {
                     + "</body>"
                     + "</html>";
             List<Adjunto> files = new ArrayList<>();
-            File TargetFileJson = new File("/FELSV3/json/jsondte_contin_" + id_contigencia + ".json");                
+            
+            File TargetFileJson;
+            if (ambiente.equals("PY")) {
+                TargetFileJson = new File("/FELSV3/json/jsondte_contin_" + id_contigencia + ".json");                
+            } else {
+                TargetFileJson = new File("/FELSV3/json_pd/jsondte_contin_" + id_contigencia + ".json");                
+            }
 
             Adjunto adjunto_json = new Adjunto();
             adjunto_json.setName(CODIGOGENERACION + ".json");
@@ -275,7 +282,7 @@ public class Ctrl_DTE_CONTINGENCIA_V3 implements Serializable {
             mensaje_correo.setFiles(files);
 
             Cliente_Rest_SendMail cliente_rest_sendmail = new Cliente_Rest_SendMail();
-            // String resul_envio_correo = cliente_rest_sendmail.sendmail(new Gson().toJson(mensaje_correo));
+            String resul_envio_correo = cliente_rest_sendmail.sendmail(new Gson().toJson(mensaje_correo));
             // System.out.println("Notificación Correo: " + resul_envio_correo);
         } catch (Exception ex) {
             try {
@@ -297,4 +304,170 @@ public class Ctrl_DTE_CONTINGENCIA_V3 implements Serializable {
         }
     }
 
+    public void registro_db_respuesta_lote_mh(String ambiente, RESPUESTA_LOTE_DTE_MH respuesta_lote_dte_mh, Long id_contigencia) {
+        Connection conn = null;
+
+        try {
+            Ctrl_Base_Datos ctrl_base_datos = new Ctrl_Base_Datos();
+            conn = ctrl_base_datos.obtener_conexion(ambiente);
+
+            String esquema;
+            String dblink;
+            if (ambiente.equals("PY")) {
+                esquema = "CRPDTA";
+                dblink = "JDEPY";
+            } else {
+                esquema = "PRODDTA";
+                dblink = "JDEPD";
+            }
+
+            conn.setAutoCommit(false);
+
+            String cadenasql = "UPDATE EVENTO_CONTINGENCIA_V3 SET "
+                    + "LOTE_VERSION='" + respuesta_lote_dte_mh.getVersion() + "', "
+                    + "LOTE_AMBIENTE='" + respuesta_lote_dte_mh.getAmbiente() + "', "
+                    + "LOTE_VERSIONAPP='" + respuesta_lote_dte_mh.getVersionApp() + "', "
+                    + "LOTE_ESTADO='" + respuesta_lote_dte_mh.getEstado() + "', "
+                    + "LOTE_IDENVIO='" + respuesta_lote_dte_mh.getIdEnvio() + "', "
+                    + "LOTE_FNPROCESAMIENTO='" + respuesta_lote_dte_mh.getFhProcesamiento() + "', "
+                    + "LOTE_CODIGOLOTE='" + respuesta_lote_dte_mh.getCodigoLote() + "', "
+                    + "LOTE_CODIGOMSG='" + respuesta_lote_dte_mh.getCodigoMsg() + "', "
+                    + "LOTE_DESCRIPCIONMSG='" + respuesta_lote_dte_mh.getDescripcionMsg() + "' "
+                    + "WHERE "
+                    + "ID_CONTINGENCIA=" + id_contigencia;
+            Statement stmt = conn.createStatement();
+            // System.out.println(cadenasql);
+            stmt.executeUpdate(cadenasql);
+            stmt.close();
+            
+            conn.commit();
+            conn.setAutoCommit(true);
+
+            String cuerpo_html_correo = "<!DOCTYPE html>"
+                    + "<html>"
+                    + "<head>"
+                    + "<style>"
+                    + "table {"
+                    + "font-family: arial, sans-serif;"
+                    + "border-collapse: collapse;"
+                    + "width: 100%;"
+                    + "}"
+                    + "td,"
+                    + "th {"
+                    + "border: 1px solid #dddddd;"
+                    + "text-align: left;"
+                    + "padding: 8px;"
+                    + "}"
+                    + "tr:nth-child(even) {"
+                    + "background-color: #dddddd;"
+                    + "}"
+                    + "</style>"
+                    + "</head>"
+                    + "<body>"
+                    + "<h2>LOTE-DTE: " + respuesta_lote_dte_mh.getCodigoLote() + "</h2>"
+                    + "<table>"
+                    + "<tr>"
+                    + "<th>Respuesta</th>"
+                    + "<th>Valor</th>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td>verson</td>"
+                    + "<td>" + respuesta_lote_dte_mh.getVersion() + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td>ambiente</td>"
+                    + "<td>" + respuesta_lote_dte_mh.getAmbiente() + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td>versionApp</td>"
+                    + "<td>" + respuesta_lote_dte_mh.getVersionApp() + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td>estado</td>"
+                    + "<td>" + respuesta_lote_dte_mh.getEstado() + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td>IdEnvio</td>"
+                    + "<td>" + respuesta_lote_dte_mh.getIdEnvio() + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<tr>"
+                    + "<td>fhProcesamiento</td>"
+                    + "<td>" + respuesta_lote_dte_mh.getFhProcesamiento() + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<tr>"
+                    + "<td>codigoLote</td>"
+                    + "<td>" + respuesta_lote_dte_mh.getCodigoLote() + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<tr>"
+                    + "<td>codigoMsg</td>"
+                    + "<td>" + respuesta_lote_dte_mh.getCodigoMsg() + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<tr>"
+                    + "<td>descripcionMsg</td>"
+                    + "<td>" + respuesta_lote_dte_mh.getDescripcionMsg() + "</td>"
+                    + "</tr>"
+                    + "<tr>"
+                    + "<td>Evento</td>"
+                    + "<td>Contigencia</td>"
+                    + "</tr>"
+                    + "</table>"
+                    + "</body>"
+                    + "</html>";
+            List<Adjunto> files = new ArrayList<>();
+            
+            File TargetFileJson;
+            if (ambiente.equals("PY")) {
+                TargetFileJson = new File("/FELSV3/json/json_lote_dte_" + id_contigencia + ".json");
+            } else {
+                TargetFileJson = new File("/FELSV3/json_pd/json_lote_dte_" + id_contigencia + ".json");
+            }
+            
+            Adjunto adjunto_json = new Adjunto();
+            adjunto_json.setName(respuesta_lote_dte_mh.getCodigoLote() + ".json");
+            adjunto_json.setType("application/json");
+            InputStream inputstream_mail_json = new FileInputStream(TargetFileJson);
+            byte[] bytes_json = IOUtils.toByteArray(inputstream_mail_json);
+            adjunto_json.setData(Base64.getEncoder().encodeToString(bytes_json));
+            adjunto_json.setExt("json");
+            adjunto_json.setPath(null);
+            files.add(adjunto_json);
+
+            Mensaje_Correo mensaje_correo = new Mensaje_Correo();
+            String send_to = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES_CONTIN F WHERE F.ACTIVO=1", conn);
+            mensaje_correo.setRecipients(send_to);
+            String send_to_cc = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES_CONTIN F WHERE F.ACTIVO=2", conn);
+            mensaje_correo.setCc(send_to_cc);
+            mensaje_correo.setSubject("Contingencia FELSV.");
+            mensaje_correo.setBody(null);
+            mensaje_correo.setFrom("replegal-unosv@uno-terra.com");
+            mensaje_correo.setBodyHtml(cuerpo_html_correo);
+            mensaje_correo.setFiles(files);
+
+            Cliente_Rest_SendMail cliente_rest_sendmail = new Cliente_Rest_SendMail();
+            String resul_envio_correo = cliente_rest_sendmail.sendmail(new Gson().toJson(mensaje_correo));
+            // System.out.println("Notificación Correo: " + resul_envio_correo);
+        } catch (Exception ex) {
+            try {
+                conn.rollback();
+                conn.setAutoCommit(true);
+
+                System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:registro_db_respuesta_mh()|ERROR:" + ex.toString());
+            } catch (Exception ex1) {
+                System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:registro_db_respuesta_mh()-rollback|ERROR:" + ex.toString());
+            }
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception ex) {
+                System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:registro_db_respuesta_mh()-finally|ERROR:" + ex.toString());
+            }
+        }
+    }
+    
 }

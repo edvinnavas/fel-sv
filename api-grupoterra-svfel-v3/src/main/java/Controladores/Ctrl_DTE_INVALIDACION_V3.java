@@ -352,7 +352,12 @@ public class Ctrl_DTE_INVALIDACION_V3 implements Serializable {
             if (respuesta_recepciondte_mh.getCodigoMsg().trim().equals("001") || respuesta_recepciondte_mh.getCodigoMsg().trim().equals("002")) {
                 List<Adjunto> files = new ArrayList<>();
 
-                File TargetFileJson = new File("/FELSV3/json/jsondte_invalidacion_" + id_dte + ".json");
+                File TargetFileJson;
+                if (ambiente.equals("PY")) {
+                    TargetFileJson = new File("/FELSV3/json/jsondte_invalidacion_" + id_dte + ".json");
+                } else {
+                    TargetFileJson = new File("/FELSV3/json_pd/jsondte_invalidacion_" + id_dte + ".json");
+                }
 
                 Adjunto adjunto_json = new Adjunto();
                 adjunto_json.setName(respuesta_recepciondte_mh.getCodigoGeneracion() + ".json");
@@ -382,7 +387,12 @@ public class Ctrl_DTE_INVALIDACION_V3 implements Serializable {
                 // System.out.println("Notificación Correo: " + resul_envio_correo);
             } else {
                 List<Adjunto> files = new ArrayList<>();
-                File TargetFileJson = new File("/FELSV3/json/jsondte_invalidacion_" + id_dte + ".json");
+                File TargetFileJson;
+                if (ambiente.equals("PY")) {
+                    TargetFileJson = new File("/FELSV3/json/jsondte_invalidacion_" + id_dte + ".json");
+                } else {
+                    TargetFileJson = new File("/FELSV3/json_pd/jsondte_invalidacion_" + id_dte + ".json");
+                }
                 Adjunto adjunto_json = new Adjunto();
                 adjunto_json.setName("jsondte_invalidacion_" + id_dte + ".json");
                 adjunto_json.setType("application/json");
