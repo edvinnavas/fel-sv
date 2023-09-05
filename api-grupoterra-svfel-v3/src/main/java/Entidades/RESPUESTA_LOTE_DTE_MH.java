@@ -11,19 +11,21 @@ public class RESPUESTA_LOTE_DTE_MH implements Serializable {
     private Number versionApp;
     private String estado;
     private String idEnvio;
-    private String fhProcesamiento;
     private String codigoLote;
+    private String fhProcesamiento;
+    private String clasificaMsg;
     private String codigoMsg;
     private String descripcionMsg;
 
-    public RESPUESTA_LOTE_DTE_MH(Number version, String ambiente, Number versionApp, String estado, String idEnvio, String fhProcesamiento, String codigoLote, String codigoMsg, String descripcionMsg) {
+    public RESPUESTA_LOTE_DTE_MH(Number version, String ambiente, Number versionApp, String estado, String idEnvio, String codigoLote, String fhProcesamiento, String clasificaMsg, String codigoMsg, String descripcionMsg) {
         this.version = version;
         this.ambiente = ambiente;
         this.versionApp = versionApp;
         this.estado = estado;
         this.idEnvio = idEnvio;
-        this.fhProcesamiento = fhProcesamiento;
         this.codigoLote = codigoLote;
+        this.fhProcesamiento = fhProcesamiento;
+        this.clasificaMsg = clasificaMsg;
         this.codigoMsg = codigoMsg;
         this.descripcionMsg = descripcionMsg;
     }
@@ -71,6 +73,14 @@ public class RESPUESTA_LOTE_DTE_MH implements Serializable {
         this.idEnvio = idEnvio;
     }
 
+    public String getCodigoLote() {
+        return codigoLote;
+    }
+
+    public void setCodigoLote(String codigoLote) {
+        this.codigoLote = codigoLote;
+    }
+
     public String getFhProcesamiento() {
         return fhProcesamiento;
     }
@@ -79,12 +89,12 @@ public class RESPUESTA_LOTE_DTE_MH implements Serializable {
         this.fhProcesamiento = fhProcesamiento;
     }
 
-    public String getCodigoLote() {
-        return codigoLote;
+    public String getClasificaMsg() {
+        return clasificaMsg;
     }
 
-    public void setCodigoLote(String codigoLote) {
-        this.codigoLote = codigoLote;
+    public void setClasificaMsg(String clasificaMsg) {
+        this.clasificaMsg = clasificaMsg;
     }
 
     public String getCodigoMsg() {
@@ -105,7 +115,7 @@ public class RESPUESTA_LOTE_DTE_MH implements Serializable {
 
     @Override
     public String toString() {
-        return "RESPUESTA_LOTE_DTE_MH{" + "version=" + version + ", ambiente=" + ambiente + ", versionApp=" + versionApp + ", estado=" + estado + ", idEnvio=" + idEnvio + ", fhProcesamiento=" + fhProcesamiento + ", codigoLote=" + codigoLote + ", codigoMsg=" + codigoMsg + ", descripcionMsg=" + descripcionMsg + '}';
+        return "RESPUESTA_LOTE_DTE_MH{" + "version=" + version + ", ambiente=" + ambiente + ", versionApp=" + versionApp + ", estado=" + estado + ", idEnvio=" + idEnvio + ", codigoLote=" + codigoLote + ", fhProcesamiento=" + fhProcesamiento + ", clasificaMsg=" + clasificaMsg + ", codigoMsg=" + codigoMsg + ", descripcionMsg=" + descripcionMsg + '}';
     }
     
 }

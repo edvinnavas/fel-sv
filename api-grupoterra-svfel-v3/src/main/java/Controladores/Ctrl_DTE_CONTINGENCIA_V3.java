@@ -332,7 +332,8 @@ public class Ctrl_DTE_CONTINGENCIA_V3 implements Serializable {
                     + "LOTE_FNPROCESAMIENTO='" + respuesta_lote_dte_mh.getFhProcesamiento() + "', "
                     + "LOTE_CODIGOLOTE='" + respuesta_lote_dte_mh.getCodigoLote() + "', "
                     + "LOTE_CODIGOMSG='" + respuesta_lote_dte_mh.getCodigoMsg() + "', "
-                    + "LOTE_DESCRIPCIONMSG='" + respuesta_lote_dte_mh.getDescripcionMsg() + "' "
+                    + "LOTE_DESCRIPCIONMSG='" + respuesta_lote_dte_mh.getDescripcionMsg() + "', "
+                    + "LOTE_CLASIFICAMSG='" + respuesta_lote_dte_mh.getClasificaMsg() + "' "
                     + "WHERE "
                     + "ID_CONTINGENCIA=" + id_contigencia;
             Statement stmt = conn.createStatement();

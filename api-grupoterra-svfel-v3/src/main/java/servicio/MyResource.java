@@ -2243,7 +2243,7 @@ public class MyResource implements Serializable {
             
             for (Integer d = 0; d < no_contin.size(); d++) {
                 // GENERAR JSON SIN FIRMAR.
-                DTE_CONTIGENCIA_V3 dte_contingencia_v3 = ctrl_dte_contingencia_v3.generar_json_contingencia_v3(ambiente, id_emisor);
+                DTE_CONTIGENCIA_V3 dte_contingencia_v3 = ctrl_dte_contingencia_v3.generar_json_contingencia_v3(ambiente, no_contin.get(d));
                 Gson gson = new GsonBuilder().serializeNulls().create();
                 String json_conting_sin_firmar = "{"
                         + "\"nit\":\"" + dte_contingencia_v3.getEmisor().getNit() + "\","
@@ -2284,14 +2284,6 @@ public class MyResource implements Serializable {
                 RESPUESTA_CONTINGENCIA_MH respuesta_contingencia_mh = new Gson().fromJson(respuesta_mh, listType2);
                 ctrl_dte_contingencia_v3.registro_db_respuesta_mh(ambiente, respuesta_contingencia_mh, no_contin.get(d));
                 driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "RESPUESTA-EVENTO-CONTIN-MH:: " + new Gson().toJson(respuesta_contingencia_mh));
-                // RESPUESTA_CONTINGENCIA_MH respuesta_contingencia_mh = new RESPUESTA_CONTINGENCIA_MH();
-                // respuesta_contingencia_mh.setEstado("RECIBIDO");
-                // respuesta_contingencia_mh.setFechaHora("01/09/2023 09:00:00");
-                // respuesta_contingencia_mh.setMensaje("Documento recibido.");
-                // respuesta_contingencia_mh.setSelloRecibido("ASLKDFJ7897FAASDFASDF9829239DS87FA98SD7F");
-                // respuesta_contingencia_mh.setObservaciones(new ArrayList<>());
-                // ctrl_dte_contingencia_v3.registro_db_respuesta_mh(ambiente, respuesta_contingencia_mh, no_contin.get(d));
-                // driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "RESPUESTA-EVENTO-CONTIN-MH:: " + new Gson().toJson(respuesta_contingencia_mh));
                 /****************************************************************************************************
                  * GENERAR JSON-LOTE SIN FIRMAR.                                                                    *
                  ****************************************************************************************************/
@@ -2426,17 +2418,6 @@ public class MyResource implements Serializable {
                 RESPUESTA_LOTE_DTE_MH respuesta_lote_dte_mh = new Gson().fromJson(respuesta_mh, listType3);
                 ctrl_dte_contingencia_v3.registro_db_respuesta_lote_mh(ambiente, respuesta_lote_dte_mh, no_contin.get(d));
                 driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "RESPUESTA-LOTE-DTE-MH:: " + new Gson().toJson(respuesta_lote_dte_mh));
-                // RESPUESTA_LOTE_DTE_MH respuesta_lote_dte_mh = new RESPUESTA_LOTE_DTE_MH();
-                // respuesta_lote_dte_mh.setVersion(2);
-                // respuesta_lote_dte_mh.setAmbiente("00");
-                // respuesta_lote_dte_mh.setVersionApp(2);
-                // respuesta_lote_dte_mh.setEstado("PROCESADO");
-                // respuesta_lote_dte_mh.setIdEnvio(json_lote_dte.getIdEnvio());
-                // respuesta_lote_dte_mh.setFhProcesamiento("01/09/2023 09:00:00");
-                // respuesta_lote_dte_mh.setCodigoLote(json_lote_dte.getIdEnvio());
-                // respuesta_lote_dte_mh.setCodigoMsg("000");
-                // respuesta_lote_dte_mh.setDescripcionMsg("LOTE RECIBIDO, VALIDADO Y PROCESADO.");
-                // driver.guardar_en_archivo(ambiente, no_contin.get(d), "contin", "RESPUESTA-LOTE-DTE-MH:: " + new Gson().toJson(respuesta_lote_dte_mh));
                 
                 resultado = gson.toJson(respuesta_lote_dte_mh);
             }

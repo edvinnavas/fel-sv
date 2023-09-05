@@ -23,7 +23,7 @@ import org.glassfish.jersey.client.JerseyClientBuilder;
 public class Cliente_Rest_MH implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    
     private static final String BASE_URI = "https://apitest.dtes.mh.gob.sv";
     private static final String BASE_URI_PROD = "https://api.dtes.mh.gob.sv";
     
@@ -187,9 +187,9 @@ public class Cliente_Rest_MH implements Serializable {
         try {
             WebTarget webTarget;
             if (ambiente.equals("PY")) {
-                webTarget = client.target(BASE_URI).path("fesv/recepcionlote");
+                webTarget = client.target(BASE_URI).path("fesv/recepcionlote/");
             } else {
-                webTarget = client.target(BASE_URI_PROD).path("fesv/recepcionlote");
+                webTarget = client.target(BASE_URI_PROD).path("fesv/recepcionlote/");
             }
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             invocationBuilder.header("Authorization", token);
