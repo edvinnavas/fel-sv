@@ -56,41 +56,55 @@ public class Ctrl_Documento_INVALIDACION_V3 implements Serializable {
             String tabla_dte = "";
             String tabla_identificacion = "";
             String tabla_extension = "";
+            String tabla_resumen = "";
             switch (DCTO_JDE) {
                 case "S3": {
                     tabla_dte = "DTE_CCF_V3";
                     tabla_identificacion = "IDENTIFICACION_CCF_V3";
                     tabla_extension = "EXTENSION_CCF_V3";
+                    tabla_resumen = "RESUMEN_CCF_V3";
                     break;
                 }
                 case "C3": {
                     tabla_dte = "DTE_NC_V3";
                     tabla_identificacion = "IDENTIFICACION_NC_V3";
                     tabla_extension = "EXTENSION_NC_V3";
+                    tabla_resumen = "RESUMEN_NC_V3";
                     break;
                 }
                 case "SD": {
                     tabla_dte = "DTE_ND_V3";
                     tabla_identificacion = "IDENTIFICACION_ND_V3";
                     tabla_extension = "EXTENSION_ND_V3";
+                    tabla_resumen = "RESUMEN_ND_V3";
                     break;
                 }
                 case "FE": {
                     tabla_dte = "DTE_F_V3";
                     tabla_identificacion = "IDENTIFICACION_F_V3";
                     tabla_extension = "EXTENSION_F_V3";
+                    tabla_resumen = "RESUMEN_F_V3";
                     break;
                 }
                 case "EX": {
                     tabla_dte = "DTE_FEX_V3";
                     tabla_identificacion = "IDENTIFICACION_FEX_V3";
                     tabla_extension = "EXTENSION_FEX_V3";
+                    tabla_resumen = "RESUMEN_FEX_V3";
                     break;
                 }
                 case "NR": {
                     tabla_dte = "DTE_NR_V3";
                     tabla_identificacion = "IDENTIFICACION_NR_V3";
                     tabla_extension = "EXTENSION_NR_V3";
+                    tabla_resumen = "RESUMEN_NR_V3";
+                    break;
+                }
+                case "CR": {
+                    tabla_dte = "DTE_CR_V3";
+                    tabla_identificacion = "IDENTIFICACION_CR_V3";
+                    tabla_extension = "EXTENSION_CR_V3";
+                    tabla_resumen = "RESUMEN_CR_V3";
                     break;
                 }
             }
@@ -103,8 +117,8 @@ public class Ctrl_Documento_INVALIDACION_V3 implements Serializable {
             String CODIGOGENERACION = ctrl_base_datos.ObtenerString("SELECT F.CODIGOGENERACION FROM " + tabla_identificacion + " F WHERE F.ID_DTE=" + ID_DTE_ANULAR, conn);
             String SELLORECIBIDO = ctrl_base_datos.ObtenerString("SELECT F.RESPONSE_FHPROCESAMIENTO FROM " + tabla_dte + " F WHERE F.ID_DTE=" + ID_DTE_ANULAR, conn);
             String NUMEROCONTROL = ctrl_base_datos.ObtenerString("SELECT F.NUMEROCONTROL FROM " + tabla_identificacion + " F WHERE F.ID_DTE=" + ID_DTE_ANULAR, conn);
-            String FECHA_HORA_EMISION = ctrl_base_datos.ObtenerString("SELECT TO_CHAR(F.FECHA_HORA_EMISION,'YYYY/MM/DD') FROM " + tabla_identificacion + " F WHERE F.ID_DTE=" + id_dte, conn);
-            Number MONTOIVA = 0.00;
+            String FECHA_HORA_EMISION = ctrl_base_datos.ObtenerString("SELECT TO_CHAR(F.FECHA_HORA_EMISION,'YYYY/MM/DD') FROM " + tabla_identificacion + " F WHERE F.ID_DTE=" + ID_DTE_ANULAR, conn);
+            Number MONTOIVA = ctrl_base_datos.ObtenerDouble("SELECT F.MONTOTOTALOPERACION FROM " + tabla_resumen + " F WHERE F.ID_DTE=" + ID_DTE_ANULAR, conn);
             String CODIGOGENERACIONR = null;
             Long ID_CAT_022 = Long.valueOf("1");
             String NUMDOCUMENTO = ctrl_base_datos.ObtenerString("SELECT F.DOCUENTREGA FROM " + tabla_extension + " F WHERE F.ID_DTE=" + ID_DTE_ANULAR, conn);

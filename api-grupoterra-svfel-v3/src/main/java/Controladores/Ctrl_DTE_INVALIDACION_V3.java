@@ -137,6 +137,9 @@ public class Ctrl_DTE_INVALIDACION_V3 implements Serializable {
                 Ctrl_Documento_INVALIDACION_V3 ctrl_documento_invalidacion_v3 = new Ctrl_Documento_INVALIDACION_V3();
                 String result_documento = ctrl_documento_invalidacion_v3.extraer_documento_jde_invalidacion_v3(ID_DTE, ambiente, KCOO_JDE, DOCO_JDE, DCTO_JDE, DOC_JDE, DCT_JDE, conn);
 
+                Ctrl_Motivo_INVALIDACION_V3 ctrl_motivo_invalidacion_v3 = new Ctrl_Motivo_INVALIDACION_V3();
+                String result_motivo = ctrl_motivo_invalidacion_v3.extraer_motivo_jde_invalidacion_v3(ID_DTE, ambiente, conn);
+                
                 resultado.add(ID_DTE);
             }
             rs.close();
@@ -182,6 +185,15 @@ public class Ctrl_DTE_INVALIDACION_V3 implements Serializable {
 
             Ctrl_Identificacion_INVALIDACION_V3 ctrl_identificacion_invalidacion_v3 = new Ctrl_Identificacion_INVALIDACION_V3();
             resultado.setIdentificacion(ctrl_identificacion_invalidacion_v3.obtener_identificacion_invalidacion_v3(id_dte, conn));
+            
+            Ctrl_Emisor_INVALIDACION_V3 ctrl_emisor_invalidacion_v3 = new Ctrl_Emisor_INVALIDACION_V3();
+            resultado.setEmisor(ctrl_emisor_invalidacion_v3.obtener_emisor_invalidacion_v3(id_dte, conn));
+            
+            Ctrl_Documento_INVALIDACION_V3 ctrl_documento_invalidacion_v3 = new Ctrl_Documento_INVALIDACION_V3();
+            resultado.setDocumento(ctrl_documento_invalidacion_v3.obtener_documento_invalidacion_v3(id_dte, conn));
+            
+            Ctrl_Motivo_INVALIDACION_V3 ctrl_motivo_invalidacion_v3 = new Ctrl_Motivo_INVALIDACION_V3();
+            resultado.setMotivo(ctrl_motivo_invalidacion_v3.obtener_motivo_invalidacion_v3(id_dte, conn));
             
             conn.commit();
             conn.setAutoCommit(true);

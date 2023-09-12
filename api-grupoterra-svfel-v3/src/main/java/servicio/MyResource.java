@@ -2164,9 +2164,6 @@ public class MyResource implements Serializable {
         String resultado = "";
 
         try {
-            Ctrl_DTE_V3 ctrl_dte_v3 = new Ctrl_DTE_V3();
-            ctrl_dte_v3.selecionar_documentos_v3(ambiente, fecha, modo);
-            
             // EXTRAER DOCUMENTOS DESDE JDE HACIA FEL_TEST.
             Ctrl_DTE_INVALIDACION_V3 ctrl_dte_invalidacion_v3 = new Ctrl_DTE_INVALIDACION_V3();
             List<Long> no_dtes = ctrl_dte_invalidacion_v3.extraer_documento_jde_invalidacion_v3(ambiente);
