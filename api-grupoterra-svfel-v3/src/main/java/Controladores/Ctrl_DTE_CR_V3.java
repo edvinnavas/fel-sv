@@ -441,7 +441,8 @@ public class Ctrl_DTE_CR_V3 implements Serializable {
                 mensaje_correo.setCc(send_to_cc);
                 mensaje_correo.setSubject("Emisión DTE.");
                 mensaje_correo.setBody(null);
-                mensaje_correo.setFrom("replegal-unosv@uno-terra.com");
+                // mensaje_correo.setFrom("replegal-unosv@uno-terra.com");
+                mensaje_correo.setFrom("felsv@uno-ca.com");
                 mensaje_correo.setBodyHtml(cuerpo_html_correo);
                 mensaje_correo.setFiles(files);
                 
@@ -495,7 +496,8 @@ public class Ctrl_DTE_CR_V3 implements Serializable {
                 mensaje_correo.setCc(send_to_cc);
                 mensaje_correo.setSubject("Error Emisión DTE.");
                 mensaje_correo.setBody(null);
-                mensaje_correo.setFrom("replegal-unosv@uno-terra.com");
+                // mensaje_correo.setFrom("replegal-unosv@uno-terra.com");
+                mensaje_correo.setFrom("felsv@uno-ca.com");
                 mensaje_correo.setBodyHtml(cuerpo_html_correo);
                 mensaje_correo.setFiles(files);
                 
