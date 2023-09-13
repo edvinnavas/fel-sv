@@ -366,9 +366,9 @@ public class Ctrl_DTE_INVALIDACION_V3 implements Serializable {
 
                 File TargetFileJson;
                 if (ambiente.equals("PY")) {
-                    TargetFileJson = new File("/FELSV3/json/jsondte_invalidacion_" + id_dte + ".json");
+                    TargetFileJson = new File("/FELSV3/json/jsondte_anulardte_" + id_dte + ".json");
                 } else {
-                    TargetFileJson = new File("/FELSV3/json_pd/jsondte_invalidacion_" + id_dte + ".json");
+                    TargetFileJson = new File("/FELSV3/json_pd/jsondte_anulardte_" + id_dte + ".json");
                 }
 
                 Adjunto adjunto_json = new Adjunto();
@@ -402,9 +402,9 @@ public class Ctrl_DTE_INVALIDACION_V3 implements Serializable {
                 List<Adjunto> files = new ArrayList<>();
                 File TargetFileJson;
                 if (ambiente.equals("PY")) {
-                    TargetFileJson = new File("/FELSV3/json/jsondte_invalidacion_" + id_dte + ".json");
+                    TargetFileJson = new File("/FELSV3/json/jsondte_anulardte_" + id_dte + ".json");
                 } else {
-                    TargetFileJson = new File("/FELSV3/json_pd/jsondte_invalidacion_" + id_dte + ".json");
+                    TargetFileJson = new File("/FELSV3/json_pd/jsondte_anulardte_" + id_dte + ".json");
                 }
                 Adjunto adjunto_json = new Adjunto();
                 adjunto_json.setName("jsondte_invalidacion_" + id_dte + ".json");

@@ -2152,13 +2152,11 @@ public class MyResource implements Serializable {
         return resultado;
     }
     
-    @Path("anulardte-v3/{ambiente}/{fecha}/{modo}")
+    @Path("anulardte-v3/{ambiente}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String anulardte_v3(
-            @PathParam("ambiente") String ambiente,
-            @PathParam("fecha") String fecha,
-            @PathParam("modo") Integer modo) {
+            @PathParam("ambiente") String ambiente) {
 
         Driver driver = new Driver();
         String resultado = "";
