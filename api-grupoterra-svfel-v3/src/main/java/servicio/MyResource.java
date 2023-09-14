@@ -2177,7 +2177,7 @@ public class MyResource implements Serializable {
                         + "\"dteJson\":" + gson.toJson(dte_invalidacion_v3)
                         + "}";
                 driver.guardar_en_archivo(ambiente, no_dtes.get(d), "anulardte", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
-                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "anulardte", dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "anulardte", gson.toJson(dte_invalidacion_v3));
 
                 // FIRMAR JSON CON JWT.
                 Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();

@@ -138,7 +138,7 @@ public class Ctrl_DTE_INVALIDACION_V3 implements Serializable {
                 String result_documento = ctrl_documento_invalidacion_v3.extraer_documento_jde_invalidacion_v3(ID_DTE, ambiente, KCOO_JDE, DOCO_JDE, DCTO_JDE, DOC_JDE, DCT_JDE, conn);
 
                 Ctrl_Motivo_INVALIDACION_V3 ctrl_motivo_invalidacion_v3 = new Ctrl_Motivo_INVALIDACION_V3();
-                String result_motivo = ctrl_motivo_invalidacion_v3.extraer_motivo_jde_invalidacion_v3(ID_DTE, ambiente, conn);
+                String result_motivo = ctrl_motivo_invalidacion_v3.extraer_motivo_jde_invalidacion_v3(ID_DTE, ambiente, KCOO_JDE, DOCO_JDE, DCTO_JDE, DOC_JDE, DCT_JDE, conn);
                 
                 resultado.add(ID_DTE);
             }
@@ -453,5 +453,85 @@ public class Ctrl_DTE_INVALIDACION_V3 implements Serializable {
             }
         }
     }
+    
+    public Integer obtener_version_dte(String ambiente, String codigogeneracion) {
+        Integer resultado = 0;
+        Connection conn = null;
 
+        try {
+            Ctrl_Base_Datos ctrl_base_datos = new Ctrl_Base_Datos();
+            conn = ctrl_base_datos.obtener_conexion(ambiente);
+
+            String esquema;
+            String dblink;
+            if (ambiente.equals("PY")) {
+                esquema = "CRPDTA";
+                dblink = "JDEPY";
+            } else {
+                esquema = "PRODDTA";
+                dblink = "JDEPD";
+            }
+
+            conn.setAutoCommit(false);
+            
+            String DCTO_JDE = ctrl_base_datos.ObtenerString("SELECT F.FEDCTO FROM " + esquema + ".F5542FEL@" + dblink + " F WHERE TRIM(F.FECRSREF02)='" + codigogeneracion + "'", conn);
+            String tabla_identificacion = "";
+            switch (DCTO_JDE) {
+                case "S3": {
+                    tabla_identificacion = "IDENTIFICACION_CCF_V3";
+                    break;
+                }
+                case "C3": {
+                    tabla_identificacion = "IDENTIFICACION_NC_V3";
+                    break;
+                }
+                case "SD": {
+                    tabla_identificacion = "IDENTIFICACION_ND_V3";
+                    break;
+                }
+                case "FE": {
+                    tabla_identificacion = "IDENTIFICACION_F_V3";
+                    break;
+                }
+                case "EX": {
+                    tabla_identificacion = "IDENTIFICACION_FEX_V3";
+                    break;
+                }
+                case "NR": {
+                    tabla_identificacion = "IDENTIFICACION_NR_V3";
+                    break;
+                }
+                case "CR": {
+                    tabla_identificacion = "IDENTIFICACION_CR_V3";
+                    break;
+                }
+            }
+            
+            resultado = ctrl_base_datos.ObtenerEntero("SELECT F.DTE_VERSION FROM " + tabla_identificacion + " F WHERE F.CODIGOGENERACION='" + codigogeneracion + "'", conn);
+            
+            conn.commit();
+            conn.setAutoCommit(true);
+        } catch (Exception ex) {
+            try {
+                resultado = -1;
+                conn.rollback();
+                conn.setAutoCommit(true);
+
+                System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:obtener_version_dte()|ERROR:" + ex.toString());
+            } catch (Exception ex1) {
+                System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:obtener_version_dte()-rollback|ERROR:" + ex.toString());
+            }
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception ex) {
+                System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:obtener_version_dte()-finally|ERROR:" + ex.toString());
+            }
+        }
+        
+        return resultado;
+    }
+    
 }
