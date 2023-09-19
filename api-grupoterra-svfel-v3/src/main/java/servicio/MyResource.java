@@ -1,6 +1,7 @@
 package servicio;
 
 import ClienteServicio.Cliente_Rest_MH;
+import Controladores.Ctrl_ConsultarDteLote_V3;
 import Controladores.Ctrl_DTE_CCF_V3;
 import Controladores.Ctrl_DTE_CONTINGENCIA_V3;
 import Controladores.Ctrl_DTE_CR_V3;
@@ -28,6 +29,7 @@ import Entidades.JsonLoteDTE;
 import Entidades.Json_Firmado;
 import Entidades.RESPUESTA_CONTINGENCIA_MH;
 import Entidades.RESPUESTA_LOTE_DTE_MH;
+import Entidades.RESPUESTA_RECEPCIONDTELOTE_MH;
 import Entidades.RESPUESTA_RECEPCIONDTE_MH;
 import Entidades.TokenMH;
 import com.google.gson.Gson;
@@ -2416,6 +2418,46 @@ public class MyResource implements Serializable {
                 
                 resultado = gson.toJson(respuesta_lote_dte_mh);
             }
+        } catch (Exception ex) {
+            System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:contingencia_v3()|ERROR:" + ex.toString());
+        }
+
+        return resultado;
+    }
+    
+    @Path("consultadtelote-v3/{ambiente}/{nit}/{codigo_lote}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String consultadtelote_v3(
+            @PathParam("ambiente") String ambiente,
+            @PathParam("nit") String nit,
+            @PathParam("codigo_lote") String codigo_lote) {
+
+        Driver driver = new Driver();
+        String resultado = "";
+
+        try {
+            /****************************************************************************************************
+             * GENERAR TOKEN MINISTERIO DE HACIENDA EVENTO CONTINGENCIA.                                        *
+             ****************************************************************************************************/
+            Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
+            String token_autenticacion = cliente_rest_mh.autenticar(ambiente, nit, "UNOSV2021*");
+            Type listType1 = new TypeToken<TokenMH>() {
+            }.getType();
+            TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
+            /****************************************************************************************************
+             * RESPUESTA DEL MINISTERIO DE HACIENDA EVENTO CONTINGENCIA.                                        *
+             ****************************************************************************************************/
+            Gson gson = new GsonBuilder().serializeNulls().create();
+            String respuesta_mh = cliente_rest_mh.consultadtelote(ambiente, token_mh.getBody().getToken(), codigo_lote);
+            Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTELOTE_MH>() {
+            }.getType();
+            RESPUESTA_RECEPCIONDTELOTE_MH respuesta_recepciondtelote_mh = new Gson().fromJson(respuesta_mh, listType2);
+            
+            Ctrl_ConsultarDteLote_V3 ctrl_consultar_dte_lote_v3 = new Ctrl_ConsultarDteLote_V3();
+            ctrl_consultar_dte_lote_v3.grabar_respuesta_dte_lote(ambiente, respuesta_recepciondtelote_mh);
+            
+            resultado = gson.toJson(respuesta_recepciondtelote_mh);
         } catch (Exception ex) {
             System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:contingencia_v3()|ERROR:" + ex.toString());
         }

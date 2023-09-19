@@ -206,5 +206,31 @@ public class Cliente_Rest_MH implements Serializable {
 
         return resultado;
     }
+    
+    public String consultadtelote(String ambiente, String token, String codigo_lote) {
+        String resultado = "";
+
+        try {
+            WebTarget webTarget;
+            if (ambiente.equals("PY")) {
+                webTarget = client.target(BASE_URI).path("fesv/recepcion/consultadtelote/" + codigo_lote);
+            } else {
+                webTarget = client.target(BASE_URI_PROD).path("fesv/recepcion/consultadtelote/" + codigo_lote);
+            }
+            Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
+            invocationBuilder.header("Authorization", token);
+            Response response = invocationBuilder.get();
+
+            if (response.getStatus() == 200 || response.getStatus() == 202 || response.getStatus() == 400) {
+                resultado = response.readEntity(String.class);
+            } else {
+                resultado = response.getStatus() + ": " + response.getStatusInfo();
+            }
+        } catch (Exception ex) {
+            resultado = "ERROR: " + ex.toString();
+        }
+
+        return resultado;
+    }
 
 }
