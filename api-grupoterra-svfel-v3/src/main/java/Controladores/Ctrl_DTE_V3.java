@@ -450,6 +450,93 @@ public class Ctrl_DTE_V3 implements Serializable {
             }
             rs.close();
             stmt.close();
+            
+            // EXTRAE FACTURAS DE SUJETO EXCLUIDO DESDE JDE.
+            cadenasql = "SELECT DISTINCT F.NRKCOO, F.NRDOCO, F.NRDCTO, F.NRN001, F.NRURCD, F.NRMCU, F.NRAN8, F.NRSHAN, F.NRCRCD, F.NRURDT, '" + STCD + "' STCD, '-' CRSREF01, '-' CRSREF02, '-' CRSREF03, '-' CRSREF04, '-' CRSREF05, 'F554211N' TABLA, TRIM(F.NRTXA1) NRTXA1, NVL(TRIM(G.ABAC30),'-') ABAC30 "
+                    + "FROM " + esquema + ".F554211N@" + dblink + " F LEFT JOIN " + esquema + ".F0101@" + dblink + " G ON (F.NRAN8=G.ABAN8) "
+                    + "WHERE (TRIM(F.NRKCOO) IN (SELECT C.KCOO_JDE FROM EMISOR_KCOO_V3 C)) AND (F.NRN001 > 0) AND (TRIM(F.NRDCTO) IN ('XF')) AND (TRIM(F.NREV01) IN ('N')) AND (F.NRURDT >= " + ivd + ")";
+            stmt = conn.createStatement();
+            // System.out.println(cadenasql);
+            rs = stmt.executeQuery(cadenasql);
+            while (rs.next()) {
+                String DCTO = "FS";
+
+                Boolean FEDOCO = false;
+                cadenasql = "SELECT F.FEDOCO "
+                        + "FROM " + esquema + ".F5542FEL@" + dblink + " F "
+                        + "WHERE "
+                        + "F.FEKCOO='" + rs.getString(1) + "' AND "
+                        + "F.FEDOCO=" + rs.getString(2) + " AND "
+                        + "F.FEDCTO='" + DCTO + "' AND "
+                        + "F.FEDOC=" + rs.getString(4) + " AND "
+                        + "F.FEDCT='" + rs.getString(5) + "'";
+                Statement stmt1 = conn.createStatement();
+                ResultSet rs1 = stmt1.executeQuery(cadenasql);
+                while (rs1.next()) {
+                    FEDOCO = true;
+                }
+                rs1.close();
+                stmt1.close();
+
+                if (!FEDOCO) {
+                    cadenasql = "INSERT INTO " + esquema + ".F5542FEL@" + dblink + " ("
+                            + "FEKCOO, "
+                            + "FEDOCO, "
+                            + "FEDCTO, "
+                            + "FEDOC, "
+                            + "FEDCT, "
+                            + "FEMCU, "
+                            + "FEAN8, "
+                            + "FESHAN, "
+                            + "FECRCD,"
+                            + "FEIVD, "
+                            + "FESTCD, "
+                            + "FECRSREF01, "
+                            + "FECRSREF02, "
+                            + "FECRSREF03, "
+                            + "FECRSREF04, "
+                            + "FECRSREF05, "
+                            + "FEJEVER, "
+                            + "FERCD, "
+                            + "FEAEXP, "
+                            + "FETXA1) VALUES ('"
+                            + rs.getString(1) + "','"
+                            + rs.getString(2) + "','"
+                            + DCTO + "','"
+                            + rs.getString(4) + "','"
+                            + rs.getString(5) + "','"
+                            + rs.getString(6) + "','"
+                            + rs.getString(7) + "','"
+                            + rs.getString(8) + "','"
+                            + rs.getString(9) + "','"
+                            + rs.getString(10) + "','"
+                            + rs.getString(11) + "','"
+                            + rs.getString(12) + "','"
+                            + rs.getString(13) + "','"
+                            + rs.getString(14) + "','"
+                            + rs.getString(15) + "','"
+                            + rs.getString(16) + "','"
+                            + rs.getString(17) + "',"
+                            + "null" + ","
+                            + "0" + ",'"
+                            + rs.getString(18) + "')";
+                    stmt1 = conn.createStatement();
+                    // System.out.println(cadenasql);
+                    stmt1.executeUpdate(cadenasql);
+                    stmt1.close();
+
+                    cadenasql = "UPDATE " + esquema + ".F554211N@" + dblink + " "
+                            + "SET NREV01='P' "
+                            + "WHERE NRKCOO='" + rs.getString(1) + "' AND NRDOCO=" + rs.getString(2) + " AND NRDCTO='" + rs.getString(3) + "' AND NRN001=" + rs.getString(4) + " AND NRURCD='" + rs.getString(5) + "'";
+                    stmt1 = conn.createStatement();
+                    // System.out.println(cadenasql);
+                    stmt1.executeUpdate(cadenasql);
+                    stmt1.close();
+                    resultado++;
+                }
+            }
+            rs.close();
+            stmt.close();
 
             conn.commit();
             conn.setAutoCommit(true);

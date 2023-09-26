@@ -41,6 +41,8 @@ SELECT C.* FROM CAT_033 C ORDER BY C.ID_CAT;
 SELECT F.* FROM EMISOR_V3 F;
 SELECT F.* FROM EMISOR_KCOO_V3 F;
 SELECT F.* FROM EMISOR_ESTABLECIMIENTO_V3 F;
+ALTER TABLE EMISOR_ESTABLECIMIENTO_V3 ADD CORRELATIVO_FSE NUMBER(13,0) DEFAULT 0 NOT NULL;
+
 SELECT F.* FROM NOTIFIACION_CORREO_V3 F;
 SELECT F.* FROM IMPRESORAS F;
 SELECT F.* FROM NOTIFICACIONES F;
@@ -169,6 +171,23 @@ SELECT F.* FROM RESUMEN_TRIBUTO_CR_V3 F WHERE F.ID_DTE IN (122);
 SELECT F.* FROM EXTENSION_CR_V3 F WHERE F.ID_DTE IN (122);
 SELECT F.* FROM APENDICE_CR_V3 F WHERE F.ID_DTE IN (122);
 -- ***************************************************************************************************************************
+-- *          FACTURA SUJETO EXCLUIDO.                                                                                       *
+-- ***************************************************************************************************************************
+SELECT F.* FROM DTE_FSE_V3 F ORDER BY F.ID_DTE DESC;
+
+SELECT F.* FROM DTE_FSE_V3 F WHERE F.ID_DTE IN (1);
+SELECT F.* FROM IDENTIFICACION_FSE_V3 F WHERE F.ID_DTE IN (1);
+SELECT F.* FROM DOCU_RELA_FSE_V3 F WHERE F.ID_DTE IN (1);
+SELECT F.* FROM SUJETOEXCLUIDO_FSE_V3 F WHERE F.ID_DTE IN (1);
+SELECT F.* FROM OTROS_DOCU_FSE_V3 F WHERE F.ID_DTE IN (1);
+SELECT F.* FROM VENTA_TERCERO_FSE_V3 F WHERE F.ID_DTE IN (1);
+SELECT F.* FROM CUERPO_DOCU_FSE_V3 F WHERE F.ID_DTE IN (1);
+SELECT F.* FROM CUERPO_TRIBUTO_FSE_V3 F WHERE F.ID_DTE IN (1);
+SELECT F.* FROM RESUMEN_FSE_V3 F WHERE F.ID_DTE IN (1);
+SELECT F.* FROM RESUMEN_TRIBUTO_FSE_V3 F WHERE F.ID_DTE IN (1);
+SELECT F.* FROM EXTENSION_FSE_V3 F WHERE F.ID_DTE IN (1);
+SELECT F.* FROM APENDICE_FSE_V3 F WHERE F.ID_DTE IN (1);
+-- ***************************************************************************************************************************
 -- *          EVENTO DE INVALIDACIÓN.                                                                                        *
 -- ***************************************************************************************************************************
 SELECT F.* FROM DTE_INVALIDACION_V3 F ORDER BY F.ID_DTE DESC;
@@ -195,23 +214,13 @@ SELECT F.* FROM CRPDTA.F5942PAR@JDEPY F;
 -- ***************************************************************************************************************************
 -- *          QUERY PARA FECHAS JULIANAS Y GREGORIANAS.                                                                      *
 -- ***************************************************************************************************************************
-SELECT TO_NUMBER(SUBSTR(TO_CHAR(TO_DATE('26/04/2023','dd/MM/yyyy'),'ccYYddd'),2,6)) FECHA_JULIANA FROM DUAL;
+SELECT TO_NUMBER(SUBSTR(TO_CHAR(TO_DATE('12/09/2023','dd/MM/yyyy'),'ccYYddd'),2,6)) FECHA_JULIANA FROM DUAL;
 SELECT TO_CHAR(TO_DATE(TO_CHAR(A.SDIVD + 1900000,'9999999'),'YYYYDDD'),'dd/MM/yyyy') FECHA_GREGORIANA FROM DUAL;
 
-SELECT F.* FROM CRPDTA.F5542FEL@JDEPY F WHERE FESTCD IN ('000','999');
-SELECT F.* FROM CRPDTA.F5542FEL@JDEPY F WHERE F.FEDOCO IN (72960211);
+SELECT DISTINCT F.NRKCOO, F.NRDOCO, F.NRDCTO, F.NRN001, F.NRURCD, F.NRMCU, F.NRAN8, F.NRSHAN, F.NRCRCD, F.NRURDT, '000' STCD, '-' CRSREF01, '-' CRSREF02, '-' CRSREF03, '-' CRSREF04, '-' CRSREF05, 'F554211N' TABLA, TRIM(F.NRTXA1) NRTXA1, NVL(TRIM(G.ABAC30),'-') ABAC30
+FROM CRPDTA.F554211N@JDEPY F LEFT JOIN CRPDTA.F0101@JDEPY G ON (F.NRAN8=G.ABAN8)
+WHERE (TRIM(F.NRKCOO) IN (SELECT C.KCOO_JDE FROM EMISOR_KCOO_V3 C)) AND (F.NRN001 > 0) AND (TRIM(F.NRDCTO) IN ('XF')) AND (TRIM(F.NREV01) IN ('N')) AND (F.NRURDT >= 123224);
 
--- UPDATE CRPDTA.F5542FEL@JDEPY SET FESTCD='000', FEJEVER='F42119    ' WHERE FEDOCO IN (72960056);
-UPDATE CRPDTA.F5542FEL@JDEPY SET FESTCD='000' WHERE FEDOCO IN (72960211);
-COMMIT;
-
-SELECT F.* FROM CRPDTA.F5542FEL@JDEPY F WHERE FESTCD IN ('99C');
--- UPDATE CRPDTA.F5542FEL@JDEPY SET FESTCD='CCC' WHERE FESTCD IN ('99C');
-SELECT F.* FROM CRPDTA.F5542FEL@JDEPY F WHERE FESTCD IN ('CCC');
-
-SELECT F.* FROM CRPDTA.F5542FEL@JDEPY F WHERE TRIM(F.FECRSREF02) IN ('ABD2D145-BE56-471A-B0EB-75C7CA09CBB2',
-                                                                     '3DC26933-33B7-4249-BBE2-2102170E93D9',
-                                                                     '26C7A4A6-635A-41E1-976F-108547BDA45E',
-                                                                     'E300BEBE-6AA7-4B20-882E-5B1D80A8A41E',
-                                                                     'AC42BB11-96FD-41D1-B925-7D3E0A73E2C7',
-                                                                     '8C9B3442-8FCE-4DBF-8452-1082E6C82CDC');
+SELECT F.NRRMK, F.*
+FROM CRPDTA.F554211N@JDEPY F LEFT JOIN CRPDTA.F0101@JDEPY G ON (F.NRAN8=G.ABAN8)
+WHERE (TRIM(F.NRKCOO) IN (SELECT C.KCOO_JDE FROM EMISOR_KCOO_V3 C)) AND (F.NRN001 > 0) AND (TRIM(F.NRDCTO) IN ('XF')) AND (TRIM(F.NREV01) IN ('N')) AND (F.NRURDT >= 123224);

@@ -2203,7 +2203,7 @@ public class MyResource implements Serializable {
                 driver.guardar_en_archivo(ambiente, no_dtes.get(d), "anulardte", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
 
                 // RESPUESTA DEL MINISTERIO DE HACIENDA.
-                String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
+                String respuesta_mh = cliente_rest_mh.anulardte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
                 Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_MH>() {
                 }.getType();
                 RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
