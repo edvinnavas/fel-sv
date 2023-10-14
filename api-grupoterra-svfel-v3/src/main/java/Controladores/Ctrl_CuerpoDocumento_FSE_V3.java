@@ -33,7 +33,7 @@ public class Ctrl_CuerpoDocumento_FSE_V3 implements Serializable {
                 cuerpo_documento_fse.setCodigo(ctrl_base_datos.ObtenerString("SELECT F.CODIGO FROM CUERPO_DOCU_FSE_V3 F WHERE F.ID_DTE=" + id_dte + " AND F.ID_CUERPO_DOCUMENTO=" + id_cuerpo_documento, conn));
                 cuerpo_documento_fse.setUniMedida(ctrl_base_datos.ObtenerEntero("SELECT C.CODIGO FROM CAT_014 C WHERE C.ID_CAT IN (SELECT F.ID_CAT_014 FROM CUERPO_DOCU_FSE_V3 F WHERE F.ID_DTE=" + id_dte + " AND F.ID_CUERPO_DOCUMENTO=" + id_cuerpo_documento + ")", conn));
                 cuerpo_documento_fse.setDescripcion(ctrl_base_datos.ObtenerString("SELECT F.DESCRIPCION FROM CUERPO_DOCU_FSE_V3 F WHERE F.ID_DTE=" + id_dte + " AND F.ID_CUERPO_DOCUMENTO=" + id_cuerpo_documento, conn));
-                cuerpo_documento_fse.setPrecioUni(ctrl_base_datos.ObtenerDouble("SELECT F.PRECIOUNI FROM CUERPO_DOCU_FSE_V3 F WHERE F.ID_DTE=" + id_dte + " AND F.ID_CUERPO_DOCUMENTO=" + id_cuerpo_documento, conn));
+                cuerpo_documento_fse.setPrecioUni(ctrl_base_datos.ObtenerDouble("SELECT F.PRCIOUNI FROM CUERPO_DOCU_FSE_V3 F WHERE F.ID_DTE=" + id_dte + " AND F.ID_CUERPO_DOCUMENTO=" + id_cuerpo_documento, conn));
                 cuerpo_documento_fse.setMontoDescu(ctrl_base_datos.ObtenerDouble("SELECT F.MONTODESCU FROM CUERPO_DOCU_FSE_V3 F WHERE F.ID_DTE=" + id_dte + " AND F.ID_CUERPO_DOCUMENTO=" + id_cuerpo_documento, conn));
                 cuerpo_documento_fse.setCompra(ctrl_base_datos.ObtenerDouble("SELECT F.COMPRA FROM CUERPO_DOCU_FSE_V3 F WHERE F.ID_DTE=" + id_dte + " AND F.ID_CUERPO_DOCUMENTO=" + id_cuerpo_documento, conn));
                 resultado.add(cuerpo_documento_fse);
@@ -71,7 +71,7 @@ public class Ctrl_CuerpoDocumento_FSE_V3 implements Serializable {
                     + "TRIM(F.NRBDS4) descripcion, "
                     + "F.NRUPRC/10000 precioUni "
                     + "FROM " + esquema + ".F554211N@" + dblink + " F "
-                    + "WHERE F.NRKCOO='00728' AND F.NRDOCO=3 AND F.NRDCTO='XF' AND F.NRLNTY IN ('M','S','SX')";
+                    + "WHERE F.NRKCOO='" + KCOO_JDE + "' AND F.NRDOCO=" + DOCO_JDE + " AND F.NRDCTO='" + DCTO_JDE + "' AND F.NRLNTY IN ('M','S','SX')";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(cadenasql);
             Integer contador = 0;

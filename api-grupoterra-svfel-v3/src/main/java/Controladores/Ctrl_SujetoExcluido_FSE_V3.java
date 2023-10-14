@@ -59,18 +59,18 @@ public class Ctrl_SujetoExcluido_FSE_V3 implements Serializable {
             Long ID_DTE = id_dte;
             Long ID_SUJETOEXCLUIDO = Long.valueOf("1");
 
-            Long ID_CAT_022 = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_022 C WHERE C.VALOR_JDE IN (SELECT NVL(TRIM(F.NRRMK),'36') FROM " + esquema + ".F554211N@" + dblink + " F WHERE F.NRKCOO='" + KCOO_JDE + "' AND F.NRDCTO='" + DCTO_JDE + "' AND F.NRDOCO=" + DOCO_JDE, conn);
-            String NUM_DOCUMENTO = ctrl_base_datos.ObtenerString("SELECT C.ID_CAT FROM CAT_022 C WHERE C.VALOR_JDE IN (SELECT NVL(TRIM(F.NRTAX),'-') FROM " + esquema + ".F554211N@" + dblink + " F WHERE F.NRKCOO='" + KCOO_JDE + "' AND F.NRDCTO='" + DCTO_JDE + "' AND F.NRDOCO=" + DOCO_JDE, conn);
+            Long ID_CAT_022 = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_022 C WHERE C.VALOR_JDE IN (SELECT NVL(TRIM(F.NRRMK),'36') FROM " + esquema + ".F554211N@" + dblink + " F WHERE F.NRKCOO='" + KCOO_JDE + "' AND F.NRDCTO='" + DCTO_JDE + "' AND F.NRDOCO=" + DOCO_JDE + ")", conn);
+            String NUM_DOCUMENTO = ctrl_base_datos.ObtenerString("SELECT NVL(TRIM(F.NRTAX),'-') FROM " + esquema + ".F554211N@" + dblink + " F WHERE F.NRKCOO='" + KCOO_JDE + "' AND F.NRDCTO='" + DCTO_JDE + "' AND F.NRDOCO=" + DOCO_JDE, conn);
 
-            String NOMBRE = ctrl_base_datos.ObtenerString("SELECT NVL(TRIM(F.A9ALPH),'-)' FROM " + esquema + ".F550401A@" + dblink + " F WHERE TRIM(F.A9TAX)='" + NUM_DOCUMENTO + "'", conn);
+            String NOMBRE = ctrl_base_datos.ObtenerString("SELECT NVL(TRIM(F.A9ALPH),'-') FROM " + esquema + ".F550401A@" + dblink + " F WHERE TRIM(F.A9TAX)='" + NUM_DOCUMENTO + "'", conn);
 
             Long ID_CAT_019 = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_019 C WHERE C.VALOR_JDE IN (SELECT TRIM(F.A9VR01) FROM " + esquema + ".F550401A@" + dblink + " F WHERE TRIM(F.A9TAX)='" + NUM_DOCUMENTO + "')", conn);
             if (ID_CAT_019 == null) {
                 ID_CAT_019 = Long.valueOf("772");
             }
 
-            Long ID_CAT_012 = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_012 C WHERE C.VALOR_JDE IN (SELECT TRIM(G.A9ADDS) FROM " + esquema + ".F550401A@" + dblink + " F WHERE TRIM(F.A9TAX)='" + NUM_DOCUMENTO + "')", conn);
-            Long ID_CAT_013 = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_013 C WHERE C.VALOR_JDE IN (SELECT TRIM(G.A9COUN) FROM " + esquema + ".F550401A@" + dblink + " F WHERE TRIM(F.A9TAX)='" + NUM_DOCUMENTO + "')", conn);
+            Long ID_CAT_012 = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_012 C WHERE C.VALOR_JDE IN (SELECT TRIM(F.A9ADDS) FROM " + esquema + ".F550401A@" + dblink + " F WHERE TRIM(F.A9TAX)='" + NUM_DOCUMENTO + "')", conn);
+            Long ID_CAT_013 = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_013 C WHERE C.VALOR_JDE IN (SELECT TRIM(F.A9COUN) FROM " + esquema + ".F550401A@" + dblink + " F WHERE TRIM(F.A9TAX)='" + NUM_DOCUMENTO + "')", conn);
             String CODIGO_CAT_013 = ctrl_base_datos.ObtenerString("SELECT C.CODIGO FROM CAT_013 C WHERE C.ID_CAT=" + ID_CAT_013 + " AND C.ID_CAT_012=" + ID_CAT_012, conn);
             if (CODIGO_CAT_013 == null) {
                 ID_CAT_012 = Long.valueOf("6");

@@ -58,14 +58,14 @@ public class Ctrl_DTE_FSE_V3 implements Serializable {
                     + "F.FEDCT, "
                     + "F.FEAN8, "
                     + "F.FESHAN, "
-                    + "F.FECRCD, "
+                    + "NVL(TRIM(F.FECRCD),'USD') FECRCD, "
                     + "F.FEIVD, "
                     + "F.FEJEVER "
                     + "FROM "
                     + esquema + ".F5542FEL@" + dblink + " F "
                     + "WHERE "
                     + "F.FESTCD='000' AND "
-                    + "F.FEDCTO='S3'";
+                    + "F.FEDCTO='FS'";
             Statement stmt = conn.createStatement();
             // System.out.println(cadenasql);
             ResultSet rs = stmt.executeQuery(cadenasql);
@@ -140,10 +140,10 @@ public class Ctrl_DTE_FSE_V3 implements Serializable {
                 String result_identificacion = ctrl_identificacion_fse_v3.extraer_identificacion_jde_fse_v3(ID_DTE, ambiente, DCTO_JDE.trim(), MCU_JDE.trim(), CRCD_JDE.trim(), IVD_JDE.trim(), conn);
 
                 Ctrl_SujetoExcluido_FSE_V3 ctrl_sujeto_excluido_fse_v3 = new Ctrl_SujetoExcluido_FSE_V3();
-                String result_recepor = ctrl_sujeto_excluido_fse_v3.extraer_sujeto_excluido_fse_v3(ID_DTE, ambiente, KCOO_JDE.trim(), DCTO_JDE.trim(), DOCO_JDE.trim(), conn);
+                String result_recepor = ctrl_sujeto_excluido_fse_v3.extraer_sujeto_excluido_fse_v3(ID_DTE, ambiente, KCOO_JDE.trim(), "XF", DOCO_JDE.trim(), conn);
 
                 Ctrl_CuerpoDocumento_FSE_V3 ctrl_cuerpo_documento_fse_v3 = new Ctrl_CuerpoDocumento_FSE_V3();
-                String result_cuerpo_documento = ctrl_cuerpo_documento_fse_v3.extraer_cuerpo_documento_jde_fse_v3(ID_DTE, ambiente, KCOO_JDE.trim(), DOCO_JDE.trim(), DCTO_JDE.trim(), JEVER_JDE.trim(), conn);
+                String result_cuerpo_documento = ctrl_cuerpo_documento_fse_v3.extraer_cuerpo_documento_jde_fse_v3(ID_DTE, ambiente, KCOO_JDE.trim(), DOCO_JDE.trim(), "XF", JEVER_JDE.trim(), conn);
 
                 Ctrl_Resumen_FSE_V3 ctrl_resumen_fse_v3 = new Ctrl_Resumen_FSE_V3();
                 String result_resumen = ctrl_resumen_fse_v3.extraer_resumen_jde_fse_v3(ID_DTE, ambiente, conn);
