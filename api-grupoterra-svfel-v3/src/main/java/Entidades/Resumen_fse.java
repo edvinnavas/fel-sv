@@ -10,7 +10,7 @@ public class Resumen_fse implements Serializable {
     private Number descu;
     private Number totalDescu;
     private Number subTotal;
-    private Number ivaRetel;
+    private Number ivaRete1;
     private Number reteRenta;
     private Number totalPagar;
     private String totalLetras;
@@ -18,12 +18,12 @@ public class Resumen_fse implements Serializable {
     private Pagos pagos;
     private String observaciones;
 
-    public Resumen_fse(Number totalCompra, Number descu, Number totalDescu, Number subTotal, Number ivaRetel, Number reteRenta, Number totalPagar, String totalLetras, Number condicionOperacion, Pagos pagos, String observaciones) {
+    public Resumen_fse(Number totalCompra, Number descu, Number totalDescu, Number subTotal, Number ivaRete1, Number reteRenta, Number totalPagar, String totalLetras, Number condicionOperacion, Pagos pagos, String observaciones) {
         this.totalCompra = totalCompra;
         this.descu = descu;
         this.totalDescu = totalDescu;
         this.subTotal = subTotal;
-        this.ivaRetel = ivaRetel;
+        this.ivaRete1 = ivaRete1;
         this.reteRenta = reteRenta;
         this.totalPagar = totalPagar;
         this.totalLetras = totalLetras;
@@ -67,12 +67,12 @@ public class Resumen_fse implements Serializable {
         this.subTotal = subTotal;
     }
 
-    public Number getIvaRetel() {
-        return ivaRetel;
+    public Number getIvaRete1() {
+        return ivaRete1;
     }
 
-    public void setIvaRetel(Number ivaRetel) {
-        this.ivaRetel = ivaRetel;
+    public void setIvaRete1(Number ivaRete1) {
+        this.ivaRete1 = ivaRete1;
     }
 
     public Number getReteRenta() {
@@ -125,7 +125,7 @@ public class Resumen_fse implements Serializable {
 
     @Override
     public String toString() {
-        return "Resumen_fse{" + "totalCompra=" + totalCompra + ", descu=" + descu + ", totalDescu=" + totalDescu + ", subTotal=" + subTotal + ", ivaRetel=" + ivaRetel + ", reteRenta=" + reteRenta + ", totalPagar=" + totalPagar + ", totalLetras=" + totalLetras + ", condicionOperacion=" + condicionOperacion + ", pagos=" + pagos + ", observaciones=" + observaciones + '}';
+        return "Resumen_fse{" + "totalCompra=" + totalCompra + ", descu=" + descu + ", totalDescu=" + totalDescu + ", subTotal=" + subTotal + ", ivaRete1=" + ivaRete1 + ", reteRenta=" + reteRenta + ", totalPagar=" + totalPagar + ", totalLetras=" + totalLetras + ", condicionOperacion=" + condicionOperacion + ", pagos=" + pagos + ", observaciones=" + observaciones + '}';
     }
     
 }

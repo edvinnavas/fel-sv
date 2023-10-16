@@ -46,7 +46,7 @@ public class Ctrl_Identificacion_FSE_V3 implements Serializable {
             
             Long ID_DTE = id_dte;
             Long ID_IDENTIFICACION = Long.valueOf("1");
-            Long DTE_VERSION = Long.valueOf("3");            
+            Long DTE_VERSION = Long.valueOf("1");            
             Long ID_CAT_001;
             if(ambiente.equals("PY")) {
                 ID_CAT_001 = Long.valueOf("1");

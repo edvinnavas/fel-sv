@@ -64,9 +64,9 @@ public class Ctrl_CuerpoDocumento_FSE_V3 implements Serializable {
             }
 
             String cadenasql = "SELECT "
-                    + "TRIM(F.NRLNTY) tipoItem, "
+                    + "'M' tipoItem, "
                     + "F.NRUORG cantidad, "
-                    + "NVL(TRIM(F.NRLITM),'XF-001') codigo, "
+                    + "NVL(TRIM(F.NRLITM),'') codigo, "
                     + "NVL(TRIM(F.NRUOM),'EA') uniMedida, "
                     + "TRIM(F.NRBDS4) descripcion, "
                     + "F.NRUPRC/10000 precioUni "
@@ -85,6 +85,11 @@ public class Ctrl_CuerpoDocumento_FSE_V3 implements Serializable {
                     CANTIDAD = CANTIDAD * -1;
                 }
                 String CODIGO = rs.getString(3);
+                if(CODIGO.equals("")) {
+                    CODIGO = "null";
+                } else {
+                    CODIGO = "'" + CODIGO + "'";
+                }
                 Long ID_CAT_014 = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_014 C WHERE C.VALOR_JDE LIKE '%[" + rs.getString(4) + "]%'", conn);
                 String DESCRIPCION = rs.getString(5);
 
@@ -95,7 +100,7 @@ public class Ctrl_CuerpoDocumento_FSE_V3 implements Serializable {
                 }
 
                 Number MONTODESCU = 0.00;
-                Number COMPRA = 0.00;
+                Number COMPRA = PRECIOUNI.doubleValue() - MONTODESCU.doubleValue();
 
                 cadenasql = "INSERT INTO CUERPO_DOCU_FSE_V3 ( "
                         + "ID_DTE, "
@@ -111,8 +116,8 @@ public class Ctrl_CuerpoDocumento_FSE_V3 implements Serializable {
                         + ID_DTE + ","
                         + ID_CUERPO_DOCUMENTO + ","
                         + ID_CAT_011 + ","
-                        + CANTIDAD + ",'"
-                        + CODIGO + "',"
+                        + CANTIDAD + ","
+                        + CODIGO + ","
                         + ID_CAT_014 + ",'"
                         + DESCRIPCION + "',"
                         + PRECIOUNI + ","

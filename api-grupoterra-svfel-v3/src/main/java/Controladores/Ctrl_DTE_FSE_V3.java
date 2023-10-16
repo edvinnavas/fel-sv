@@ -288,7 +288,7 @@ public class Ctrl_DTE_FSE_V3 implements Serializable {
                     + "FECRSREF02='" + respuesta_recepciondte_mh.getCodigoGeneracion() + "', "
                     + "FECRSREF03='" + respuesta_recepciondte_mh.getSelloRecibido() + "', "
                     + "FEAEXP=" + AEXP_JDE + " "
-                    + "WHERE FEKCOO='" + KCOO_JDE + "' AND FEDOCO=" + DOCO_JDE + " AND FEDCTO='" + DCTO_JDE + "' AND FEDOC=" + DOC_JDE + " AND FEDCT='" + DCT_JDE + "'";
+                    + "WHERE FEKCOO='" + KCOO_JDE + "' AND FEDOCO=" + DOCO_JDE + " AND FEDCTO='FS' AND FEDOC=" + DOC_JDE + " AND FEDCT='" + DCT_JDE + "'";
             stmt = conn.createStatement();
             // System.out.println(cadenasql);
             stmt.executeUpdate(cadenasql);
@@ -378,7 +378,7 @@ public class Ctrl_DTE_FSE_V3 implements Serializable {
                     + "</tr>"
                     + "<tr>"
                     + "<td>Tipo Documento</td>"
-                    + "<td>Comprobante de Crédito Fiscal</td>"
+                    + "<td>Factura Sujeto Excluido</td>"
                     + "</tr>"
                     + "</table>"
                     + "</body>"

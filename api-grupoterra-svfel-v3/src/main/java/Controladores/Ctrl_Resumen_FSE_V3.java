@@ -24,7 +24,7 @@ public class Ctrl_Resumen_FSE_V3 implements Serializable {
             resultado.setDescu(ctrl_base_datos.ObtenerDouble("SELECT F.DESCU FROM RESUMEN_FSE_V3 F WHERE F.ID_DTE=" + id_dte, conn));
             resultado.setTotalDescu(ctrl_base_datos.ObtenerDouble("SELECT F.TOTALDESCU FROM RESUMEN_FSE_V3 F WHERE F.ID_DTE=" + id_dte, conn));
             resultado.setSubTotal(ctrl_base_datos.ObtenerDouble("SELECT F.SUBTOTAL FROM RESUMEN_FSE_V3 F WHERE F.ID_DTE=" + id_dte, conn));
-            resultado.setIvaRetel(ctrl_base_datos.ObtenerDouble("SELECT F.IVARETEL FROM RESUMEN_FSE_V3 F WHERE F.ID_DTE=" + id_dte, conn));
+            resultado.setIvaRete1(ctrl_base_datos.ObtenerDouble("SELECT F.IVARETEL FROM RESUMEN_FSE_V3 F WHERE F.ID_DTE=" + id_dte, conn));
             resultado.setReteRenta(ctrl_base_datos.ObtenerDouble("SELECT F.RETERENTA FROM RESUMEN_FSE_V3 F WHERE F.ID_DTE=" + id_dte, conn));
             resultado.setTotalPagar(ctrl_base_datos.ObtenerDouble("SELECT F.TOTALPAGAR FROM RESUMEN_FSE_V3 F WHERE F.ID_DTE=" + id_dte, conn));
             resultado.setTotalLetras(ctrl_base_datos.ObtenerString("SELECT F.TOTALLETRAS FROM RESUMEN_FSE_V3 F WHERE F.ID_DTE=" + id_dte, conn));
@@ -66,13 +66,13 @@ public class Ctrl_Resumen_FSE_V3 implements Serializable {
             
             Long ID_DTE = id_dte;
             Long ID_RESUMEN = Long.valueOf("1");
-            Number TOTALCOMPRA = 0.00;
+            Number TOTALCOMPRA = ctrl_base_datos.ObtenerDouble("SELECT SUM(F.COMPRA) FROM CUERPO_DOCU_FSE_V3 F WHERE F.ID_DTE=" + id_dte, conn);
             Number DESCU = 0.00;
             Number TOTALDESCU = 0.00;
             Number SUBTOTAL = TOTALCOMPRA.doubleValue();
-            Number IVARETEL = SUBTOTAL.doubleValue() * 0.13;
-            Number RETERENTA = 0.00;
-            Number TOTALPAGAR = SUBTOTAL.doubleValue() + IVARETEL.doubleValue() + RETERENTA.doubleValue();
+            Number IVARETEL = 0.00;
+            Number RETERENTA = SUBTOTAL.doubleValue() * 0.10;
+            Number TOTALPAGAR = SUBTOTAL.doubleValue() - IVARETEL.doubleValue() - RETERENTA.doubleValue();
             
             Long TOTALPAGAR_LONG = TOTALPAGAR.longValue();
             Double TOTALPAGAR_DOUBLE = TOTALPAGAR.doubleValue();

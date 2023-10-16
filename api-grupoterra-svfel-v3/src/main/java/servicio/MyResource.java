@@ -2218,33 +2218,33 @@ public class MyResource implements Serializable {
                     /****************************************************************************************************
                      * RESPUESTA DEL MINISTERIO DE HACIENDA FSE.                                                        *
                      ****************************************************************************************************/
-                    // String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
-                    // Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_MH>() {
-                    // }.getType();
-                    // RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
-                    // ctrl_dte_fse_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
-                    // driver.guardar_en_archivo(ambiente, no_dtes.get(d), "fse", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                    String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
+                    Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_MH>() {
+                    }.getType();
+                    RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
+                    ctrl_dte_fse_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
+                    driver.guardar_en_archivo(ambiente, no_dtes.get(d), "fse", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
                 } else {
                     /****************************************************************************************************
                      * RESPUESTA DEL MINISTERIO DE HACIENDA FSE.                                                        *
                      ****************************************************************************************************/
-                    // RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new RESPUESTA_RECEPCIONDTE_MH();
-                    // respuesta_recepciondte_mh.setVersion(dte_fse_v3.getIdentificacion().getVersion());
-                    // respuesta_recepciondte_mh.setAmbiente(dte_fse_v3.getIdentificacion().getAmbiente());
-                    // respuesta_recepciondte_mh.setVersionApp(2);
-                    // respuesta_recepciondte_mh.setEstado("EMITIDO-CONTIGENCIA");
-                    // respuesta_recepciondte_mh.setCodigoGeneracion(dte_fse_v3.getIdentificacion().getCodigoGeneracion());
-                    // respuesta_recepciondte_mh.setCodigoGeneracion(dte_fse_v3.getIdentificacion().getCodigoGeneracion());
-                    // respuesta_recepciondte_mh.setSelloRecibido("-");
-                    // respuesta_recepciondte_mh.setFhProcesamiento(dte_fse_v3.getIdentificacion().getFecEmi() + " " + dte_fse_v3.getIdentificacion().getHorEmi());
-                    // respuesta_recepciondte_mh.setClasificaMsg("00");
-                    // respuesta_recepciondte_mh.setCodigoMsg("CCC");
-                    // respuesta_recepciondte_mh.setDescripcionMsg("Documeto emitido en contigencia.");
-                    // List<String> observaciones = new ArrayList<>();
-                    // observaciones.add("Documeto emitido en contigencia.");
-                    // respuesta_recepciondte_mh.setObservaciones(observaciones);
-                    // ctrl_dte_fse_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
-                    // driver.guardar_en_archivo(ambiente, no_dtes.get(d), "fse", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                    RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new RESPUESTA_RECEPCIONDTE_MH();
+                    respuesta_recepciondte_mh.setVersion(dte_fse_v3.getIdentificacion().getVersion());
+                    respuesta_recepciondte_mh.setAmbiente(dte_fse_v3.getIdentificacion().getAmbiente());
+                    respuesta_recepciondte_mh.setVersionApp(2);
+                    respuesta_recepciondte_mh.setEstado("EMITIDO-CONTIGENCIA");
+                    respuesta_recepciondte_mh.setCodigoGeneracion(dte_fse_v3.getIdentificacion().getCodigoGeneracion());
+                    respuesta_recepciondte_mh.setCodigoGeneracion(dte_fse_v3.getIdentificacion().getCodigoGeneracion());
+                    respuesta_recepciondte_mh.setSelloRecibido("-");
+                    respuesta_recepciondte_mh.setFhProcesamiento(dte_fse_v3.getIdentificacion().getFecEmi() + " " + dte_fse_v3.getIdentificacion().getHorEmi());
+                    respuesta_recepciondte_mh.setClasificaMsg("00");
+                    respuesta_recepciondte_mh.setCodigoMsg("CCC");
+                    respuesta_recepciondte_mh.setDescripcionMsg("Documeto emitido en contigencia.");
+                    List<String> observaciones = new ArrayList<>();
+                    observaciones.add("Documeto emitido en contigencia.");
+                    respuesta_recepciondte_mh.setObservaciones(observaciones);
+                    ctrl_dte_fse_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes.get(d));
+                    driver.guardar_en_archivo(ambiente, no_dtes.get(d), "fse", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
                 }
             }
 
