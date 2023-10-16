@@ -645,6 +645,87 @@ public class MyResource implements Serializable {
                 }
             }
             
+            /****************************************************************************************************
+             * EXTRAER DOCUMENTOS FSE DESDE JDE HACIA FELSV.                                                     *
+             ****************************************************************************************************/
+            Ctrl_DTE_FSE_V3 ctrl_dte_fse_v3 = new Ctrl_DTE_FSE_V3();
+            List<Long> no_dtes_fse = ctrl_dte_fse_v3.extraer_documento_jde_fse_v3(ambiente);
+
+            for (Integer d = 0; d < no_dtes_fse.size(); d++) {
+                /****************************************************************************************************
+                 * GENERAR JSON SIN FIRMAR FSE.                                                                      *
+                 ****************************************************************************************************/
+                DTE_FSE_V3 dte_fse_v3 = ctrl_dte_fse_v3.generar_json_dte_fse_v3(ambiente, no_dtes_fse.get(d));
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                String dte_sin_firmar = "{"
+                        + "\"nit\":\"" + dte_fse_v3.getEmisor().getNit() + "\","
+                        + "\"activo\":true,"
+                        + "\"passwordPri\":\"UNOSV2021*\","
+                        + "\"dteJson\":" + gson.toJson(dte_fse_v3)
+                        + "}";
+                driver.guardar_en_archivo(ambiente, no_dtes_fse.get(d), "fse", "JSON-NO-FIRMADO:: " + dte_sin_firmar);
+                driver.guardar_en_archivo_json(ambiente, no_dtes_fse.get(d), "fse", gson.toJson(dte_fse_v3));
+                
+                Number opcion_contigencia = 1;
+                if (dte_fse_v3.getIdentificacion().getTipoOperacion().equals(opcion_contigencia)) {
+                    /****************************************************************************************************
+                     * FIRMAR JSON CON JWT FSE.                                                                          *
+                     ****************************************************************************************************/
+                    Ctrl_Firmar_Documento_JWT ctrl_firmar_documento_jwt = new Ctrl_Firmar_Documento_JWT();
+                    Json_Firmado dte_firmado = ctrl_firmar_documento_jwt.firmardocumento(ambiente, dte_fse_v3.getEmisor().getNit(), dte_sin_firmar);
+                    driver.guardar_en_archivo(ambiente, no_dtes_fse.get(d), "fse", "JSON-FIRMADO:: " + new Gson().toJson(dte_firmado));
+                    /****************************************************************************************************
+                     * ENVIAR DOCUMENTO AL MINISTERIO DE HACIENDA FSE.                                                   *
+                     ****************************************************************************************************/
+                    JsonDTE json_dte = new JsonDTE();
+                    json_dte.setVersion(dte_fse_v3.getIdentificacion().getVersion().intValue());
+                    json_dte.setAmbiente(dte_fse_v3.getIdentificacion().getAmbiente());
+                    json_dte.setTipoDte(dte_fse_v3.getIdentificacion().getTipoDte());
+                    json_dte.setIdEnvio(no_dtes_fse.get(d));
+                    json_dte.setDocumento(dte_firmado.getBody());
+                    driver.guardar_en_archivo(ambiente, no_dtes_fse.get(d), "fse", "JSON-DTE:: " + new Gson().toJson(json_dte));
+                    /****************************************************************************************************
+                     * GENERAR TOKEN MINISTERIO DE HACIENDA FSE.                                                         *
+                     ****************************************************************************************************/
+                    Cliente_Rest_MH cliente_rest_mh = new Cliente_Rest_MH();
+                    String token_autenticacion = cliente_rest_mh.autenticar(ambiente, dte_fse_v3.getEmisor().getNit(), "UNOSV2021*");
+                    Type listType1 = new TypeToken<TokenMH>() {
+                    }.getType();
+                    TokenMH token_mh = new Gson().fromJson(token_autenticacion, listType1);
+                    driver.guardar_en_archivo(ambiente, no_dtes_fse.get(d), "fse", "AUTH-TOKEN-MH:: " + new Gson().toJson(token_mh));
+                    /****************************************************************************************************
+                     * RESPUESTA DEL MINISTERIO DE HACIENDA FSE.                                                         *
+                     ****************************************************************************************************/
+                    String respuesta_mh = cliente_rest_mh.recepciondte(ambiente, token_mh.getBody().getToken(), new Gson().toJson(json_dte));
+                    Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_MH>() {
+                    }.getType();
+                    RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new Gson().fromJson(respuesta_mh, listType2);
+                    ctrl_dte_fse_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes_fse.get(d));
+                    driver.guardar_en_archivo(ambiente, no_dtes_fse.get(d), "fse", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                } else {
+                    /****************************************************************************************************
+                     * RESPUESTA DEL MINISTERIO DE HACIENDA FSE.                                                         *
+                     ****************************************************************************************************/
+                    RESPUESTA_RECEPCIONDTE_MH respuesta_recepciondte_mh = new RESPUESTA_RECEPCIONDTE_MH();
+                    respuesta_recepciondte_mh.setVersion(dte_fse_v3.getIdentificacion().getVersion());
+                    respuesta_recepciondte_mh.setAmbiente(dte_fse_v3.getIdentificacion().getAmbiente());
+                    respuesta_recepciondte_mh.setVersionApp(2);
+                    respuesta_recepciondte_mh.setEstado("EMITIDO-CONTIGENCIA");
+                    respuesta_recepciondte_mh.setCodigoGeneracion(dte_fse_v3.getIdentificacion().getCodigoGeneracion());
+                    respuesta_recepciondte_mh.setCodigoGeneracion(dte_fse_v3.getIdentificacion().getCodigoGeneracion());
+                    respuesta_recepciondte_mh.setSelloRecibido("-");
+                    respuesta_recepciondte_mh.setFhProcesamiento(dte_fse_v3.getIdentificacion().getFecEmi() + " " + dte_fse_v3.getIdentificacion().getHorEmi());
+                    respuesta_recepciondte_mh.setClasificaMsg("00");
+                    respuesta_recepciondte_mh.setCodigoMsg("CCC");
+                    respuesta_recepciondte_mh.setDescripcionMsg("Documeto emitido en contigencia.");
+                    List<String> observaciones = new ArrayList<>();
+                    observaciones.add("Documeto emitido en contigencia.");
+                    respuesta_recepciondte_mh.setObservaciones(observaciones);
+                    ctrl_dte_fse_v3.registro_db_respuesta_mh(ambiente, respuesta_recepciondte_mh, no_dtes_fse.get(d));
+                    driver.guardar_en_archivo(ambiente, no_dtes_fse.get(d), "fse", "RESPUESTA-DTE-MH:: " + new Gson().toJson(respuesta_recepciondte_mh));
+                }
+            }
+            
         } catch (Exception ex) {
             System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:recepciondte_v3()|ERROR:" + ex.toString());
         }
