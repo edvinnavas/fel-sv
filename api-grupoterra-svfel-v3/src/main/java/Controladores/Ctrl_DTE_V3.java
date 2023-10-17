@@ -521,7 +521,7 @@ public class Ctrl_DTE_V3 implements Serializable {
                             + "0" + ",'"
                             + rs.getString(18) + "')";
                     stmt1 = conn.createStatement();
-                    System.out.println(cadenasql);
+                    // System.out.println(cadenasql);
                     stmt1.executeUpdate(cadenasql);
                     stmt1.close();
 
@@ -529,7 +529,7 @@ public class Ctrl_DTE_V3 implements Serializable {
                             + "SET NREV01='P' "
                             + "WHERE NRKCOO='" + rs.getString(1) + "' AND NRDOCO=" + rs.getString(2) + " AND NRDCTO='" + rs.getString(3) + "' AND NRN001=" + rs.getString(4) + " AND NRURCD='" + rs.getString(5) + "'";
                     stmt1 = conn.createStatement();
-                    System.out.println(cadenasql);
+                    // System.out.println(cadenasql);
                     stmt1.executeUpdate(cadenasql);
                     stmt1.close();
                     resultado++;

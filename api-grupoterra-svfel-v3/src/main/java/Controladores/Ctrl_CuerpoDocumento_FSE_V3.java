@@ -85,10 +85,14 @@ public class Ctrl_CuerpoDocumento_FSE_V3 implements Serializable {
                     CANTIDAD = CANTIDAD * -1;
                 }
                 String CODIGO = rs.getString(3);
-                if(CODIGO.equals("")) {
+                if(CODIGO == null) {
                     CODIGO = "null";
                 } else {
-                    CODIGO = "'" + CODIGO + "'";
+                    if(CODIGO.equals("")) {
+                        CODIGO = "null";
+                    } else {
+                        CODIGO = "'" + CODIGO + "'";
+                    }
                 }
                 Long ID_CAT_014 = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_014 C WHERE C.VALOR_JDE LIKE '%[" + rs.getString(4) + "]%'", conn);
                 String DESCRIPCION = rs.getString(5);
