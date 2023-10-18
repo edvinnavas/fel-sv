@@ -1471,7 +1471,7 @@ CUE.ID_CUERPO_DOCUMENTO]]>
 		</band>
 	</detail>
 	<summary>
-		<band height="330">
+		<band height="290">
 			<staticText>
 				<reportElement x="342" y="40" width="200" height="10" uuid="09086a91-2745-4752-ac62-dd246918bd64">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="12bef44e-5013-4d7f-8b4d-bfbec0a70952"/>

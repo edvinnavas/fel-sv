@@ -175,7 +175,10 @@ public class Ctrl_Receptor_CR_V3 implements Serializable {
                     DIRECCION_COMPLEMENTO = "Sin dirección registrada en el código del cliente";
                 }
 
-                TELEFONO = "25288000";
+                TELEFONO = ctrl_base_datos.ObtenerString("SELECT NVL(TRIM(F.A9VR04),'-') PHONE FROM " + esquema + ".F550401A@" + dblink + " F WHERE TRIM(F.A9TAX)='" + CRTAX + "'", conn);
+                if (TELEFONO == null) {
+                    TELEFONO = "25288000";
+                }
 
                 CORREO = ctrl_base_datos.ObtenerString("SELECT NVL(TRIM(F.A9EMAIL),'sinregistro@terra-uno.com') EMAIL FROM " + esquema + ".F550401A@" + dblink + " F WHERE TRIM(F.A9TAX)='" + CRTAX + "'", conn);
                 if (CORREO == null) {

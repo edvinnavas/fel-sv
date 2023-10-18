@@ -70,20 +70,25 @@ public class Ctrl_SujetoExcluido_FSE_V3 implements Serializable {
             }
 
             Long ID_CAT_012 = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_012 C WHERE C.VALOR_JDE IN (SELECT TRIM(F.A9ADDS) FROM " + esquema + ".F550401A@" + dblink + " F WHERE TRIM(F.A9TAX)='" + NUM_DOCUMENTO + "')", conn);
+            
             Long ID_CAT_013 = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_013 C WHERE C.VALOR_JDE IN (SELECT TRIM(F.A9COUN) FROM " + esquema + ".F550401A@" + dblink + " F WHERE TRIM(F.A9TAX)='" + NUM_DOCUMENTO + "')", conn);
+            
             String CODIGO_CAT_013 = ctrl_base_datos.ObtenerString("SELECT C.CODIGO FROM CAT_013 C WHERE C.ID_CAT=" + ID_CAT_013 + " AND C.ID_CAT_012=" + ID_CAT_012, conn);
             if (CODIGO_CAT_013 == null) {
                 ID_CAT_012 = Long.valueOf("6");
                 ID_CAT_013 = Long.valueOf("111");
             }
+            
             String DIRECCION_COMPLEMENTO = ctrl_base_datos.ObtenerString("SELECT NVL(TRIM(F.A9ADD2),' ') || ' ' || NVL(TRIM(F.A9ADD3),' ') FROM " + esquema + ".F550401A@" + dblink + " F WHERE TRIM(F.A9TAX)='" + NUM_DOCUMENTO + "'", conn);
             if (DIRECCION_COMPLEMENTO == null) {
                 DIRECCION_COMPLEMENTO = "Sin dirección registrada en el código del cliente";
             }
-            String TELEFONO = ctrl_base_datos.ObtenerString("SELECT '99999999' PHONE FROM " + esquema + ".F550401A@" + dblink + " F WHERE TRIM(F.A9TAX)='" + NUM_DOCUMENTO + "'", conn);
+            
+            String TELEFONO = ctrl_base_datos.ObtenerString("SELECT NVL(TRIM(F.A9VR04),'-') PHONE FROM " + esquema + ".F550401A@" + dblink + " F WHERE TRIM(F.A9TAX)='" + NUM_DOCUMENTO + "'", conn);
             if (TELEFONO == null) {
                 TELEFONO = "25288000";
             }
+            
             String CORREO = ctrl_base_datos.ObtenerString("SELECT NVL(TRIM(F.A9EMAIL),'-') EMAIL FROM " + esquema + ".F550401A@" + dblink + " F WHERE TRIM(F.A9TAX)='" + NUM_DOCUMENTO + "'", conn);
             if (CORREO == null) {
                 CORREO = "sinregistro@terra-uno.com";
