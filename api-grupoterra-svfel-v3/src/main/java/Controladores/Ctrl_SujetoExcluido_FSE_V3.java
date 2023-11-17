@@ -85,13 +85,13 @@ public class Ctrl_SujetoExcluido_FSE_V3 implements Serializable {
             }
             
             String TELEFONO = ctrl_base_datos.ObtenerString("SELECT NVL(TRIM(F.A9VR04),'-') PHONE FROM " + esquema + ".F550401A@" + dblink + " F WHERE TRIM(F.A9TAX)='" + NUM_DOCUMENTO + "'", conn);
-            if (TELEFONO == null) {
+            if (TELEFONO == null || TELEFONO.equals("-")) {
                 TELEFONO = "25288000";
             }
             
             String CORREO = ctrl_base_datos.ObtenerString("SELECT NVL(TRIM(F.A9EMAIL),'-') EMAIL FROM " + esquema + ".F550401A@" + dblink + " F WHERE TRIM(F.A9TAX)='" + NUM_DOCUMENTO + "'", conn);
-            if (CORREO == null) {
-                CORREO = "sinregistro@terra-uno.com";
+            if (CORREO == null || CORREO.equals("-")) {
+                CORREO = "felsv@uno-ca.com";
             }
 
             String cadenasql = "INSERT INTO SUJETOEXCLUIDO_FSE_V3 ("
