@@ -97,7 +97,7 @@ public class Ctrl_Resumen_FSE_V3 implements Serializable {
             Number PAGOS_MONTOPAGO = null;
             String PAGOS_REFERENCIA = null;
             Long ID_CAT_018 = Long.valueOf("1");
-            Number PAGOS_PERIODO = 1;
+            Number PAGOS_PERIODO = 30;
             String OBSERVACIONES = "-";
 
             String cadenasql = "INSERT INTO RESUMEN_FSE_V3 ("
