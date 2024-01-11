@@ -83,7 +83,7 @@ public class Ctrl_CuerpoDocumento_CR_V3 implements Serializable {
                 contador++;
                 Long ID_DTE = id_dte;
                 Long ID_CUERPO_DOCUMENTO = Long.valueOf(contador.toString());
-                Long ID_CAT_002 = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_002 C WHERE C.CODIGO='" + rs.getString(1) + "'", conn);
+                Long ID_CAT_002 = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_002 C WHERE C.VALOR_JDE='" + rs.getString(1) + "'", conn);
                 Long ID_CAT_007 = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_007 C WHERE C.CODIGO='" + rs.getString(2) + "'", conn);
                 String NUMDOCUMENTO = rs.getString(3);
                 if(NUMDOCUMENTO == null) {
