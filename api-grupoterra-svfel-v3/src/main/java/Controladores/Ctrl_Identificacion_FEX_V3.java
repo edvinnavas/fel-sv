@@ -57,7 +57,7 @@ public class Ctrl_Identificacion_FEX_V3 implements Serializable {
             String NUMEROCONTROL = "DTE-" 
                     + ctrl_base_datos.ObtenerString("SELECT C.CODIGO FROM CAT_002 C WHERE C.VALOR_JDE='EX'", conn) + "-"
                     + ctrl_base_datos.ObtenerString("SELECT F.CODESTABLE FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA='" + MCU_JDE + "'", conn)
-                    + MCU_JDE + "-"
+                    + ctrl_base_datos.ObtenerString("SELECT F.CODPUNTOVENTA_INT FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA='" + MCU_JDE + "'", conn) + "-"
                     + ctrl_base_datos.ObtenerString("SELECT LPAD(F.CORRELATIVO_FEX + 1, 15, '0') FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA='" + MCU_JDE + "'", conn);
             String cadenasql = "UPDATE EMISOR_ESTABLECIMIENTO_V3 SET CORRELATIVO_FEX=CORRELATIVO_FEX+1 WHERE CODPUNTOVENTA='" + MCU_JDE + "'";
             Statement stmt = conn.createStatement();
