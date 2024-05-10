@@ -27,7 +27,7 @@ public class Ctrl_Emisor_Contigencia_V3 implements Serializable {
             resultado.setNumeroDocResponsable(ctrl_base_datos.ObtenerString("SELECT F.DOCUENTREGA FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA=" + mcu_jde + " AND F.ID_EMISOR=" + id_emisor, conn));
             resultado.setTipoEstablecimiento(ctrl_base_datos.ObtenerString("SELECT C.CODIGO FROM CAT_009 C WHERE C.ID_CAT IN (SELECT F.ID_CAT_009 FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA=" + mcu_jde + " AND F.ID_EMISOR=" + id_emisor + ")", conn));
             resultado.setCodEstableMH(ctrl_base_datos.ObtenerString("SELECT F.CODPUNTOVENTAMH FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA=" + mcu_jde + " AND F.ID_EMISOR=" + id_emisor, conn));
-            resultado.setCodPuntoVenta(ctrl_base_datos.ObtenerString("SELECT F.CODPUNTOVENTA_INT FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA=" + mcu_jde + " AND F.ID_EMISOR=" + id_emisor, conn));
+            resultado.setCodPuntoVenta(ctrl_base_datos.ObtenerString("SELECT DECODE(F.CODPUNTOVENTA_INT, '0000', NULL) FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA=" + mcu_jde + " AND F.ID_EMISOR=" + id_emisor, conn));
             resultado.setTelefono(ctrl_base_datos.ObtenerString("SELECT F.TELEFONO FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA=" + mcu_jde + " AND F.ID_EMISOR=" + id_emisor, conn));
             resultado.setCorreo(ctrl_base_datos.ObtenerString("SELECT F.CORREO FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA=" + mcu_jde + " AND F.ID_EMISOR=" + id_emisor, conn));
         } catch (Exception ex) {

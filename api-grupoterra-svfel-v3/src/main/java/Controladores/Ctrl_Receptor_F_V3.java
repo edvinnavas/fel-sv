@@ -34,6 +34,7 @@ public class Ctrl_Receptor_F_V3 implements Serializable {
 
             resultado.setTelefono(ctrl_base_datos.ObtenerString("SELECT F.TELEFONO FROM RECEPTOR_F_V3 F WHERE F.ID_DTE=" + id_dte, conn));
             resultado.setCorreo(ctrl_base_datos.ObtenerString("SELECT F.CORREO FROM RECEPTOR_F_V3 F WHERE F.ID_DTE=" + id_dte, conn));
+            resultado.setCorreo("pruebasecsasv@servicioscompartidos.com");
         } catch (Exception ex) {
             System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:obtener_receptor_f_v3()|ERROR:" + ex.toString());
         }

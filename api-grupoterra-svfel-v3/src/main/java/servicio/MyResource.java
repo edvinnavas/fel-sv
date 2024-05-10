@@ -1,5 +1,6 @@
 package servicio;
 
+import ClienteServicio.Cliente_Rest_INFILE;
 import ClienteServicio.Cliente_Rest_MH;
 import Controladores.Ctrl_ConsultarDteLote_V3;
 import Controladores.Ctrl_DTE_CCF_V3;
@@ -25,6 +26,7 @@ import Entidades.DTE_ND_V3;
 import Entidades.DTE_F_V3;
 import Entidades.DTE_INVALIDACION_V3;
 import Entidades.DTE_NR_V3;
+import Entidades.Errores_INFILE;
 import Entidades.JsonCONTIN;
 import Entidades.JsonDTE;
 import Entidades.JsonLoteDTE;
@@ -33,13 +35,17 @@ import Entidades.RESPUESTA_CONTINGENCIA_MH;
 import Entidades.RESPUESTA_LOTE_DTE_MH;
 import Entidades.RESPUESTA_RECEPCIONDTELOTE_MH;
 import Entidades.RESPUESTA_RECEPCIONDTE_MH;
+import Entidades.Respuesta_INFILE_DGI;
+import Entidades.RESPUESTA_RECEPCIONDTE_INFILE;
 import Entidades.TokenMH;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import java.io.Serializable;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import javax.ws.rs.GET;
@@ -2643,6 +2649,163 @@ public class MyResource implements Serializable {
             resultado = gson.toJson(respuesta_recepciondtelote_mh);
         } catch (Exception ex) {
             System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:contingencia_v3()|ERROR:" + ex.toString());
+        }
+
+        return resultado;
+    }
+
+    @Path("certificar-json-infile/{ambiente}/{usuario}/{llave}/{identificador}")
+    @POST
+    @Produces(MediaType.TEXT_PLAIN)
+    public String certificar_json_infile(
+            @PathParam("ambiente") String ambiente,
+            @PathParam("usuario") String usuario,
+            @PathParam("llave") String llave,
+            @PathParam("identificador") String identificador,
+            String documento) {
+
+        String resultado = "";
+
+        try {
+            System.out.println("JSON: " + documento);
+            Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
+            resultado = cliente_rest_infile.certificar_json(ambiente, usuario, llave, identificador, documento);
+        } catch (Exception ex) {
+            System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:certificar_json_infile()|ERROR:" + ex.toString());
+        }
+
+        return resultado;
+    }
+
+    @Path("recepciondte-ccf-infile/{ambiente}/{fecha}/{modo}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String recepciondte_ccf_infile(
+            @PathParam("ambiente") String ambiente,
+            @PathParam("fecha") String fecha,
+            @PathParam("modo") Integer modo) {
+
+        Driver driver = new Driver();
+        String resultado = "";
+
+        try {
+            Ctrl_DTE_V3 ctrl_dte_v3 = new Ctrl_DTE_V3();
+            ctrl_dte_v3.selecionar_documentos_v3(ambiente, fecha, modo);
+            
+            // EXTRAER DOCUMENTOS DESDE JDE HACIA FEL_TEST.
+            Ctrl_DTE_CCF_V3 ctrl_dte_ccf_v3 = new Ctrl_DTE_CCF_V3();
+            List<Long> no_dtes = ctrl_dte_ccf_v3.extraer_documento_jde_ccf_v3(ambiente);
+
+            for (Integer d = 0; d < no_dtes.size(); d++) {
+                /****************************************************************************************************
+                 * GENERAR JSON CCF.                                                                                *
+                 ****************************************************************************************************/
+                DTE_CCF_V3 dte_ccf_v3 = ctrl_dte_ccf_v3.generar_json_dte_ccf_v3(ambiente, no_dtes.get(d));
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "ccf", "JSON:: " + gson.toJson(dte_ccf_v3));
+                driver.guardar_en_archivo_json(ambiente, no_dtes.get(d), "ccf", gson.toJson(dte_ccf_v3));
+                /****************************************************************************************************
+                 * ENVIAR DODUMENTO Y RESPUESTA DE INFILE CCF.                                                      *
+                 ****************************************************************************************************/
+                Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_ccf_v3.getEmisor().getNit(), "742c9601bf0cc56a6f5608eca65e764f", "DTE-" + ambiente + "-CCF-" + no_dtes.get(d), gson.toJson(dte_ccf_v3));
+                RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
+                try {
+                    Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
+                    }.getType();
+                    respuesta_recepciondte_infile = new Gson().fromJson(respuesta_infile, listType2);
+
+                    if(!respuesta_recepciondte_infile.getOk()) {
+                        SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                        List<String> observaciones = new ArrayList<>();
+                        observaciones.add(respuesta_infile);
+
+                        Errores_INFILE errores_infile = new Errores_INFILE();
+                        errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setVersion(2);
+                        errores_infile.setAmbiente("00");
+                        errores_infile.setVersionApp(2);
+                        errores_infile.setEstado("RECHAZADO");
+                        errores_infile.setCodigoGeneracion(dte_ccf_v3.getIdentificacion().getCodigoGeneracion());
+                        errores_infile.setSelloRecibido(null);
+                        errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        errores_infile.setClasificaMsg("99");
+                        errores_infile.setCodigoMsg("999");
+                        errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                        respuesta_recepciondte_infile.setRespuesta(null);
+
+                        Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                        respuesta_infile_dgi.setVersion(2);
+                        respuesta_infile_dgi.setAmbiente("00");
+                        respuesta_infile_dgi.setVersionApp(2);
+                        respuesta_infile_dgi.setEstado("RECHAZADO");
+                        respuesta_infile_dgi.setCodigoGeneracion(dte_ccf_v3.getIdentificacion().getCodigoGeneracion());
+                        respuesta_infile_dgi.setSelloRecibido(null);
+                        respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        respuesta_infile_dgi.setClasificaMsg("99");
+                        respuesta_infile_dgi.setCodigoMsg("999");
+                        respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        respuesta_infile_dgi.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                        respuesta_recepciondte_infile.setPdf_path(null);
+                        respuesta_recepciondte_infile.setAdendas(null);
+                    }
+                } catch(Exception ex) {
+                    SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                    List<String> observaciones = new ArrayList<>();
+                    observaciones.add(respuesta_infile);
+
+                    respuesta_recepciondte_infile = new RESPUESTA_RECEPCIONDTE_INFILE();
+                    respuesta_recepciondte_infile.setOk(false);
+                    respuesta_recepciondte_infile.setMensaje("Erros en el proceso para deserializar la respuesta INFILE.");
+
+                    Errores_INFILE errores_infile = new Errores_INFILE();
+                    errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setVersion(2);
+                    errores_infile.setAmbiente("00");
+                    errores_infile.setVersionApp(2);
+                    errores_infile.setEstado("RECHAZADO");
+                    errores_infile.setCodigoGeneracion(dte_ccf_v3.getIdentificacion().getCodigoGeneracion());
+                    errores_infile.setSelloRecibido(null);
+                    errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    errores_infile.setClasificaMsg("99");
+                    errores_infile.setCodigoMsg("999");
+                    errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                    respuesta_recepciondte_infile.setRespuesta(null);
+
+                    Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                    respuesta_infile_dgi.setVersion(2);
+                    respuesta_infile_dgi.setAmbiente("00");
+                    respuesta_infile_dgi.setVersionApp(2);
+                    respuesta_infile_dgi.setEstado("RECHAZADO");
+                    respuesta_infile_dgi.setCodigoGeneracion(dte_ccf_v3.getIdentificacion().getCodigoGeneracion());
+                    respuesta_infile_dgi.setSelloRecibido(null);
+                    respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    respuesta_infile_dgi.setClasificaMsg("99");
+                    respuesta_infile_dgi.setCodigoMsg("999");
+                    respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    respuesta_infile_dgi.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                    respuesta_recepciondte_infile.setPdf_path(null);
+                    respuesta_recepciondte_infile.setAdendas(null);
+                }
+                ctrl_dte_ccf_v3.registro_db_respuesta_infile(ambiente, respuesta_recepciondte_infile, no_dtes.get(d));
+                driver.guardar_en_archivo(ambiente, no_dtes.get(d), "ccf", "RESPUESTA-DTE-INFILE:: " + new Gson().toJson(respuesta_recepciondte_infile));
+            }
+
+            resultado = "ID-DTE PROCESADOS: " + no_dtes.toString();
+        } catch (Exception ex) {
+            System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:recepciondte_ccf_infile()|ERROR:" + ex.toString());
         }
 
         return resultado;
