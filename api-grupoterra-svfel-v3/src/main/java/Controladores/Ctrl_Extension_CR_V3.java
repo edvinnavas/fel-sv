@@ -48,8 +48,8 @@ public class Ctrl_Extension_CR_V3 implements Serializable {
 
             Long ID_DTE = id_dte;
             Long ID_EXTENSION = Long.valueOf("1");
-            String NOMBENTREGA = "UNO EL SALVADOR";
-            String DOCUENTREGA = "06140404600015";
+            String NOMBENTREGA = ctrl_base_datos.ObtenerString("SELECT F.NOMBENTREGA FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA IN (SELECT F.MCU_JDE FROM DTE_CR_V3 F WHERE F.ID_DTE=" + ID_DTE + ")", conn);
+            String DOCUENTREGA = ctrl_base_datos.ObtenerString("SELECT F.DOCUENTREGA FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA IN (SELECT F.MCU_JDE FROM DTE_CR_V3 F WHERE F.ID_DTE=" + ID_DTE + ")", conn);
 
             String NOMBRECIBE = ctrl_base_datos.ObtenerString("SELECT TRIM(F.WWMLNM) NOMBRECIBE FROM " + esquema + ".F0111@" + dblink + " F WHERE F.WWAN8=" + AN8_JDE + " AND TRIM(F.WWTYC)='S'", conn);
             if (NOMBRECIBE == null) {
