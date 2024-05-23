@@ -801,12 +801,12 @@ public class Ctrl_DTE_CR_V3 implements Serializable {
                 List<Adjunto> files = new ArrayList<>();
                 File TargetFileJson;
                 if (ambiente.equals("PY")) {
-                    TargetFileJson = new File("/FELSV3/json/jsondte_ccf_" + id_dte + ".json");
+                    TargetFileJson = new File("/FELSV3/json/jsondte_cr_" + id_dte + ".json");
                 } else {
-                    TargetFileJson = new File("/FELSV3/json_pd/jsondte_ccf_" + id_dte + ".json");
+                    TargetFileJson = new File("/FELSV3/json_pd/jsondte_cr_" + id_dte + ".json");
                 }
                 Adjunto adjunto_json = new Adjunto();
-                adjunto_json.setName("jsondte_ccf_" + id_dte + ".json");
+                adjunto_json.setName("jsondte_cr_" + id_dte + ".json");
                 adjunto_json.setType("application/json");
                 InputStream inputstream_mail_json = new FileInputStream(TargetFileJson);
                 byte[] bytes_json = IOUtils.toByteArray(inputstream_mail_json);

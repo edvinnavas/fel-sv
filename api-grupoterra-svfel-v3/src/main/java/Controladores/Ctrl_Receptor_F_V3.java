@@ -75,7 +75,7 @@ public class Ctrl_Receptor_F_V3 implements Serializable {
             String TELEFONO;
             String CORREO;
 
-            if (AN8_JDE.equals("727353") || AN8_JDE.equals("726829") || AN8_JDE.equals("726647") || AN8_JDE.equals("721956")) {
+            if (AN8_JDE.equals("727353") || AN8_JDE.equals("726829") || AN8_JDE.equals("726647") || AN8_JDE.equals("721956") || AN8_JDE.equals("221393") || AN8_JDE.equals("222009") || AN8_JDE.equals("222012")) {
                 ID_CAT_022 = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_022 C WHERE C.VALOR_JDE IN (SELECT NVL(TRIM(F.OAADD2),' ') FROM " + esquema + ".F4006@" + dblink + " F WHERE F.OADOCO=" + DOCO_JDE + " AND F.OADCTO='" + DCTO_JDE + "' AND F.OAANTY=2)", conn);
                 if (ID_CAT_022 == null) {
                     ID_CAT_022 = Long.valueOf("1");
@@ -202,7 +202,7 @@ public class Ctrl_Receptor_F_V3 implements Serializable {
             String TELEFONO_SHAN;
             String CORREO_SHAN;
 
-            if (SHAN_JDE.equals("727353") || SHAN_JDE.equals("726829") || SHAN_JDE.equals("726647") || SHAN_JDE.equals("721956")) {
+            if (SHAN_JDE.equals("727353") || SHAN_JDE.equals("726829") || SHAN_JDE.equals("726647") || SHAN_JDE.equals("721956") || SHAN_JDE.equals("221393") || SHAN_JDE.equals("222009") || SHAN_JDE.equals("222012")) {
                 ID_CAT_022_SHAN = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_022 C WHERE C.VALOR_JDE IN (SELECT NVL(TRIM(F.OAADD2),' ') FROM " + esquema + ".F4006@" + dblink + " F WHERE F.OADOCO=" + DOCO_JDE + " AND F.OADCTO='" + DCTO_JDE + "' AND F.OAANTY=2)", conn);
                 if (ID_CAT_022_SHAN == null) {
                     ID_CAT_022_SHAN = Long.valueOf("1");

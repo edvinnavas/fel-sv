@@ -1,6 +1,5 @@
 package Controladores;
 
-import ClienteServicio.Cliente_Rest_JDE;
 import Entidades.Apendice_fse;
 import java.io.Serializable;
 import java.sql.Connection;
@@ -63,19 +62,16 @@ public class Ctrl_Apendice_FSE_V3 implements Serializable {
             }
             
             Long ID_DTE = id_dte;
-            
+
+            String NUMERO_ORDEN = ctrl_base_datos.ObtenerString("SELECT F.DCTO_JDE || '-' || F.DOCO_JDE FROM DTE_FSE_V3 F WHERE F.ID_DTE=" + ID_DTE, conn);
+            String NUMERO_DOCUMENTO = ctrl_base_datos.ObtenerString("SELECT F.DCT_JDE || '-' || F.DOC_JDE FROM DTE_FSE_V3 F WHERE F.ID_DTE=" + ID_DTE, conn);
+            String FECHA_VENCIMIENTO = ctrl_base_datos.ObtenerString("SELECT C16.VALOR || ' - ' || RES.PAGOS_PERIODO || ' días' || ' - ' || TO_CHAR(IDE.FECHA_HORA_EMISION + RES.PAGOS_PERIODO, 'DD-MM-YYYY') infoCondicionOperacion FROM RESUMEN_FSE_V3 RES LEFT JOIN CAT_016 C16 ON (RES.ID_CAT_016=C16.ID_CAT) LEFT JOIN IDENTIFICACION_FSE_V3 IDE ON (IDE.ID_DTE=RES.ID_DTE) WHERE RES.ID_DTE=" + ID_DTE, conn);
+
             Long ID_APENDICE = Long.valueOf("1");
-            String CAMPO = "SELLOS";
-            String ETIQUETA = "SELLOS DE SEGURIDAD";
-            String TDLDNM = ctrl_base_datos.ObtenerString("SELECT DISTINCT F.TDLDNM FROM " + esquema + ".F49621@" + dblink + " F WHERE F.TDDCTO='" + DCTO_JDE + "' AND F.TDDOCO=" + DOCO_JDE + " AND TRIM(F.TDVMCU)='" + MCU_JDE + "'", conn);
-            if(TDLDNM == null) {
-                TDLDNM = "0";
-            }
-            String VALOR = ctrl_base_datos.ObtenerString("SELECT DISTINCT T.SELLOS FROM (SELECT (LISTAGG(F.SUSLN, ', ') WITHIN GROUP (ORDER BY F.SUSLN) OVER (PARTITION BY F.SULDNM, F.SUVMCU)) SELLOS FROM " + esquema + ".F49380@" + dblink + " F  WHERE F.SULDNM='" + TDLDNM + "' AND TRIM(F.SUVMCU)='" + MCU_JDE + "') T", conn);
-            if(VALOR == null) {
-                VALOR = "-";
-            }
-            
+            String CAMPO = "Apendice-1";
+            String ETIQUETA = "No. orden";
+            String VALOR = NUMERO_ORDEN;
+
             String cadenasql = "INSERT INTO APENDICE_FSE_V3 ("
                     + "ID_DTE, "
                     + "ID_APENDICE, "
@@ -91,16 +87,12 @@ public class Ctrl_Apendice_FSE_V3 implements Serializable {
             // System.out.println(cadenasql);
             stmt.executeUpdate(cadenasql);
             stmt.close();
-            
+
             ID_APENDICE = Long.valueOf("2");
-            CAMPO = "NO_CONTRATO";
-            ETIQUETA = "NO CONTRATO";
-            String AN8_JDE = ctrl_base_datos.ObtenerString("SELECT F.AN8_JDE FROM DTE_FSE_V3 F WHERE F.ID_DTE=" + ID_DTE, conn);
-            VALOR = ctrl_base_datos.ObtenerString("SELECT TRIM(F.WWATTL) FROM " + esquema + ".F0111@" + dblink + " F WHERE F.WWAN8=" + AN8_JDE + " AND TRIM(F.WWTYC)='S'", conn);
-            if(VALOR == null) {
-                VALOR = "-";
-            }
-            
+            CAMPO = "Apendice-2";
+            ETIQUETA = "No. documento";
+            VALOR = NUMERO_DOCUMENTO;
+
             cadenasql = "INSERT INTO APENDICE_FSE_V3 ("
                     + "ID_DTE, "
                     + "ID_APENDICE, "
@@ -116,23 +108,12 @@ public class Ctrl_Apendice_FSE_V3 implements Serializable {
             // System.out.println(cadenasql);
             stmt.executeUpdate(cadenasql);
             stmt.close();
-            
+
             ID_APENDICE = Long.valueOf("3");
-            CAMPO = "BOLETAS";
-            ETIQUETA = "BOLETAS";
-            String KCOO_JDE = ctrl_base_datos.ObtenerString("SELECT F.KCOO_JDE FROM DTE_FSE_V3 F WHERE F.ID_DTE=" + ID_DTE, conn);
-            Cliente_Rest_JDE cliente_rest_jde = new Cliente_Rest_JDE();
-            VALOR = cliente_rest_jde.obetener_texto_encabezado_orden_ventas("PET", ambiente, DOCO_JDE, DCTO_JDE, KCOO_JDE);
-            if(VALOR == null) {
-                VALOR = "SIN REGISTRO.";
-            }
-            VALOR = VALOR.replaceAll("\"", "");
-            if(VALOR == null) {
-                VALOR = "SIN REGISTRO.";
-            }
-            if(VALOR.trim().equals("")) {
-                VALOR = "SIN REGISTRO.";
-            }
+            CAMPO = "Apendice-3";
+            ETIQUETA = "Fecha de vencimiento";
+            VALOR = FECHA_VENCIMIENTO;
+
             cadenasql = "INSERT INTO APENDICE_FSE_V3 ("
                     + "ID_DTE, "
                     + "ID_APENDICE, "
