@@ -69,7 +69,7 @@ public class Ctrl_Apendice_FEX_V3 implements Serializable {
             String NUMERO_DOCUMENTO = ctrl_base_datos.ObtenerString("SELECT F.DCT_JDE || '-' || F.DOC_JDE FROM DTE_FEX_V3 F WHERE F.ID_DTE=" + ID_DTE, conn);
             String FECHA_VENCIMIENTO = ctrl_base_datos.ObtenerString("SELECT C16.VALOR || ' - ' || RES.PAGOS_PERIODO || ' días' || ' - ' || TO_CHAR(IDE.FECHA_HORA_EMISION + RES.PAGOS_PERIODO, 'DD-MM-YYYY') infoCondicionOperacion FROM RESUMEN_FEX_V3 RES LEFT JOIN CAT_016 C16 ON (RES.ID_CAT_016=C16.ID_CAT) LEFT JOIN IDENTIFICACION_FEX_V3 IDE ON (IDE.ID_DTE=RES.ID_DTE) WHERE RES.ID_DTE=" + ID_DTE, conn);
             String CODIGO_DESTINO = ctrl_base_datos.ObtenerString("SELECT F.SHAN_JDE FROM DTE_FEX_V3 F WHERE F.ID_DTE=" + ID_DTE, conn);
-            String ENVIAR_A = ctrl_base_datos.ObtenerString("SELECT SHI.NOMBRE || ' ' || SHI.DIRECCION_COMPLEMENTO infoEnviarANombre FROM SHIPTO_FEX_V3 SHI WHERE SHI.ID_DTE=" + ID_DTE, conn);
+            String ENVIAR_A = ctrl_base_datos.ObtenerString("SELECT SHI.NOMBRE || ' ' || SHI.COMPLEMENTO || ' ' || C20.VALOR infoEnviarANombre FROM SHIPTO_FEX_V3 SHI LEFT JOIN CAT_020 C20 ON (SHI.ID_CAT_020=C20.ID_CAT) WHERE SHI.ID_DTE=" + ID_DTE, conn);
             String NUMERO_VIAJE = ctrl_base_datos.ObtenerString("SELECT DISTINCT F.TDLDNM FROM " + esquema + ".F49621@" + dblink + " F WHERE F.TDDCTO='" + DCTO_JDE + "' AND F.TDDOCO=" + DOCO_JDE + " AND TRIM(F.TDVMCU)='" + MCU_JDE + "'", conn);
             if(NUMERO_VIAJE == null) {
                 NUMERO_VIAJE = "0";
