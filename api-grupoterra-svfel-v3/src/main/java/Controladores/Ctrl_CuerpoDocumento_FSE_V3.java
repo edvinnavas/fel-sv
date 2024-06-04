@@ -104,7 +104,7 @@ public class Ctrl_CuerpoDocumento_FSE_V3 implements Serializable {
                 }
 
                 Number MONTODESCU = 0.00;
-                Number COMPRA = PRECIOUNI.doubleValue() - MONTODESCU.doubleValue();
+                Number COMPRA = (CANTIDAD * PRECIOUNI.doubleValue()) - MONTODESCU.doubleValue();
 
                 cadenasql = "INSERT INTO CUERPO_DOCU_FSE_V3 ( "
                         + "ID_DTE, "
