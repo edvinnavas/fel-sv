@@ -139,7 +139,7 @@ public class Ctrl_CuerpoDocumento_NC_V3 implements Serializable {
                 MONTODESCU = CANTIDAD * MONTODESCU.doubleValue();
 
                 // EXTRAE EL FLETE SI APLICA MAYOR A 0.00
-                Number PRECIOUNIFLETE = ctrl_base_datos.ObtenerDouble("SELECT F.ALUPRC/10000 FROM " + esquema + ".F4074@" + dblink + " F WHERE F.ALKCOO='" + KCOO_JDE + "' AND F.ALDOCO=" + DOCO_JDE + " AND F.ALDCTO='" + DCTO_JDE + "' AND F.ALLNID=" + rs.getString(7) + " AND TRIM(F.ALAST) IN ('SVBITFRG', 'SVBITFR', 'SVECSAFR', 'SVCOMBFR', 'SVFCG2', 'SVMARBFG')", conn);
+                Number PRECIOUNIFLETE = ctrl_base_datos.ObtenerDouble("SELECT F.ALUPRC/10000 FROM " + esquema + ".F4074@" + dblink + " F WHERE F.ALKCOO='" + KCOO_JDE + "' AND F.ALDOCO=" + DOCO_JDE + " AND F.ALDCTO='" + DCTO_JDE + "' AND F.ALLNID=" + rs.getString(7) + " AND TRIM(F.ALAST) IN ('SVBITFRG', 'SVBITFR', 'SVCOMBFR', 'SVFCG2', 'SVMARBFG')", conn);
                 if (PRECIOUNIFLETE == null) {
                     PRECIOUNIFLETE = 0.00;
                 }
@@ -148,6 +148,17 @@ public class Ctrl_CuerpoDocumento_NC_V3 implements Serializable {
                 }
                 PRECIOUNI = PRECIOUNI.doubleValue() - PRECIOUNIFLETE.doubleValue();
                 PRECIOUNIFLETE = CANTIDAD * PRECIOUNIFLETE.doubleValue();
+                
+                if(PRECIOUNIFLETE.doubleValue() == 0.00) {
+                    PRECIOUNIFLETE = ctrl_base_datos.ObtenerDouble("SELECT F.ALUPRC/10000 FROM " + esquema + ".F4074@" + dblink + " F WHERE F.ALKCOO='" + KCOO_JDE + "' AND F.ALDOCO=" + DOCO_JDE + " AND F.ALDCTO='" + DCTO_JDE + "' AND F.ALLNID=" + rs.getString(7) + " AND TRIM(F.ALAST) IN ('SVECSAFR')", conn);
+                    if (PRECIOUNIFLETE == null) {
+                        PRECIOUNIFLETE = 0.00;
+                    }
+                    if (PRECIOUNIFLETE.doubleValue() < 0.00) {
+                        PRECIOUNIFLETE = PRECIOUNIFLETE.doubleValue() * -1;
+                    }
+                    PRECIOUNIFLETE = CANTIDAD * PRECIOUNIFLETE.doubleValue();
+                }
 
                 // EXTRAE EL IMPUESTO ESPECIAL IEC SI APLICA MAYOR A 0.00, ESTE MONTO NO SE RESTA DEL PRECIO UNITARIO BASE
                 Number PRECIOUNIIEC = ctrl_base_datos.ObtenerDouble("SELECT F.ALUPRC/10000 FROM " + esquema + ".F4074@" + dblink + " F WHERE F.ALKCOO='" + KCOO_JDE + "' AND F.ALDOCO=" + DOCO_JDE + " AND F.ALDCTO='" + DCTO_JDE + "' AND F.ALLNID=" + rs.getString(7) + " AND TRIM(F.ALAST) IN ('SVECSAT4', 'SVT4')", conn);
