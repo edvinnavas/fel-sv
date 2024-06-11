@@ -15,7 +15,7 @@ public class Ctrl_Resumen_FEX_V3 implements Serializable {
     public Ctrl_Resumen_FEX_V3() {
     }
 
-    public Resumen_fex obtener_resumen_fex_v3(Long id_dte, Connection conn) {
+    public Resumen_fex obtener_resumen_fex_v3(Long id_dte, Integer tipo_Item_Expor, Connection conn) {
         Resumen_fex resultado = new Resumen_fex();
 
         try {
@@ -42,8 +42,14 @@ public class Ctrl_Resumen_FEX_V3 implements Serializable {
             pagos = null;
             resultado.setPagos(pagos);
             
-            resultado.setCodIncoterms(ctrl_base_datos.ObtenerString("SELECT C.CODIGO FROM CAT_031 C WHERE C.ID_CAT IN (SELECT F.ID_CAT_031 FROM RESUMEN_FEX_V3 F WHERE F.ID_DTE=" + id_dte + ")", conn));
-            resultado.setDescIncoterms(ctrl_base_datos.ObtenerString("SELECT C.VALOR FROM CAT_031 C WHERE C.ID_CAT IN (SELECT F.ID_CAT_031 FROM RESUMEN_FEX_V3 F WHERE F.ID_DTE=" + id_dte + ")", conn));
+            if(tipo_Item_Expor == 2) {
+                resultado.setCodIncoterms(null);
+                resultado.setDescIncoterms(null);
+            } else {
+                resultado.setCodIncoterms(ctrl_base_datos.ObtenerString("SELECT C.CODIGO FROM CAT_031 C WHERE C.ID_CAT IN (SELECT F.ID_CAT_031 FROM RESUMEN_FEX_V3 F WHERE F.ID_DTE=" + id_dte + ")", conn));
+                resultado.setDescIncoterms(ctrl_base_datos.ObtenerString("SELECT C.VALOR FROM CAT_031 C WHERE C.ID_CAT IN (SELECT F.ID_CAT_031 FROM RESUMEN_FEX_V3 F WHERE F.ID_DTE=" + id_dte + ")", conn));
+            }
+            
             resultado.setNumPagoElectronico(ctrl_base_datos.ObtenerString("SELECT F.NUMPAGOELECTRONICO FROM RESUMEN_FEX_V3 F WHERE F.ID_DTE=" + id_dte, conn));
             resultado.setObservaciones(ctrl_base_datos.ObtenerString("SELECT F.OBSERVACIONES FROM RESUMEN_FEX_V3 F WHERE F.ID_DTE=" + id_dte, conn));
         } catch (Exception ex) {

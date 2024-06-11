@@ -77,6 +77,9 @@ public class Ctrl_Receptor_FEX_V3 implements Serializable {
             }
 
             Long ID_CAT_029 = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_029 C WHERE C.VALOR_JDE IN (SELECT TRIM(G.ABTAXC) FROM " + esquema + ".F0101@" + dblink + " G WHERE G.ABAN8=" + AN8_JDE + ")", conn);
+            if (ID_CAT_029 == null) {
+                ID_CAT_029 = Long.valueOf("1");
+            }
 
             Long ID_CAT_019 = ctrl_base_datos.ObtenerLong("SELECT C.ID_CAT FROM CAT_019 C WHERE C.VALOR_JDE IN (SELECT TRIM(G.ABAC12) FROM " + esquema + ".F0101@" + dblink + " G WHERE G.ABAN8=" + AN8_JDE + ")", conn);
             if (ID_CAT_019 == null) {

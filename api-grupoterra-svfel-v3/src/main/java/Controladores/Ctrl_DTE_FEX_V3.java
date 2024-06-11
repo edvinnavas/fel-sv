@@ -216,7 +216,7 @@ public class Ctrl_DTE_FEX_V3 implements Serializable {
             resultado.setCuerpoDocumento(ctrl_cuerpo_documento_fex_v3.obtener_cuerpo_documento_fex_v3(id_dte, conn));
 
             Ctrl_Resumen_FEX_V3 ctrl_resumen_fex_v3 = new Ctrl_Resumen_FEX_V3();
-            resultado.setResumen(ctrl_resumen_fex_v3.obtener_resumen_fex_v3(id_dte, conn));
+            resultado.setResumen(ctrl_resumen_fex_v3.obtener_resumen_fex_v3(id_dte, Integer.valueOf(resultado.getEmisor().getTipoItemExpor().intValue()), conn));
 
             Ctrl_Apendice_FEX_V3 ctrl_apendice_fex_v3 = new Ctrl_Apendice_FEX_V3();
             resultado.setApendice(ctrl_apendice_fex_v3.obtener_apendice_fex_v3(id_dte, conn));
