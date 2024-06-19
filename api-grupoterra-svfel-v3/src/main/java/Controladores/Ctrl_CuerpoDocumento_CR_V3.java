@@ -66,15 +66,16 @@ public class Ctrl_CuerpoDocumento_CR_V3 implements Serializable {
             String cadenasql = "SELECT "
                     + "TRIM(F.CRVR02) ID_CAT_002, "
                     + "TRIM(F.CREV02) ID_CAT_007, "
-                    + "CASE WHEN F.CREV02='1' THEN (TRIM(F.CRURRF) || TRIM(F.CRVINV)) WHEN F.CREV02='2' THEN TRIM(F.CRDS01) END NUMDOCUMENTO, "
-                    + "TO_CHAR(TO_DATE(TO_CHAR(F.CRDIVJ + 1900000,'9999999'),'YYYYDDD'),'YYYY-MM-DD') FECHAEMISION, "
-                    + "F.CRAG/100 MONTOSUJETOGRAV, "
+                    + "CASE WHEN F.CREV02='1' THEN (TRIM(G.CDURRF) || TRIM(G.CDVINV)) WHEN F.CREV02='2' THEN TRIM(G.CDGENKEY) END NUMDOCUMENTO, " 
+                    + "TO_CHAR(TO_DATE(TO_CHAR(G.CDDIVJ + 1900000,'9999999'),'YYYYDDD'),'YYYY-MM-DD') FECHAEMISION, " 
+                    + "G.CDAG/100 MONTOSUJETOGRAV, " 
                     + "TRIM(F.CRVR01) ID_CAT_006, "
-                    + "F.CRTAX2/100 IVARETENIDO, "
-                    + "'FELSV' DESCRIPCION "
-                    + "FROM "
+                    + "G.CDMATH01/100 IVARETENIDO, " 
+                    + "'FELSV' DESCRIPCION " 
+                    + "FROM " 
                     + esquema + ".F5504001@" + dblink + " F "
-                    + "WHERE "
+                    + "LEFT JOIN " + esquema + ".F550401D@" + dblink + " G ON (F.CRKCO=G.CDKCO AND F.CRURCD=G.CDURCD AND F.CRN001=G.CDN001) " 
+                    + "WHERE " 
                     + "F.CRKCO='" + KCOO_JDE + "' AND F.CRN001=" + DOCO_JDE + " AND F.CRURCD='" + DCTO_JDE + "'";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(cadenasql);

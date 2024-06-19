@@ -779,6 +779,14 @@ public class Ctrl_DTE_FEX_V3 implements Serializable {
                 String resul_envio_correo = cliente_rest_sendmail.sendmail(new Gson().toJson(mensaje_correo));
                 // System.out.println("Notificación Correo: " + resul_envio_correo);
                 
+                // VALIDA SI HUBO CAMBIO DE DEPOSITO DE IMPRESION.
+                String MCU_JDE_I_CAMBIO = ctrl_base_datos.ObtenerString("SELECT TRIM(F.BIEMCU) FROM " + esquema + ".F5542009@" + dblink + " F WHERE TRIM(F.BIKCOO)='" + KCOO_JDE + "' AND F.BIDOCO=" + DOCO_JDE + " AND F.BIDCT='" + DCT_JDE + "'", conn);
+                if(MCU_JDE_I_CAMBIO != null) {
+                    if(!MCU_JDE_I_CAMBIO.equals("")) {
+                        MCU_JDE_I = MCU_JDE_I_CAMBIO;
+                    }
+                }
+
                 Documento_Impresion documento_impresion = new Documento_Impresion();
                 documento_impresion.setType("NA");
                 documento_impresion.setData(Base64.getEncoder().encodeToString(bytes));
@@ -788,6 +796,7 @@ public class Ctrl_DTE_FEX_V3 implements Serializable {
                 String IMPRESORA = ctrl_base_datos.ObtenerString("SELECT DISTINCT TRIM(F.NOMBRE_IMPRESORA) FROM IMPRESORAS F WHERE F.MCU_JDE='" + MCU_JDE_I + "' AND F.DCTO_JDE='" + DCTO_JDE_I + "'", conn);
                 documento_impresion.setPrinter(IMPRESORA);
                 documento_impresion.setCopies(3);
+                System.out.println("IMPRESORA: " + KCOO_JDE + "-" + DCT_JDE + "-" + DOCO_JDE + "-" + MCU_JDE_I + "-" + IMPRESORA);
                 
                 Cliente_Rest_Printer cliente_rest_printer = new Cliente_Rest_Printer("user", "apirestutils");
                 String resul_printer;
