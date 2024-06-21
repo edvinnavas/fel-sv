@@ -76,7 +76,7 @@ public class Ctrl_CuerpoDocumento_CR_V3 implements Serializable {
                     + esquema + ".F5504001@" + dblink + " F "
                     + "LEFT JOIN " + esquema + ".F550401D@" + dblink + " G ON (F.CRKCO=G.CDKCO AND F.CRURCD=G.CDURCD AND F.CRN001=G.CDN001) " 
                     + "WHERE " 
-                    + "F.CRKCO='" + KCOO_JDE + "' AND F.CRN001=" + DOCO_JDE + " AND F.CRURCD='" + DCTO_JDE + "'";
+                    + "F.CRKCO='" + KCOO_JDE + "' AND F.CRN001=" + DOCO_JDE + " AND F.CRURCD='" + DCTO_JDE + "' AND G.CDDIVJ>0";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(cadenasql);
             Integer contador = 0;

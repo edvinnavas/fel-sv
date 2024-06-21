@@ -803,7 +803,7 @@ public class Ctrl_DTE_ND_V3 implements Serializable {
                 String IMPRESORA = ctrl_base_datos.ObtenerString("SELECT DISTINCT TRIM(F.NOMBRE_IMPRESORA) FROM IMPRESORAS F WHERE F.MCU_JDE='" + MCU_JDE_I + "' AND F.DCTO_JDE='" + DCTO_JDE_I + "'", conn);
                 documento_impresion.setPrinter(IMPRESORA);
                 documento_impresion.setCopies(3);
-                System.out.println("IMPRESORA: " + KCOO_JDE + "-" + DCT_JDE + "-" + DOCO_JDE + "-" + MCU_JDE_I + "-" + IMPRESORA);
+                // System.out.println("IMPRESORA: " + KCOO_JDE + "-" + DCT_JDE + "-" + DOCO_JDE + "-" + MCU_JDE_I + "-" + IMPRESORA);
                 
                 Cliente_Rest_Printer cliente_rest_printer = new Cliente_Rest_Printer("user", "apirestutils");
                 String resul_printer;
