@@ -263,6 +263,13 @@ public class Ctrl_DTE_CR_V3 implements Serializable {
 
             conn.setAutoCommit(false);
 
+            String RESPONSE_OBSERVACIONES = "";
+            if(respuesta_recepciondte_mh.getObservaciones().toString().length() > 1990) {
+                RESPONSE_OBSERVACIONES = respuesta_recepciondte_mh.getObservaciones().toString().substring(0, 1990);
+            } else {
+                RESPONSE_OBSERVACIONES = respuesta_recepciondte_mh.getObservaciones().toString();
+            }
+
             String cadenasql = "UPDATE DTE_CR_V3 SET "
                     + "RESPONSE_VERSION=" + respuesta_recepciondte_mh.getVersion() + ", "
                     + "RESPONSE_AMBIENTE='" + respuesta_recepciondte_mh.getAmbiente() + "', "
@@ -273,7 +280,7 @@ public class Ctrl_DTE_CR_V3 implements Serializable {
                     + "RESPONSE_FHPROCESAMIENTO='" + respuesta_recepciondte_mh.getFhProcesamiento() + "', "
                     + "RESPONSE_CODIGOMSG='" + respuesta_recepciondte_mh.getCodigoMsg() + "', "
                     + "RESPONSE_DESCRIPCIONMSG='" + respuesta_recepciondte_mh.getDescripcionMsg() + "', "
-                    + "RESPONSE_OBSERVACIONES='" + respuesta_recepciondte_mh.getObservaciones().toString() + "', "
+                    + "RESPONSE_OBSERVACIONES='" + RESPONSE_OBSERVACIONES + "', "
                     + "RESPONSE_CLASIFICAMSG='" + respuesta_recepciondte_mh.getClasificaMsg() + "' "
                     + "WHERE "
                     + "ID_DTE=" + id_dte;
@@ -589,6 +596,13 @@ public class Ctrl_DTE_CR_V3 implements Serializable {
 
             conn.setAutoCommit(false);
 
+            String RESPONSE_OBSERVACIONES = "";
+            if(respuesta_recepciondte_infile.getRespuesta_dgi().getObservaciones().toString().length() > 1990) {
+                RESPONSE_OBSERVACIONES = respuesta_recepciondte_infile.getRespuesta_dgi().getObservaciones().toString().substring(0, 1990);
+            } else {
+                RESPONSE_OBSERVACIONES = respuesta_recepciondte_infile.getRespuesta_dgi().getObservaciones().toString();
+            }
+
             String cadenasql = "UPDATE DTE_CR_V3 SET "
                     + "RESPONSE_VERSION=" + respuesta_recepciondte_infile.getRespuesta_dgi().getVersion() + ", "
                     + "RESPONSE_AMBIENTE='" + respuesta_recepciondte_infile.getRespuesta_dgi().getAmbiente() + "', "
@@ -599,7 +613,7 @@ public class Ctrl_DTE_CR_V3 implements Serializable {
                     + "RESPONSE_FHPROCESAMIENTO='" + respuesta_recepciondte_infile.getRespuesta_dgi().getFhProcesamiento() + "', "
                     + "RESPONSE_CODIGOMSG='" + respuesta_recepciondte_infile.getRespuesta_dgi().getCodigoMsg() + "', "
                     + "RESPONSE_DESCRIPCIONMSG='" + respuesta_recepciondte_infile.getRespuesta_dgi().getDescripcionMsg() + "', "
-                    + "RESPONSE_OBSERVACIONES='" + respuesta_recepciondte_infile.getRespuesta_dgi().getObservaciones().toString() + "', "
+                    + "RESPONSE_OBSERVACIONES='" + RESPONSE_OBSERVACIONES + "', "
                     + "RESPONSE_CLASIFICAMSG='" + respuesta_recepciondte_infile.getRespuesta_dgi().getClasificaMsg() + "' "
                     + "WHERE "
                     + "ID_DTE=" + id_dte;
