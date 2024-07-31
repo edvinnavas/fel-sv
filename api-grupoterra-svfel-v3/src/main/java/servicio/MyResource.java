@@ -2,6 +2,7 @@ package servicio;
 
 import ClienteServicio.Cliente_Rest_INFILE;
 import ClienteServicio.Cliente_Rest_MH;
+import Controladores.Ctrl_Archivos;
 import Controladores.Ctrl_ConsultarDteLote_V3;
 import Controladores.Ctrl_DTE_CCF_V3;
 import Controladores.Ctrl_DTE_CONTINGENCIA_V3;
@@ -2707,8 +2708,33 @@ public class MyResource implements Serializable {
                 /****************************************************************************************************
                  * ENVIAR DODUMENTO Y RESPUESTA DE INFILE CCF.                                                      *
                  ****************************************************************************************************/
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
                 Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
-                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_ccf_v3.getEmisor().getNit(), "742c9601bf0cc56a6f5608eca65e764f", "DTE-" + ambiente + "-CCF-" + no_dtes.get(d), gson.toJson(dte_ccf_v3));
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_ccf_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-CCF-" + no_dtes.get(d), gson.toJson(dte_ccf_v3));
                 RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
                 try {
                     Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
@@ -2842,8 +2868,33 @@ public class MyResource implements Serializable {
                 /****************************************************************************************************
                  * ENVIAR DODUMENTO Y RESPUESTA DE INFILE F.                                                      *
                  ****************************************************************************************************/
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
                 Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
-                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_f_v3.getEmisor().getNit(), "742c9601bf0cc56a6f5608eca65e764f", "DTE-" + ambiente + "-F-" + no_dtes.get(d), gson.toJson(dte_f_v3));
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_f_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-F-" + no_dtes.get(d), gson.toJson(dte_f_v3));
                 RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
                 try {
                     Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
@@ -2977,8 +3028,33 @@ public class MyResource implements Serializable {
                 /****************************************************************************************************
                  * ENVIAR DODUMENTO Y RESPUESTA DE INFILE NC.                                                      *
                  ****************************************************************************************************/
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
                 Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
-                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_nc_v3.getEmisor().getNit(), "742c9601bf0cc56a6f5608eca65e764f", "DTE-" + ambiente + "-NC-" + no_dtes.get(d), gson.toJson(dte_nc_v3));
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_nc_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-NC-" + no_dtes.get(d), gson.toJson(dte_nc_v3));
                 RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
                 try {
                     Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
@@ -3112,8 +3188,33 @@ public class MyResource implements Serializable {
                 /****************************************************************************************************
                  * ENVIAR DODUMENTO Y RESPUESTA DE INFILE ND.                                                      *
                  ****************************************************************************************************/
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
                 Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
-                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_nd_v3.getEmisor().getNit(), "742c9601bf0cc56a6f5608eca65e764f", "DTE-" + ambiente + "-ND-" + no_dtes.get(d), gson.toJson(dte_nd_v3));
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_nd_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-ND-" + no_dtes.get(d), gson.toJson(dte_nd_v3));
                 RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
                 try {
                     Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
@@ -3247,8 +3348,33 @@ public class MyResource implements Serializable {
                 /****************************************************************************************************
                  * ENVIAR DODUMENTO Y RESPUESTA DE INFILE FEX.                                                      *
                  ****************************************************************************************************/
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
                 Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
-                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_fex_v3.getEmisor().getNit(), "742c9601bf0cc56a6f5608eca65e764f", "DTE-" + ambiente + "-FEX-" + no_dtes.get(d), gson.toJson(dte_fex_v3));
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_fex_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-FEX-" + no_dtes.get(d), gson.toJson(dte_fex_v3));
                 RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
                 try {
                     Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
@@ -3382,8 +3508,33 @@ public class MyResource implements Serializable {
                 /****************************************************************************************************
                  * ENVIAR DODUMENTO Y RESPUESTA DE INFILE NR.                                                      *
                  ****************************************************************************************************/
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
                 Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
-                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_nr_v3.getEmisor().getNit(), "742c9601bf0cc56a6f5608eca65e764f", "DTE-" + ambiente + "-NR-" + no_dtes.get(d), gson.toJson(dte_nr_v3));
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_nr_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-NR-" + no_dtes.get(d), gson.toJson(dte_nr_v3));
                 RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
                 try {
                     Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
@@ -3517,8 +3668,33 @@ public class MyResource implements Serializable {
                 /****************************************************************************************************
                  * ENVIAR DODUMENTO Y RESPUESTA DE INFILE CR.                                                      *
                  ****************************************************************************************************/
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
                 Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
-                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_cr_v3.getEmisor().getNit(), "742c9601bf0cc56a6f5608eca65e764f", "DTE-" + ambiente + "-CR-" + no_dtes.get(d), gson.toJson(dte_cr_v3));
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_cr_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-CR-" + no_dtes.get(d), gson.toJson(dte_cr_v3));
                 RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
                 try {
                     Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
@@ -3652,8 +3828,33 @@ public class MyResource implements Serializable {
                 /****************************************************************************************************
                  * ENVIAR DODUMENTO Y RESPUESTA DE INFILE FSE.                                                      *
                  ****************************************************************************************************/
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
                 Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
-                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_fse_v3.getEmisor().getNit(), "742c9601bf0cc56a6f5608eca65e764f", "DTE-" + ambiente + "-FSE-" + no_dtes.get(d), gson.toJson(dte_fse_v3));
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_fse_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-FSE-" + no_dtes.get(d), gson.toJson(dte_fse_v3));
                 RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
                 try {
                     Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
@@ -3789,8 +3990,33 @@ public class MyResource implements Serializable {
                 /****************************************************************************************************
                  * ENVIAR DODUMENTO Y RESPUESTA DE INFILE CCF.                                                      *
                  ****************************************************************************************************/
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
                 Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
-                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_ccf_v3.getEmisor().getNit(), "742c9601bf0cc56a6f5608eca65e764f", "DTE-" + ambiente + "-CCF-" + no_dtes_ccf.get(d), gson.toJson(dte_ccf_v3));
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_ccf_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-CCF-" + no_dtes_ccf.get(d), gson.toJson(dte_ccf_v3));
                 RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
                 try {
                     Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
@@ -3903,8 +4129,33 @@ public class MyResource implements Serializable {
                 /****************************************************************************************************
                  * ENVIAR DODUMENTO Y RESPUESTA DE INFILE F.                                                      *
                  ****************************************************************************************************/
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
                 Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
-                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_f_v3.getEmisor().getNit(), "742c9601bf0cc56a6f5608eca65e764f", "DTE-" + ambiente + "-F-" + no_dtes_f.get(d), gson.toJson(dte_f_v3));
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_f_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-F-" + no_dtes_f.get(d), gson.toJson(dte_f_v3));
                 RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
                 try {
                     Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
@@ -4017,8 +4268,33 @@ public class MyResource implements Serializable {
                 /****************************************************************************************************
                  * ENVIAR DODUMENTO Y RESPUESTA DE INFILE NC.                                                      *
                  ****************************************************************************************************/
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
                 Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
-                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_nc_v3.getEmisor().getNit(), "742c9601bf0cc56a6f5608eca65e764f", "DTE-" + ambiente + "-NC-" + no_dtes_nc.get(d), gson.toJson(dte_nc_v3));
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_nc_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-NC-" + no_dtes_nc.get(d), gson.toJson(dte_nc_v3));
                 RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
                 try {
                     Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
@@ -4131,8 +4407,33 @@ public class MyResource implements Serializable {
                 /****************************************************************************************************
                  * ENVIAR DODUMENTO Y RESPUESTA DE INFILE ND.                                                      *
                  ****************************************************************************************************/
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
                 Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
-                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_nd_v3.getEmisor().getNit(), "742c9601bf0cc56a6f5608eca65e764f", "DTE-" + ambiente + "-ND-" + no_dtes_nd.get(d), gson.toJson(dte_nd_v3));
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_nd_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-ND-" + no_dtes_nd.get(d), gson.toJson(dte_nd_v3));
                 RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
                 try {
                     Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
@@ -4245,8 +4546,33 @@ public class MyResource implements Serializable {
                 /****************************************************************************************************
                  * ENVIAR DODUMENTO Y RESPUESTA DE INFILE FEX.                                                      *
                  ****************************************************************************************************/
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
                 Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
-                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_fex_v3.getEmisor().getNit(), "742c9601bf0cc56a6f5608eca65e764f", "DTE-" + ambiente + "-FEX-" + no_dtes_fex.get(d), gson.toJson(dte_fex_v3));
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_fex_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-FEX-" + no_dtes_fex.get(d), gson.toJson(dte_fex_v3));
                 RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
                 try {
                     Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
@@ -4359,8 +4685,33 @@ public class MyResource implements Serializable {
                 /****************************************************************************************************
                  * ENVIAR DODUMENTO Y RESPUESTA DE INFILE NR.                                                      *
                  ****************************************************************************************************/
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
                 Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
-                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_nr_v3.getEmisor().getNit(), "742c9601bf0cc56a6f5608eca65e764f", "DTE-" + ambiente + "-NR-" + no_dtes_nr.get(d), gson.toJson(dte_nr_v3));
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_nr_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-NR-" + no_dtes_nr.get(d), gson.toJson(dte_nr_v3));
                 RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
                 try {
                     Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
@@ -4473,8 +4824,33 @@ public class MyResource implements Serializable {
                 /****************************************************************************************************
                  * ENVIAR DODUMENTO Y RESPUESTA DE INFILE CR.                                                      *
                  ****************************************************************************************************/
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
                 Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
-                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_cr_v3.getEmisor().getNit(), "742c9601bf0cc56a6f5608eca65e764f", "DTE-" + ambiente + "-CR-" + no_dtes_cr.get(d), gson.toJson(dte_cr_v3));
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_cr_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-CR-" + no_dtes_cr.get(d), gson.toJson(dte_cr_v3));
                 RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
                 try {
                     Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
@@ -4587,8 +4963,33 @@ public class MyResource implements Serializable {
                 /****************************************************************************************************
                  * ENVIAR DODUMENTO Y RESPUESTA DE INFILE FSE.                                                      *
                  ****************************************************************************************************/
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                        // System.out.println("mysql-db-host:" + mysql_db_host);
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
                 Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
-                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_fse_v3.getEmisor().getNit(), "742c9601bf0cc56a6f5608eca65e764f", "DTE-" + ambiente + "-FSE-" + no_dtes_fse.get(d), gson.toJson(dte_fse_v3));
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_fse_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-FSE-" + no_dtes_fse.get(d), gson.toJson(dte_fse_v3));
                 RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
                 try {
                     Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
