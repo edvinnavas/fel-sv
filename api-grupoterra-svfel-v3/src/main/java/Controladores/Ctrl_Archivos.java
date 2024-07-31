@@ -28,7 +28,7 @@ public class Ctrl_Archivos implements Serializable {
             fr.close();
         } catch (Exception ex) {
             resultado = null;
-            System.out.println("PROYECTO: SFC-JERSEY-REST-API ==> CLASE: " + this.getClass().getName()
+            System.out.println("PROYECTO: API-GRUPOTERRA-SVFEL-V3 ==> CLASE: " + this.getClass().getName()
                     + " ==> METODO: lineas_archivo()" + " ERROR: " + ex.toString());
         }
 
