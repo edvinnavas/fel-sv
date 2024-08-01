@@ -27,7 +27,7 @@ public class Ctrl_Emisor_INVALIDACION_V3 implements Serializable {
             resultado.setCodEstableMH(ctrl_base_datos.ObtenerString("SELECT F.CODESTABLEMH FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA=" + mcu_jde + " AND F.ID_EMISOR=" + id_emisor, conn));
             resultado.setCodEstable(ctrl_base_datos.ObtenerString("SELECT F.CODESTABLE FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA=" + mcu_jde + " AND F.ID_EMISOR=" + id_emisor, conn));
             resultado.setCodPuntoVentaMH(ctrl_base_datos.ObtenerString("SELECT F.CODPUNTOVENTAMH FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA=" + mcu_jde + " AND F.ID_EMISOR=" + id_emisor, conn));
-            resultado.setCodPuntoVenta(ctrl_base_datos.ObtenerString("SELECT DECODE(F.CODPUNTOVENTA_INT, '0000', NULL) FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA=" + mcu_jde + " AND F.ID_EMISOR=" + id_emisor, conn));
+            resultado.setCodPuntoVenta(ctrl_base_datos.ObtenerString("SELECT DECODE(F.CODPUNTOVENTA_INT, '0000', NULL, F.CODPUNTOVENTA_INT) FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA=" + mcu_jde + " AND F.ID_EMISOR=" + id_emisor, conn));
             resultado.setTelefono(ctrl_base_datos.ObtenerString("SELECT F.TELEFONO FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA=" + mcu_jde + " AND F.ID_EMISOR=" + id_emisor, conn));
             resultado.setCorreo(ctrl_base_datos.ObtenerString("SELECT F.CORREO FROM EMISOR_ESTABLECIMIENTO_V3 F WHERE F.CODPUNTOVENTA=" + mcu_jde + " AND F.ID_EMISOR=" + id_emisor, conn));
         } catch (Exception ex) {

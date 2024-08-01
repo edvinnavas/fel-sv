@@ -203,7 +203,7 @@ public class Ctrl_DTE_FSE_V3 implements Serializable {
             resultado.setEmisor(ctrl_emisor_fse_v3.obtener_emisor_fse_v3(id_dte, conn));
 
             Ctrl_SujetoExcluido_FSE_V3 ctrl_sujeto_excluido_fse_v3 = new Ctrl_SujetoExcluido_FSE_V3();
-            resultado.setSujetoExcluido(ctrl_sujeto_excluido_fse_v3.obtener_sujeto_excluido_fse_v3(id_dte, conn));
+            resultado.setSujetoExcluido(ctrl_sujeto_excluido_fse_v3.obtener_sujeto_excluido_fse_v3(id_dte, ambiente, conn));
             
             Ctrl_CuerpoDocumento_FSE_V3 ctrl_cuerpo_documento_fse_v3 = new Ctrl_CuerpoDocumento_FSE_V3();
             resultado.setCuerpoDocumento(ctrl_cuerpo_documento_fse_v3.obtener_cuerpo_documento_fse_v3(id_dte, conn));

@@ -13,7 +13,7 @@ public class Ctrl_SujetoExcluido_FSE_V3 implements Serializable {
     public Ctrl_SujetoExcluido_FSE_V3() {
     }
 
-    public SujetoExcluido_fse obtener_sujeto_excluido_fse_v3(Long id_dte, Connection conn) {
+    public SujetoExcluido_fse obtener_sujeto_excluido_fse_v3(Long id_dte, String ambiente, Connection conn) {
         SujetoExcluido_fse resultado = new SujetoExcluido_fse();
 
         try {
@@ -32,7 +32,11 @@ public class Ctrl_SujetoExcluido_FSE_V3 implements Serializable {
             resultado.setDireccion(direccion_fse);
 
             resultado.setTelefono(ctrl_base_datos.ObtenerString("SELECT F.TELEFONO FROM SUJETOEXCLUIDO_FSE_V3 F WHERE F.ID_DTE=" + id_dte, conn));
-            resultado.setCorreo(ctrl_base_datos.ObtenerString("SELECT F.CORREO FROM SUJETOEXCLUIDO_FSE_V3 F WHERE F.ID_DTE=" + id_dte, conn));
+            if (ambiente.equals("PY")) {
+                resultado.setCorreo("pruebasecsasv@servicioscompartidos.com");
+            } else {
+                resultado.setCorreo(ctrl_base_datos.ObtenerString("SELECT F.CORREO FROM RECEPTOR_CCF_V3 F WHERE F.ID_DTE=" + id_dte, conn));
+            }
         } catch (Exception ex) {
             System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:obtener_sujeto_excluido_fse_v3()|ERROR:" + ex.toString());
         }

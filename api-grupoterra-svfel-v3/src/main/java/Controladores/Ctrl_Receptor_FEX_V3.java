@@ -12,7 +12,7 @@ public class Ctrl_Receptor_FEX_V3 implements Serializable {
     public Ctrl_Receptor_FEX_V3() {
     }
 
-    public Receptor_fex obtener_receptor_fex_v3(Long id_dte, Connection conn) {
+    public Receptor_fex obtener_receptor_fex_v3(Long id_dte, String ambiente, Connection conn) {
         Receptor_fex resultado = new Receptor_fex();
 
         try {
@@ -28,8 +28,11 @@ public class Ctrl_Receptor_FEX_V3 implements Serializable {
             resultado.setTipoPersona(ctrl_base_datos.ObtenerEntero("SELECT C.CODIGO FROM CAT_029 C WHERE C.ID_CAT IN (SELECT F.ID_CAT_029 FROM RECEPTOR_FEX_V3 F WHERE F.ID_DTE=" + id_dte + ")", conn));
             resultado.setDescActividad(ctrl_base_datos.ObtenerString("SELECT C.VALOR FROM CAT_019 C WHERE C.ID_CAT IN (SELECT F.ID_CAT_019 FROM RECEPTOR_FEX_V3 F WHERE F.ID_DTE=" + id_dte + ")", conn));
             resultado.setTelefono(ctrl_base_datos.ObtenerString("SELECT F.TELEFONO FROM RECEPTOR_FEX_V3 F WHERE F.ID_DTE=" + id_dte, conn));
-            resultado.setCorreo(ctrl_base_datos.ObtenerString("SELECT F.CORREO FROM RECEPTOR_FEX_V3 F WHERE F.ID_DTE=" + id_dte, conn));
-            resultado.setCorreo("pruebasecsasv@servicioscompartidos.com");
+            if (ambiente.equals("PY")) {
+                resultado.setCorreo("pruebasecsasv@servicioscompartidos.com");
+            } else {
+                resultado.setCorreo(ctrl_base_datos.ObtenerString("SELECT F.CORREO FROM RECEPTOR_CCF_V3 F WHERE F.ID_DTE=" + id_dte, conn));
+            }
         } catch (Exception ex) {
             System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:obtener_receptor_fex_v3()|ERROR:" + ex.toString());
         }

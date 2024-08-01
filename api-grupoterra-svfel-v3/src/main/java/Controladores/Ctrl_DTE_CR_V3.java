@@ -206,7 +206,7 @@ public class Ctrl_DTE_CR_V3 implements Serializable {
             resultado.setEmisor(ctrl_emisor_cr_v3.obtener_emisor_cr_v3(id_dte, conn));
 
             Ctrl_Receptor_CR_V3 ctrl_receptor_cr_v3 = new Ctrl_Receptor_CR_V3();
-            resultado.setReceptor(ctrl_receptor_cr_v3.obtener_receptor_cr_v3(id_dte, conn));
+            resultado.setReceptor(ctrl_receptor_cr_v3.obtener_receptor_cr_v3(id_dte, ambiente, conn));
 
             Ctrl_CuerpoDocumento_CR_V3 ctrl_cuerpo_documento_cr_v3 = new Ctrl_CuerpoDocumento_CR_V3();
             resultado.setCuerpoDocumento(ctrl_cuerpo_documento_cr_v3.obtener_cuerpo_documento_cr_v3(id_dte, conn));

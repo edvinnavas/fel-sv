@@ -206,7 +206,7 @@ public class Ctrl_DTE_FEX_V3 implements Serializable {
             resultado.setEmisor(ctrl_emisor_fex_v3.obtener_emisor_fex_v3(id_dte, ambiente, conn));
             
             Ctrl_Receptor_FEX_V3 ctrl_receptor_fex_v3 = new Ctrl_Receptor_FEX_V3();
-            resultado.setReceptor(ctrl_receptor_fex_v3.obtener_receptor_fex_v3(id_dte, conn));
+            resultado.setReceptor(ctrl_receptor_fex_v3.obtener_receptor_fex_v3(id_dte, ambiente, conn));
 
             resultado.setOtrosDocumentos(null);
 

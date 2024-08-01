@@ -13,7 +13,7 @@ public class Ctrl_Receptor_CR_V3 implements Serializable {
     public Ctrl_Receptor_CR_V3() {
     }
 
-    public Receptor_cr obtener_receptor_cr_v3(Long id_dte, Connection conn) {
+    public Receptor_cr obtener_receptor_cr_v3(Long id_dte, String ambiente, Connection conn) {
         Receptor_cr resultado = new Receptor_cr();
 
         try {
@@ -34,8 +34,11 @@ public class Ctrl_Receptor_CR_V3 implements Serializable {
             resultado.setDireccion(direccion_cr);
 
             resultado.setTelefono(ctrl_base_datos.ObtenerString("SELECT F.TELEFONO FROM RECEPTOR_CR_V3 F WHERE F.ID_DTE=" + id_dte, conn));
-            resultado.setCorreo(ctrl_base_datos.ObtenerString("SELECT F.CORREO FROM RECEPTOR_CR_V3 F WHERE F.ID_DTE=" + id_dte, conn));
-            resultado.setCorreo("pruebasecsasv@servicioscompartidos.com");
+            if (ambiente.equals("PY")) {
+                resultado.setCorreo("pruebasecsasv@servicioscompartidos.com");
+            } else {
+                resultado.setCorreo(ctrl_base_datos.ObtenerString("SELECT F.CORREO FROM RECEPTOR_CCF_V3 F WHERE F.ID_DTE=" + id_dte, conn));
+            }
         } catch (Exception ex) {
             System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:obtener_receptor_cr_v3()|ERROR:" + ex.toString());
         }

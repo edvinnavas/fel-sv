@@ -208,7 +208,7 @@ public class Ctrl_DTE_CCF_V3 implements Serializable {
             resultado.setEmisor(ctrl_emisor_ccf_v3.obtener_emisor_ccf_v3(id_dte, conn));
 
             Ctrl_Receptor_CCF_V3 ctrl_receptor_ccf_v3 = new Ctrl_Receptor_CCF_V3();
-            resultado.setReceptor(ctrl_receptor_ccf_v3.obtener_receptor_ccf_v3(id_dte, conn));
+            resultado.setReceptor(ctrl_receptor_ccf_v3.obtener_receptor_ccf_v3(id_dte, ambiente, conn));
 
             resultado.setOtrosDocumentos(null);
 
