@@ -388,7 +388,11 @@ public class Ctrl_DTE_INVALIDACION_V3 implements Serializable {
                 mensaje_correo.setRecipients(send_to);
                 String send_to_cc = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES F WHERE F.ACTIVO=2 AND F.MCU_JDE='" + MCU_JDE_I + "' AND F.DCTO_JDE='" + DCTO_JDE_I + "'", conn);
                 mensaje_correo.setCc(send_to_cc);
-                mensaje_correo.setSubject("Anulación DTE.");
+                if (ambiente.equals("PY")) {
+                    mensaje_correo.setSubject("PRUEBAS: Anulación DTE.");
+                } else {
+                    mensaje_correo.setSubject("PRODUCCIÓN: Anulación DTE.");
+                }
                 mensaje_correo.setBody(null);
                 // mensaje_correo.setFrom("replegal-unosv@uno-terra.com");
                 mensaje_correo.setFrom("felsv@uno-ca.com");
@@ -423,7 +427,11 @@ public class Ctrl_DTE_INVALIDACION_V3 implements Serializable {
                 mensaje_correo.setRecipients(send_to);
                 String send_to_cc = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES F WHERE F.ACTIVO=2 AND F.MCU_JDE='" + MCU_JDE_I + "' AND F.DCTO_JDE='" + DCTO_JDE_I + "'", conn);
                 mensaje_correo.setCc(send_to_cc);
-                mensaje_correo.setSubject("Error Anulación DTE.");
+                if (ambiente.equals("PY")) {
+                    mensaje_correo.setSubject("PRUEBAS: Error Anulación DTE.");
+                } else {
+                    mensaje_correo.setSubject("PRODUCCIÓN: Error Anulación DTE.");
+                }
                 mensaje_correo.setBody(null);
                 // mensaje_correo.setFrom("replegal-unosv@uno-terra.com");
                 mensaje_correo.setFrom("felsv@uno-ca.com");

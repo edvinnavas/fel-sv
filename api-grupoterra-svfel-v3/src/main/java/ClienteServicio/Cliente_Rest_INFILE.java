@@ -83,7 +83,7 @@ public class Cliente_Rest_INFILE implements Serializable {
             if (ambiente.equals("PY")) {
                 webTarget = client.target(BASE_URI).path("certificacion/test/documento/1/certificar_json");
             } else {
-                webTarget = client.target(BASE_URI_PROD).path("certificacion/prod/documento/certificar");
+                webTarget = client.target(BASE_URI_PROD).path("certificacion/prod/documento/1/certificar_json");
             }
             Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON_TYPE);
             invocationBuilder.header("usuario", usuario);

@@ -5093,4 +5093,1040 @@ public class MyResource implements Serializable {
         return resultado;
     }
 
+    @Path("recepciondte-json-infile/{ambiente}/{tipo_dte}/{id_dte}")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String recepciondte_json_infile(
+            @PathParam("ambiente") String ambiente,
+            @PathParam("tipo_dte") String tipo_dte,
+            @PathParam("id_dte") Long id_dte) {
+
+        Driver driver = new Driver();
+        String resultado = "";
+
+        try {
+            if(tipo_dte.equals("ccf")) {
+                Ctrl_DTE_CCF_V3 ctrl_dte_ccf_v3 = new Ctrl_DTE_CCF_V3();
+                DTE_CCF_V3 dte_ccf_v3 = ctrl_dte_ccf_v3.generar_json_dte_ccf_v3(ambiente, id_dte);
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                driver.guardar_en_archivo(ambiente, id_dte, "ccf", "JSON:: " + gson.toJson(dte_ccf_v3));
+                driver.guardar_en_archivo_json(ambiente, id_dte, "ccf", gson.toJson(dte_ccf_v3));
+                
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
+                Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_ccf_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-CCF-" + id_dte, gson.toJson(dte_ccf_v3));
+                RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
+                try {
+                    Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
+                    }.getType();
+                    respuesta_recepciondte_infile = new Gson().fromJson(respuesta_infile, listType2);
+                    respuesta_infile = respuesta_infile.replaceAll("\'","");
+
+                    if(!respuesta_recepciondte_infile.getOk()) {
+                        SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                        List<String> observaciones = new ArrayList<>();
+                        observaciones.add(respuesta_infile);
+
+                        Errores_INFILE errores_infile = new Errores_INFILE();
+                        errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setVersion(2);
+                        errores_infile.setAmbiente("00");
+                        errores_infile.setVersionApp(2);
+                        errores_infile.setEstado("RECHAZADO");
+                        errores_infile.setCodigoGeneracion(dte_ccf_v3.getIdentificacion().getCodigoGeneracion());
+                        errores_infile.setSelloRecibido(null);
+                        errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        errores_infile.setClasificaMsg("99");
+                        errores_infile.setCodigoMsg("999");
+                        errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                        respuesta_recepciondte_infile.setRespuesta(null);
+
+                        Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                        respuesta_infile_dgi.setVersion(2);
+                        respuesta_infile_dgi.setAmbiente("00");
+                        respuesta_infile_dgi.setVersionApp(2);
+                        respuesta_infile_dgi.setEstado("RECHAZADO");
+                        respuesta_infile_dgi.setCodigoGeneracion(dte_ccf_v3.getIdentificacion().getCodigoGeneracion());
+                        respuesta_infile_dgi.setSelloRecibido(null);
+                        respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        respuesta_infile_dgi.setClasificaMsg("99");
+                        respuesta_infile_dgi.setCodigoMsg("999");
+                        respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        respuesta_infile_dgi.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                        respuesta_recepciondte_infile.setPdf_path(null);
+                        respuesta_recepciondte_infile.setAdendas(null);
+                    }
+                } catch(Exception ex) {
+                    SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                    List<String> observaciones = new ArrayList<>();
+                    observaciones.add(respuesta_infile);
+
+                    respuesta_recepciondte_infile = new RESPUESTA_RECEPCIONDTE_INFILE();
+                    respuesta_recepciondte_infile.setOk(false);
+                    respuesta_recepciondte_infile.setMensaje("Erros en el proceso para deserializar la respuesta INFILE.");
+
+                    Errores_INFILE errores_infile = new Errores_INFILE();
+                    errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setVersion(2);
+                    errores_infile.setAmbiente("00");
+                    errores_infile.setVersionApp(2);
+                    errores_infile.setEstado("RECHAZADO");
+                    errores_infile.setCodigoGeneracion(dte_ccf_v3.getIdentificacion().getCodigoGeneracion());
+                    errores_infile.setSelloRecibido(null);
+                    errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    errores_infile.setClasificaMsg("99");
+                    errores_infile.setCodigoMsg("999");
+                    errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                    respuesta_recepciondte_infile.setRespuesta(null);
+
+                    Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                    respuesta_infile_dgi.setVersion(2);
+                    respuesta_infile_dgi.setAmbiente("00");
+                    respuesta_infile_dgi.setVersionApp(2);
+                    respuesta_infile_dgi.setEstado("RECHAZADO");
+                    respuesta_infile_dgi.setCodigoGeneracion(dte_ccf_v3.getIdentificacion().getCodigoGeneracion());
+                    respuesta_infile_dgi.setSelloRecibido(null);
+                    respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    respuesta_infile_dgi.setClasificaMsg("99");
+                    respuesta_infile_dgi.setCodigoMsg("999");
+                    respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    respuesta_infile_dgi.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                    respuesta_recepciondte_infile.setPdf_path(null);
+                    respuesta_recepciondte_infile.setAdendas(null);
+                }
+                ctrl_dte_ccf_v3.registro_db_respuesta_infile(ambiente, respuesta_recepciondte_infile, id_dte);
+                driver.guardar_en_archivo(ambiente, id_dte, "ccf", "RESPUESTA-DTE-INFILE:: " + new Gson().toJson(respuesta_recepciondte_infile));
+            }
+
+            if(tipo_dte.equals("f")) {
+                Ctrl_DTE_F_V3 ctrl_dte_f_v3 = new Ctrl_DTE_F_V3();
+                DTE_F_V3 dte_f_v3 = ctrl_dte_f_v3.generar_json_dte_f_v3(ambiente, id_dte);
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                driver.guardar_en_archivo(ambiente, id_dte, "f", "JSON:: " + gson.toJson(dte_f_v3));
+                driver.guardar_en_archivo_json(ambiente, id_dte, "f", gson.toJson(dte_f_v3));
+                
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
+                Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_f_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-F-" + id_dte, gson.toJson(dte_f_v3));
+                RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
+                try {
+                    Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
+                    }.getType();
+                    respuesta_recepciondte_infile = new Gson().fromJson(respuesta_infile, listType2);
+                    respuesta_infile = respuesta_infile.replaceAll("\'","");
+
+                    if(!respuesta_recepciondte_infile.getOk()) {
+                        SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                        List<String> observaciones = new ArrayList<>();
+                        observaciones.add(respuesta_infile);
+
+                        Errores_INFILE errores_infile = new Errores_INFILE();
+                        errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setVersion(2);
+                        errores_infile.setAmbiente("00");
+                        errores_infile.setVersionApp(2);
+                        errores_infile.setEstado("RECHAZADO");
+                        errores_infile.setCodigoGeneracion(dte_f_v3.getIdentificacion().getCodigoGeneracion());
+                        errores_infile.setSelloRecibido(null);
+                        errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        errores_infile.setClasificaMsg("99");
+                        errores_infile.setCodigoMsg("999");
+                        errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                        respuesta_recepciondte_infile.setRespuesta(null);
+
+                        Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                        respuesta_infile_dgi.setVersion(2);
+                        respuesta_infile_dgi.setAmbiente("00");
+                        respuesta_infile_dgi.setVersionApp(2);
+                        respuesta_infile_dgi.setEstado("RECHAZADO");
+                        respuesta_infile_dgi.setCodigoGeneracion(dte_f_v3.getIdentificacion().getCodigoGeneracion());
+                        respuesta_infile_dgi.setSelloRecibido(null);
+                        respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        respuesta_infile_dgi.setClasificaMsg("99");
+                        respuesta_infile_dgi.setCodigoMsg("999");
+                        respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        respuesta_infile_dgi.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                        respuesta_recepciondte_infile.setPdf_path(null);
+                        respuesta_recepciondte_infile.setAdendas(null);
+                    }
+                } catch(Exception ex) {
+                    SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                    List<String> observaciones = new ArrayList<>();
+                    observaciones.add(respuesta_infile);
+
+                    respuesta_recepciondte_infile = new RESPUESTA_RECEPCIONDTE_INFILE();
+                    respuesta_recepciondte_infile.setOk(false);
+                    respuesta_recepciondte_infile.setMensaje("Erros en el proceso para deserializar la respuesta INFILE.");
+
+                    Errores_INFILE errores_infile = new Errores_INFILE();
+                    errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setVersion(2);
+                    errores_infile.setAmbiente("00");
+                    errores_infile.setVersionApp(2);
+                    errores_infile.setEstado("RECHAZADO");
+                    errores_infile.setCodigoGeneracion(dte_f_v3.getIdentificacion().getCodigoGeneracion());
+                    errores_infile.setSelloRecibido(null);
+                    errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    errores_infile.setClasificaMsg("99");
+                    errores_infile.setCodigoMsg("999");
+                    errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                    respuesta_recepciondte_infile.setRespuesta(null);
+
+                    Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                    respuesta_infile_dgi.setVersion(2);
+                    respuesta_infile_dgi.setAmbiente("00");
+                    respuesta_infile_dgi.setVersionApp(2);
+                    respuesta_infile_dgi.setEstado("RECHAZADO");
+                    respuesta_infile_dgi.setCodigoGeneracion(dte_f_v3.getIdentificacion().getCodigoGeneracion());
+                    respuesta_infile_dgi.setSelloRecibido(null);
+                    respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    respuesta_infile_dgi.setClasificaMsg("99");
+                    respuesta_infile_dgi.setCodigoMsg("999");
+                    respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    respuesta_infile_dgi.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                    respuesta_recepciondte_infile.setPdf_path(null);
+                    respuesta_recepciondte_infile.setAdendas(null);
+                }
+                ctrl_dte_f_v3.registro_db_respuesta_infile(ambiente, respuesta_recepciondte_infile, id_dte);
+                driver.guardar_en_archivo(ambiente, id_dte, "f", "RESPUESTA-DTE-INFILE:: " + new Gson().toJson(respuesta_recepciondte_infile));
+            }
+
+            if(tipo_dte.equals("nc")) {
+                Ctrl_DTE_NC_V3 ctrl_dte_nc_v3 = new Ctrl_DTE_NC_V3();
+                DTE_NC_V3 dte_nc_v3 = ctrl_dte_nc_v3.generar_json_dte_nc_v3(ambiente, id_dte);
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                driver.guardar_en_archivo(ambiente, id_dte, "nc", "JSON:: " + gson.toJson(dte_nc_v3));
+                driver.guardar_en_archivo_json(ambiente, id_dte, "nc", gson.toJson(dte_nc_v3));
+                
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
+                Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_nc_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-NC-" + id_dte, gson.toJson(dte_nc_v3));
+                RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
+                try {
+                    Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
+                    }.getType();
+                    respuesta_recepciondte_infile = new Gson().fromJson(respuesta_infile, listType2);
+                    respuesta_infile = respuesta_infile.replaceAll("\'","");
+
+                    if(!respuesta_recepciondte_infile.getOk()) {
+                        SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                        List<String> observaciones = new ArrayList<>();
+                        observaciones.add(respuesta_infile);
+
+                        Errores_INFILE errores_infile = new Errores_INFILE();
+                        errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setVersion(2);
+                        errores_infile.setAmbiente("00");
+                        errores_infile.setVersionApp(2);
+                        errores_infile.setEstado("RECHAZADO");
+                        errores_infile.setCodigoGeneracion(dte_nc_v3.getIdentificacion().getCodigoGeneracion());
+                        errores_infile.setSelloRecibido(null);
+                        errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        errores_infile.setClasificaMsg("99");
+                        errores_infile.setCodigoMsg("999");
+                        errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                        respuesta_recepciondte_infile.setRespuesta(null);
+
+                        Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                        respuesta_infile_dgi.setVersion(2);
+                        respuesta_infile_dgi.setAmbiente("00");
+                        respuesta_infile_dgi.setVersionApp(2);
+                        respuesta_infile_dgi.setEstado("RECHAZADO");
+                        respuesta_infile_dgi.setCodigoGeneracion(dte_nc_v3.getIdentificacion().getCodigoGeneracion());
+                        respuesta_infile_dgi.setSelloRecibido(null);
+                        respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        respuesta_infile_dgi.setClasificaMsg("99");
+                        respuesta_infile_dgi.setCodigoMsg("999");
+                        respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        respuesta_infile_dgi.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                        respuesta_recepciondte_infile.setPdf_path(null);
+                        respuesta_recepciondte_infile.setAdendas(null);
+                    }
+                } catch(Exception ex) {
+                    SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                    List<String> observaciones = new ArrayList<>();
+                    observaciones.add(respuesta_infile);
+
+                    respuesta_recepciondte_infile = new RESPUESTA_RECEPCIONDTE_INFILE();
+                    respuesta_recepciondte_infile.setOk(false);
+                    respuesta_recepciondte_infile.setMensaje("Erros en el proceso para deserializar la respuesta INFILE.");
+
+                    Errores_INFILE errores_infile = new Errores_INFILE();
+                    errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setVersion(2);
+                    errores_infile.setAmbiente("00");
+                    errores_infile.setVersionApp(2);
+                    errores_infile.setEstado("RECHAZADO");
+                    errores_infile.setCodigoGeneracion(dte_nc_v3.getIdentificacion().getCodigoGeneracion());
+                    errores_infile.setSelloRecibido(null);
+                    errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    errores_infile.setClasificaMsg("99");
+                    errores_infile.setCodigoMsg("999");
+                    errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                    respuesta_recepciondte_infile.setRespuesta(null);
+
+                    Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                    respuesta_infile_dgi.setVersion(2);
+                    respuesta_infile_dgi.setAmbiente("00");
+                    respuesta_infile_dgi.setVersionApp(2);
+                    respuesta_infile_dgi.setEstado("RECHAZADO");
+                    respuesta_infile_dgi.setCodigoGeneracion(dte_nc_v3.getIdentificacion().getCodigoGeneracion());
+                    respuesta_infile_dgi.setSelloRecibido(null);
+                    respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    respuesta_infile_dgi.setClasificaMsg("99");
+                    respuesta_infile_dgi.setCodigoMsg("999");
+                    respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    respuesta_infile_dgi.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                    respuesta_recepciondte_infile.setPdf_path(null);
+                    respuesta_recepciondte_infile.setAdendas(null);
+                }
+                ctrl_dte_nc_v3.registro_db_respuesta_infile(ambiente, respuesta_recepciondte_infile, id_dte);
+                driver.guardar_en_archivo(ambiente, id_dte, "nc", "RESPUESTA-DTE-INFILE:: " + new Gson().toJson(respuesta_recepciondte_infile));
+            }
+
+            if(tipo_dte.equals("nd")) {
+                Ctrl_DTE_ND_V3 ctrl_dte_nd_v3 = new Ctrl_DTE_ND_V3();
+                DTE_ND_V3 dte_nd_v3 = ctrl_dte_nd_v3.generar_json_dte_nd_v3(ambiente, id_dte);
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                driver.guardar_en_archivo(ambiente, id_dte, "nd", "JSON:: " + gson.toJson(dte_nd_v3));
+                driver.guardar_en_archivo_json(ambiente, id_dte, "nd", gson.toJson(dte_nd_v3));
+                
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
+                Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_nd_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-ND-" + id_dte, gson.toJson(dte_nd_v3));
+                RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
+                try {
+                    Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
+                    }.getType();
+                    respuesta_recepciondte_infile = new Gson().fromJson(respuesta_infile, listType2);
+                    respuesta_infile = respuesta_infile.replaceAll("\'","");
+
+                    if(!respuesta_recepciondte_infile.getOk()) {
+                        SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                        List<String> observaciones = new ArrayList<>();
+                        observaciones.add(respuesta_infile);
+
+                        Errores_INFILE errores_infile = new Errores_INFILE();
+                        errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setVersion(2);
+                        errores_infile.setAmbiente("00");
+                        errores_infile.setVersionApp(2);
+                        errores_infile.setEstado("RECHAZADO");
+                        errores_infile.setCodigoGeneracion(dte_nd_v3.getIdentificacion().getCodigoGeneracion());
+                        errores_infile.setSelloRecibido(null);
+                        errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        errores_infile.setClasificaMsg("99");
+                        errores_infile.setCodigoMsg("999");
+                        errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                        respuesta_recepciondte_infile.setRespuesta(null);
+
+                        Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                        respuesta_infile_dgi.setVersion(2);
+                        respuesta_infile_dgi.setAmbiente("00");
+                        respuesta_infile_dgi.setVersionApp(2);
+                        respuesta_infile_dgi.setEstado("RECHAZADO");
+                        respuesta_infile_dgi.setCodigoGeneracion(dte_nd_v3.getIdentificacion().getCodigoGeneracion());
+                        respuesta_infile_dgi.setSelloRecibido(null);
+                        respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        respuesta_infile_dgi.setClasificaMsg("99");
+                        respuesta_infile_dgi.setCodigoMsg("999");
+                        respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        respuesta_infile_dgi.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                        respuesta_recepciondte_infile.setPdf_path(null);
+                        respuesta_recepciondte_infile.setAdendas(null);
+                    }
+                } catch(Exception ex) {
+                    SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                    List<String> observaciones = new ArrayList<>();
+                    observaciones.add(respuesta_infile);
+
+                    respuesta_recepciondte_infile = new RESPUESTA_RECEPCIONDTE_INFILE();
+                    respuesta_recepciondte_infile.setOk(false);
+                    respuesta_recepciondte_infile.setMensaje("Erros en el proceso para deserializar la respuesta INFILE.");
+
+                    Errores_INFILE errores_infile = new Errores_INFILE();
+                    errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setVersion(2);
+                    errores_infile.setAmbiente("00");
+                    errores_infile.setVersionApp(2);
+                    errores_infile.setEstado("RECHAZADO");
+                    errores_infile.setCodigoGeneracion(dte_nd_v3.getIdentificacion().getCodigoGeneracion());
+                    errores_infile.setSelloRecibido(null);
+                    errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    errores_infile.setClasificaMsg("99");
+                    errores_infile.setCodigoMsg("999");
+                    errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                    respuesta_recepciondte_infile.setRespuesta(null);
+
+                    Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                    respuesta_infile_dgi.setVersion(2);
+                    respuesta_infile_dgi.setAmbiente("00");
+                    respuesta_infile_dgi.setVersionApp(2);
+                    respuesta_infile_dgi.setEstado("RECHAZADO");
+                    respuesta_infile_dgi.setCodigoGeneracion(dte_nd_v3.getIdentificacion().getCodigoGeneracion());
+                    respuesta_infile_dgi.setSelloRecibido(null);
+                    respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    respuesta_infile_dgi.setClasificaMsg("99");
+                    respuesta_infile_dgi.setCodigoMsg("999");
+                    respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    respuesta_infile_dgi.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                    respuesta_recepciondte_infile.setPdf_path(null);
+                    respuesta_recepciondte_infile.setAdendas(null);
+                }
+                ctrl_dte_nd_v3.registro_db_respuesta_infile(ambiente, respuesta_recepciondte_infile, id_dte);
+                driver.guardar_en_archivo(ambiente, id_dte, "nd", "RESPUESTA-DTE-INFILE:: " + new Gson().toJson(respuesta_recepciondte_infile));
+            }
+
+            if(tipo_dte.equals("fex")) {
+                Ctrl_DTE_FEX_V3 ctrl_dte_fex_v3 = new Ctrl_DTE_FEX_V3();
+                DTE_FEX_V3 dte_fex_v3 = ctrl_dte_fex_v3.generar_json_dte_fex_v3(ambiente, id_dte);
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                driver.guardar_en_archivo(ambiente, id_dte, "fex", "JSON:: " + gson.toJson(dte_fex_v3));
+                driver.guardar_en_archivo_json(ambiente, id_dte, "fex", gson.toJson(dte_fex_v3));
+                
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
+                Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_fex_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-FEX-" + id_dte, gson.toJson(dte_fex_v3));
+                RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
+                try {
+                    Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
+                    }.getType();
+                    respuesta_recepciondte_infile = new Gson().fromJson(respuesta_infile, listType2);
+                    respuesta_infile = respuesta_infile.replaceAll("\'","");
+
+                    if(!respuesta_recepciondte_infile.getOk()) {
+                        SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                        List<String> observaciones = new ArrayList<>();
+                        observaciones.add(respuesta_infile);
+
+                        Errores_INFILE errores_infile = new Errores_INFILE();
+                        errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setVersion(2);
+                        errores_infile.setAmbiente("00");
+                        errores_infile.setVersionApp(2);
+                        errores_infile.setEstado("RECHAZADO");
+                        errores_infile.setCodigoGeneracion(dte_fex_v3.getIdentificacion().getCodigoGeneracion());
+                        errores_infile.setSelloRecibido(null);
+                        errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        errores_infile.setClasificaMsg("99");
+                        errores_infile.setCodigoMsg("999");
+                        errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                        respuesta_recepciondte_infile.setRespuesta(null);
+
+                        Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                        respuesta_infile_dgi.setVersion(2);
+                        respuesta_infile_dgi.setAmbiente("00");
+                        respuesta_infile_dgi.setVersionApp(2);
+                        respuesta_infile_dgi.setEstado("RECHAZADO");
+                        respuesta_infile_dgi.setCodigoGeneracion(dte_fex_v3.getIdentificacion().getCodigoGeneracion());
+                        respuesta_infile_dgi.setSelloRecibido(null);
+                        respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        respuesta_infile_dgi.setClasificaMsg("99");
+                        respuesta_infile_dgi.setCodigoMsg("999");
+                        respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        respuesta_infile_dgi.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                        respuesta_recepciondte_infile.setPdf_path(null);
+                        respuesta_recepciondte_infile.setAdendas(null);
+                    }
+                } catch(Exception ex) {
+                    SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                    List<String> observaciones = new ArrayList<>();
+                    observaciones.add(respuesta_infile);
+
+                    respuesta_recepciondte_infile = new RESPUESTA_RECEPCIONDTE_INFILE();
+                    respuesta_recepciondte_infile.setOk(false);
+                    respuesta_recepciondte_infile.setMensaje("Erros en el proceso para deserializar la respuesta INFILE.");
+
+                    Errores_INFILE errores_infile = new Errores_INFILE();
+                    errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setVersion(2);
+                    errores_infile.setAmbiente("00");
+                    errores_infile.setVersionApp(2);
+                    errores_infile.setEstado("RECHAZADO");
+                    errores_infile.setCodigoGeneracion(dte_fex_v3.getIdentificacion().getCodigoGeneracion());
+                    errores_infile.setSelloRecibido(null);
+                    errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    errores_infile.setClasificaMsg("99");
+                    errores_infile.setCodigoMsg("999");
+                    errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                    respuesta_recepciondte_infile.setRespuesta(null);
+
+                    Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                    respuesta_infile_dgi.setVersion(2);
+                    respuesta_infile_dgi.setAmbiente("00");
+                    respuesta_infile_dgi.setVersionApp(2);
+                    respuesta_infile_dgi.setEstado("RECHAZADO");
+                    respuesta_infile_dgi.setCodigoGeneracion(dte_fex_v3.getIdentificacion().getCodigoGeneracion());
+                    respuesta_infile_dgi.setSelloRecibido(null);
+                    respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    respuesta_infile_dgi.setClasificaMsg("99");
+                    respuesta_infile_dgi.setCodigoMsg("999");
+                    respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    respuesta_infile_dgi.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                    respuesta_recepciondte_infile.setPdf_path(null);
+                    respuesta_recepciondte_infile.setAdendas(null);
+                }
+                ctrl_dte_fex_v3.registro_db_respuesta_infile(ambiente, respuesta_recepciondte_infile, id_dte);
+                driver.guardar_en_archivo(ambiente, id_dte, "fex", "RESPUESTA-DTE-INFILE:: " + new Gson().toJson(respuesta_recepciondte_infile));
+            }
+
+            if(tipo_dte.equals("nr")) {
+                Ctrl_DTE_NR_V3 ctrl_dte_nr_v3 = new Ctrl_DTE_NR_V3();
+                DTE_NR_V3 dte_nr_v3 = ctrl_dte_nr_v3.generar_json_dte_nr_v3(ambiente, id_dte);
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                driver.guardar_en_archivo(ambiente, id_dte, "nr", "JSON:: " + gson.toJson(dte_nr_v3));
+                driver.guardar_en_archivo_json(ambiente, id_dte, "nr", gson.toJson(dte_nr_v3));
+                
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
+                Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_nr_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-NR-" + id_dte, gson.toJson(dte_nr_v3));
+                RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
+                try {
+                    Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
+                    }.getType();
+                    respuesta_recepciondte_infile = new Gson().fromJson(respuesta_infile, listType2);
+                    respuesta_infile = respuesta_infile.replaceAll("\'","");
+
+                    if(!respuesta_recepciondte_infile.getOk()) {
+                        SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                        List<String> observaciones = new ArrayList<>();
+                        observaciones.add(respuesta_infile);
+
+                        Errores_INFILE errores_infile = new Errores_INFILE();
+                        errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setVersion(2);
+                        errores_infile.setAmbiente("00");
+                        errores_infile.setVersionApp(2);
+                        errores_infile.setEstado("RECHAZADO");
+                        errores_infile.setCodigoGeneracion(dte_nr_v3.getIdentificacion().getCodigoGeneracion());
+                        errores_infile.setSelloRecibido(null);
+                        errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        errores_infile.setClasificaMsg("99");
+                        errores_infile.setCodigoMsg("999");
+                        errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                        respuesta_recepciondte_infile.setRespuesta(null);
+
+                        Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                        respuesta_infile_dgi.setVersion(2);
+                        respuesta_infile_dgi.setAmbiente("00");
+                        respuesta_infile_dgi.setVersionApp(2);
+                        respuesta_infile_dgi.setEstado("RECHAZADO");
+                        respuesta_infile_dgi.setCodigoGeneracion(dte_nr_v3.getIdentificacion().getCodigoGeneracion());
+                        respuesta_infile_dgi.setSelloRecibido(null);
+                        respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        respuesta_infile_dgi.setClasificaMsg("99");
+                        respuesta_infile_dgi.setCodigoMsg("999");
+                        respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        respuesta_infile_dgi.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                        respuesta_recepciondte_infile.setPdf_path(null);
+                        respuesta_recepciondte_infile.setAdendas(null);
+                    }
+                } catch(Exception ex) {
+                    SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                    List<String> observaciones = new ArrayList<>();
+                    observaciones.add(respuesta_infile);
+
+                    respuesta_recepciondte_infile = new RESPUESTA_RECEPCIONDTE_INFILE();
+                    respuesta_recepciondte_infile.setOk(false);
+                    respuesta_recepciondte_infile.setMensaje("Erros en el proceso para deserializar la respuesta INFILE.");
+
+                    Errores_INFILE errores_infile = new Errores_INFILE();
+                    errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setVersion(2);
+                    errores_infile.setAmbiente("00");
+                    errores_infile.setVersionApp(2);
+                    errores_infile.setEstado("RECHAZADO");
+                    errores_infile.setCodigoGeneracion(dte_nr_v3.getIdentificacion().getCodigoGeneracion());
+                    errores_infile.setSelloRecibido(null);
+                    errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    errores_infile.setClasificaMsg("99");
+                    errores_infile.setCodigoMsg("999");
+                    errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                    respuesta_recepciondte_infile.setRespuesta(null);
+
+                    Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                    respuesta_infile_dgi.setVersion(2);
+                    respuesta_infile_dgi.setAmbiente("00");
+                    respuesta_infile_dgi.setVersionApp(2);
+                    respuesta_infile_dgi.setEstado("RECHAZADO");
+                    respuesta_infile_dgi.setCodigoGeneracion(dte_nr_v3.getIdentificacion().getCodigoGeneracion());
+                    respuesta_infile_dgi.setSelloRecibido(null);
+                    respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    respuesta_infile_dgi.setClasificaMsg("99");
+                    respuesta_infile_dgi.setCodigoMsg("999");
+                    respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    respuesta_infile_dgi.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                    respuesta_recepciondte_infile.setPdf_path(null);
+                    respuesta_recepciondte_infile.setAdendas(null);
+                }
+                ctrl_dte_nr_v3.registro_db_respuesta_infile(ambiente, respuesta_recepciondte_infile, id_dte);
+                driver.guardar_en_archivo(ambiente, id_dte, "nr", "RESPUESTA-DTE-INFILE:: " + new Gson().toJson(respuesta_recepciondte_infile));
+            }
+
+            if(tipo_dte.equals("cr")) {
+                Ctrl_DTE_CR_V3 ctrl_dte_cr_v3 = new Ctrl_DTE_CR_V3();
+                DTE_CR_V3 dte_cr_v3 = ctrl_dte_cr_v3.generar_json_dte_cr_v3(ambiente, id_dte);
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                driver.guardar_en_archivo(ambiente, id_dte, "cr", "JSON:: " + gson.toJson(dte_cr_v3));
+                driver.guardar_en_archivo_json(ambiente, id_dte, "cr", gson.toJson(dte_cr_v3));
+                
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
+                Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_cr_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-CR-" + id_dte, gson.toJson(dte_cr_v3));
+                RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
+                try {
+                    Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
+                    }.getType();
+                    respuesta_recepciondte_infile = new Gson().fromJson(respuesta_infile, listType2);
+                    respuesta_infile = respuesta_infile.replaceAll("\'","");
+
+                    if(!respuesta_recepciondte_infile.getOk()) {
+                        SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                        List<String> observaciones = new ArrayList<>();
+                        observaciones.add(respuesta_infile);
+
+                        Errores_INFILE errores_infile = new Errores_INFILE();
+                        errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setVersion(2);
+                        errores_infile.setAmbiente("00");
+                        errores_infile.setVersionApp(2);
+                        errores_infile.setEstado("RECHAZADO");
+                        errores_infile.setCodigoGeneracion(dte_cr_v3.getIdentificacion().getCodigoGeneracion());
+                        errores_infile.setSelloRecibido(null);
+                        errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        errores_infile.setClasificaMsg("99");
+                        errores_infile.setCodigoMsg("999");
+                        errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                        respuesta_recepciondte_infile.setRespuesta(null);
+
+                        Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                        respuesta_infile_dgi.setVersion(2);
+                        respuesta_infile_dgi.setAmbiente("00");
+                        respuesta_infile_dgi.setVersionApp(2);
+                        respuesta_infile_dgi.setEstado("RECHAZADO");
+                        respuesta_infile_dgi.setCodigoGeneracion(dte_cr_v3.getIdentificacion().getCodigoGeneracion());
+                        respuesta_infile_dgi.setSelloRecibido(null);
+                        respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        respuesta_infile_dgi.setClasificaMsg("99");
+                        respuesta_infile_dgi.setCodigoMsg("999");
+                        respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        respuesta_infile_dgi.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                        respuesta_recepciondte_infile.setPdf_path(null);
+                        respuesta_recepciondte_infile.setAdendas(null);
+                    }
+                } catch(Exception ex) {
+                    SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                    List<String> observaciones = new ArrayList<>();
+                    observaciones.add(respuesta_infile);
+
+                    respuesta_recepciondte_infile = new RESPUESTA_RECEPCIONDTE_INFILE();
+                    respuesta_recepciondte_infile.setOk(false);
+                    respuesta_recepciondte_infile.setMensaje("Erros en el proceso para deserializar la respuesta INFILE.");
+
+                    Errores_INFILE errores_infile = new Errores_INFILE();
+                    errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setVersion(2);
+                    errores_infile.setAmbiente("00");
+                    errores_infile.setVersionApp(2);
+                    errores_infile.setEstado("RECHAZADO");
+                    errores_infile.setCodigoGeneracion(dte_cr_v3.getIdentificacion().getCodigoGeneracion());
+                    errores_infile.setSelloRecibido(null);
+                    errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    errores_infile.setClasificaMsg("99");
+                    errores_infile.setCodigoMsg("999");
+                    errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                    respuesta_recepciondte_infile.setRespuesta(null);
+
+                    Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                    respuesta_infile_dgi.setVersion(2);
+                    respuesta_infile_dgi.setAmbiente("00");
+                    respuesta_infile_dgi.setVersionApp(2);
+                    respuesta_infile_dgi.setEstado("RECHAZADO");
+                    respuesta_infile_dgi.setCodigoGeneracion(dte_cr_v3.getIdentificacion().getCodigoGeneracion());
+                    respuesta_infile_dgi.setSelloRecibido(null);
+                    respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    respuesta_infile_dgi.setClasificaMsg("99");
+                    respuesta_infile_dgi.setCodigoMsg("999");
+                    respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    respuesta_infile_dgi.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                    respuesta_recepciondte_infile.setPdf_path(null);
+                    respuesta_recepciondte_infile.setAdendas(null);
+                }
+                ctrl_dte_cr_v3.registro_db_respuesta_infile(ambiente, respuesta_recepciondte_infile, id_dte);
+                driver.guardar_en_archivo(ambiente, id_dte, "cr", "RESPUESTA-DTE-INFILE:: " + new Gson().toJson(respuesta_recepciondte_infile));
+            }
+
+            if(tipo_dte.equals("fse")) {
+                Ctrl_DTE_FSE_V3 ctrl_dte_fse_v3 = new Ctrl_DTE_FSE_V3();
+                DTE_FSE_V3 dte_fse_v3 = ctrl_dte_fse_v3.generar_json_dte_fse_v3(ambiente, id_dte);
+                Gson gson = new GsonBuilder().serializeNulls().create();
+                driver.guardar_en_archivo(ambiente, id_dte, "fse", "JSON:: " + gson.toJson(dte_fse_v3));
+                driver.guardar_en_archivo_json(ambiente, id_dte, "fse", gson.toJson(dte_fse_v3));
+                
+                String infile_rest_auth_py = "";
+                String infile_rest_auth_pd = "";
+                
+                Ctrl_Archivos ctrl_archivos = new Ctrl_Archivos();
+                List<String> lineas_archivos = ctrl_archivos.lineas_archivo("/FELSV3/config/properties.conf");
+                for (Integer i = 0; i < lineas_archivos.size(); i++) {
+                    String[] param_db = lineas_archivos.get(i).trim().split(":");
+
+                    if (param_db[0].trim().equals("infile_rest_auth_py")) {
+                        infile_rest_auth_py = param_db[1];
+                    }
+                    if (param_db[0].trim().equals("infile_rest_auth_pd")) {
+                        infile_rest_auth_pd = param_db[1];
+                    }
+                }
+                
+                String llave_infile;
+                if (ambiente.equals("PY")) {
+                    llave_infile = infile_rest_auth_py;
+                } else {
+                    llave_infile = infile_rest_auth_pd;
+                }
+
+                Cliente_Rest_INFILE cliente_rest_infile = new Cliente_Rest_INFILE();
+                String respuesta_infile = cliente_rest_infile.certificar_json(ambiente, dte_fse_v3.getEmisor().getNit(), llave_infile, "DTE-" + ambiente + "-FSE-" + id_dte, gson.toJson(dte_fse_v3));
+                RESPUESTA_RECEPCIONDTE_INFILE respuesta_recepciondte_infile;
+                try {
+                    Type listType2 = new TypeToken<RESPUESTA_RECEPCIONDTE_INFILE>() {
+                    }.getType();
+                    respuesta_recepciondte_infile = new Gson().fromJson(respuesta_infile, listType2);
+                    respuesta_infile = respuesta_infile.replaceAll("\'","");
+
+                    if(!respuesta_recepciondte_infile.getOk()) {
+                        SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                        List<String> observaciones = new ArrayList<>();
+                        observaciones.add(respuesta_infile);
+
+                        Errores_INFILE errores_infile = new Errores_INFILE();
+                        errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setVersion(2);
+                        errores_infile.setAmbiente("00");
+                        errores_infile.setVersionApp(2);
+                        errores_infile.setEstado("RECHAZADO");
+                        errores_infile.setCodigoGeneracion(dte_fse_v3.getIdentificacion().getCodigoGeneracion());
+                        errores_infile.setSelloRecibido(null);
+                        errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        errores_infile.setClasificaMsg("99");
+                        errores_infile.setCodigoMsg("999");
+                        errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        errores_infile.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                        respuesta_recepciondte_infile.setRespuesta(null);
+
+                        Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                        respuesta_infile_dgi.setVersion(2);
+                        respuesta_infile_dgi.setAmbiente("00");
+                        respuesta_infile_dgi.setVersionApp(2);
+                        respuesta_infile_dgi.setEstado("RECHAZADO");
+                        respuesta_infile_dgi.setCodigoGeneracion(dte_fse_v3.getIdentificacion().getCodigoGeneracion());
+                        respuesta_infile_dgi.setSelloRecibido(null);
+                        respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                        respuesta_infile_dgi.setClasificaMsg("99");
+                        respuesta_infile_dgi.setCodigoMsg("999");
+                        respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                        respuesta_infile_dgi.setObservaciones(observaciones);
+                        respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                        respuesta_recepciondte_infile.setPdf_path(null);
+                        respuesta_recepciondte_infile.setAdendas(null);
+                    }
+                } catch(Exception ex) {
+                    SimpleDateFormat dateFormat_Infile = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                    List<String> observaciones = new ArrayList<>();
+                    observaciones.add(respuesta_infile);
+
+                    respuesta_recepciondte_infile = new RESPUESTA_RECEPCIONDTE_INFILE();
+                    respuesta_recepciondte_infile.setOk(false);
+                    respuesta_recepciondte_infile.setMensaje("Erros en el proceso para deserializar la respuesta INFILE.");
+
+                    Errores_INFILE errores_infile = new Errores_INFILE();
+                    errores_infile.setError_infile("Erros en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setVersion(2);
+                    errores_infile.setAmbiente("00");
+                    errores_infile.setVersionApp(2);
+                    errores_infile.setEstado("RECHAZADO");
+                    errores_infile.setCodigoGeneracion(dte_fse_v3.getIdentificacion().getCodigoGeneracion());
+                    errores_infile.setSelloRecibido(null);
+                    errores_infile.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    errores_infile.setClasificaMsg("99");
+                    errores_infile.setCodigoMsg("999");
+                    errores_infile.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    errores_infile.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setErrores(errores_infile);
+
+                    respuesta_recepciondte_infile.setRespuesta(null);
+
+                    Respuesta_INFILE_DGI respuesta_infile_dgi = new Respuesta_INFILE_DGI();
+                    respuesta_infile_dgi.setVersion(2);
+                    respuesta_infile_dgi.setAmbiente("00");
+                    respuesta_infile_dgi.setVersionApp(2);
+                    respuesta_infile_dgi.setEstado("RECHAZADO");
+                    respuesta_infile_dgi.setCodigoGeneracion(dte_fse_v3.getIdentificacion().getCodigoGeneracion());
+                    respuesta_infile_dgi.setSelloRecibido(null);
+                    respuesta_infile_dgi.setFhProcesamiento(dateFormat_Infile.format(new Date()));
+                    respuesta_infile_dgi.setClasificaMsg("99");
+                    respuesta_infile_dgi.setCodigoMsg("999");
+                    respuesta_infile_dgi.setDescripcionMsg("Error en el proceso para deserializar la respuesta INFILE.");
+                    respuesta_infile_dgi.setObservaciones(observaciones);
+                    respuesta_recepciondte_infile.setRespuesta_dgi(respuesta_infile_dgi);
+
+                    respuesta_recepciondte_infile.setPdf_path(null);
+                    respuesta_recepciondte_infile.setAdendas(null);
+                }
+                ctrl_dte_fse_v3.registro_db_respuesta_infile(ambiente, respuesta_recepciondte_infile, id_dte);
+                driver.guardar_en_archivo(ambiente, id_dte, "fse", "RESPUESTA-DTE-INFILE:: " + new Gson().toJson(respuesta_recepciondte_infile));
+            }
+
+            resultado = "ID-DTE PROCESADOS: " + id_dte;
+        } catch (Exception ex) {
+            System.out.println("PROYECTO:api-grupoterra-svfel-v3|CLASE:" + this.getClass().getName() + "|METODO:recepciondte_infile()|ERROR:" + ex.toString());
+        }
+
+        return resultado;
+    }
+
 }

@@ -448,7 +448,11 @@ public class Ctrl_DTE_CR_V3 implements Serializable {
                 mensaje_correo.setRecipients(send_to);
                 String send_to_cc = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES F WHERE F.ACTIVO=2 AND F.MCU_JDE='" + MCU_JDE_I + "' AND F.DCTO_JDE='" + DCTO_JDE_I + "'", conn);
                 mensaje_correo.setCc(send_to_cc);
-                mensaje_correo.setSubject("Emisión DTE.");
+                if (ambiente.equals("PY")) {
+                    mensaje_correo.setSubject("PRUEBAS: Emisión DTE.");
+                } else {
+                    mensaje_correo.setSubject("PRODUCCIÓN: Emisión DTE.");
+                }
                 mensaje_correo.setBody(null);
                 // mensaje_correo.setFrom("replegal-unosv@uno-terra.com");
                 mensaje_correo.setFrom("felsv@uno-ca.com");
@@ -503,7 +507,11 @@ public class Ctrl_DTE_CR_V3 implements Serializable {
                 mensaje_correo.setRecipients(send_to);
                 String send_to_cc = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES F WHERE F.ACTIVO=2 AND F.MCU_JDE='" + MCU_JDE_I + "' AND F.DCTO_JDE='" + DCTO_JDE_I + "'", conn);
                 mensaje_correo.setCc(send_to_cc);
-                mensaje_correo.setSubject("Error Emisión DTE.");
+                if (ambiente.equals("PY")) {
+                    mensaje_correo.setSubject("PRUEBAS: Error Emisión DTE.");
+                } else {
+                    mensaje_correo.setSubject("PRODUCCIÓN: Error Emisión DTE.");
+                }
                 mensaje_correo.setBody(null);
                 // mensaje_correo.setFrom("replegal-unosv@uno-terra.com");
                 mensaje_correo.setFrom("felsv@uno-ca.com");
@@ -781,7 +789,11 @@ public class Ctrl_DTE_CR_V3 implements Serializable {
                 mensaje_correo.setRecipients(send_to);
                 String send_to_cc = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES F WHERE F.ACTIVO=2 AND F.MCU_JDE='" + MCU_JDE_I + "' AND F.DCTO_JDE='" + DCTO_JDE_I + "'", conn);
                 mensaje_correo.setCc(send_to_cc);
-                mensaje_correo.setSubject("Emisión DTE.");
+                if (ambiente.equals("PY")) {
+                    mensaje_correo.setSubject("PRUEBAS: Emisión DTE.");
+                } else {
+                    mensaje_correo.setSubject("PRODUCCIÓN: Emisión DTE.");
+                }
                 mensaje_correo.setBody(null);
                 // mensaje_correo.setFrom("replegal-unosv@uno-terra.com");
                 mensaje_correo.setFrom("felsv@uno-ca.com");
@@ -793,12 +805,12 @@ public class Ctrl_DTE_CR_V3 implements Serializable {
                 // System.out.println("Notificación Correo: " + resul_envio_correo);
                 
                 // VALIDA SI HUBO CAMBIO DE DEPOSITO DE IMPRESION.
-                String MCU_JDE_I_CAMBIO = ctrl_base_datos.ObtenerString("SELECT TRIM(F.BIEMCU) FROM " + esquema + ".F5542009@" + dblink + " F WHERE TRIM(F.BIKCOO)='" + KCOO_JDE + "' AND F.BIDOCO=" + DOCO_JDE + " AND F.BIDCT='" + DCT_JDE + "'", conn);
+                /* String MCU_JDE_I_CAMBIO = ctrl_base_datos.ObtenerString("SELECT TRIM(F.BIEMCU) FROM " + esquema + ".F5542009@" + dblink + " F WHERE TRIM(F.BIKCOO)='" + KCOO_JDE + "' AND F.BIDOCO=" + DOCO_JDE + " AND F.BIDCT='" + DCT_JDE + "'", conn);
                 if(MCU_JDE_I_CAMBIO != null) {
                     if(!MCU_JDE_I_CAMBIO.equals("")) {
                         MCU_JDE_I = MCU_JDE_I_CAMBIO;
                     }
-                }
+                } */
 
                 Documento_Impresion documento_impresion = new Documento_Impresion();
                 documento_impresion.setType("NA");
@@ -845,7 +857,11 @@ public class Ctrl_DTE_CR_V3 implements Serializable {
                 mensaje_correo.setRecipients(send_to);
                 String send_to_cc = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES F WHERE F.ACTIVO=2 AND F.MCU_JDE='" + MCU_JDE_I + "' AND F.DCTO_JDE='" + DCTO_JDE_I + "'", conn);
                 mensaje_correo.setCc(send_to_cc);
-                mensaje_correo.setSubject("Error Emisión DTE.");
+                if (ambiente.equals("PY")) {
+                    mensaje_correo.setSubject("PRUEBAS: Error Emisión DTE.");
+                } else {
+                    mensaje_correo.setSubject("PRODUCCIÓN: Error Emisión DTE.");
+                }
                 mensaje_correo.setBody(null);
                 // mensaje_correo.setFrom("replegal-unosv@uno-terra.com");
                 mensaje_correo.setFrom("felsv@uno-ca.com");

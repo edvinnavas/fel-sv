@@ -275,7 +275,11 @@ public class Ctrl_DTE_CONTINGENCIA_V3 implements Serializable {
             mensaje_correo.setRecipients(send_to);
             String send_to_cc = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES_CONTIN F WHERE F.ACTIVO=2", conn);
             mensaje_correo.setCc(send_to_cc);
-            mensaje_correo.setSubject("Contingencia FELSV.");
+            if (ambiente.equals("PY")) {
+                mensaje_correo.setSubject("PRUEBAS: Contingencia FELSV.");
+            } else {
+                mensaje_correo.setSubject("PRODUCCIÓN: Contingencia FELSV.");
+            }
             mensaje_correo.setBody(null);
             // mensaje_correo.setFrom("replegal-unosv@uno-terra.com");
                 mensaje_correo.setFrom("felsv@uno-ca.com");
@@ -443,7 +447,11 @@ public class Ctrl_DTE_CONTINGENCIA_V3 implements Serializable {
             mensaje_correo.setRecipients(send_to);
             String send_to_cc = ctrl_base_datos.ObtenerString("SELECT LISTAGG(TO_CHAR(TRIM(F.CORREO_ELECTRONICO)),', ') WITHIN GROUP (ORDER BY TO_CHAR(TRIM(F.CORREO_ELECTRONICO))) CUENTAS_CORREO FROM NOTIFICACIONES_CONTIN F WHERE F.ACTIVO=2", conn);
             mensaje_correo.setCc(send_to_cc);
-            mensaje_correo.setSubject("Contingencia FELSV.");
+            if (ambiente.equals("PY")) {
+                mensaje_correo.setSubject("PRUEBAS: Contingencia FELSV.");
+            } else {
+                mensaje_correo.setSubject("PRODUCCIÓN: Contingencia FELSV.");
+            }
             mensaje_correo.setBody(null);
             // mensaje_correo.setFrom("replegal-unosv@uno-terra.com");
                 mensaje_correo.setFrom("felsv@uno-ca.com");
