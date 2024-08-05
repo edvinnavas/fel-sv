@@ -795,12 +795,12 @@ public class Ctrl_DTE_NR_V3 implements Serializable {
                 // System.out.println("Notificación Correo: " + resul_envio_correo);
                 
                 // VALIDA SI HUBO CAMBIO DE DEPOSITO DE IMPRESION.
-                /* String MCU_JDE_I_CAMBIO = ctrl_base_datos.ObtenerString("SELECT TRIM(F.BIEMCU) FROM " + esquema + ".F5542009@" + dblink + " F WHERE TRIM(F.BIKCOO)='" + KCOO_JDE + "' AND F.BIDOCO=" + DOCO_JDE + " AND F.BIDCT='" + DCT_JDE + "'", conn);
+                String MCU_JDE_I_CAMBIO = ctrl_base_datos.ObtenerString("SELECT TRIM(F.BIEMCU) FROM " + esquema + ".F5542009@" + dblink + " F WHERE TRIM(F.BIKCOO)='" + KCOO_JDE + "' AND F.BIDOCO=" + DOCO_JDE + " AND F.BIDCT='" + DCT_JDE + "'", conn);
                 if(MCU_JDE_I_CAMBIO != null) {
                     if(!MCU_JDE_I_CAMBIO.equals("")) {
                         MCU_JDE_I = MCU_JDE_I_CAMBIO;
                     }
-                } */
+                }
 
                 Documento_Impresion documento_impresion = new Documento_Impresion();
                 documento_impresion.setType("NA");

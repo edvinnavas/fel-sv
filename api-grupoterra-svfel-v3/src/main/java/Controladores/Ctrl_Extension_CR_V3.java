@@ -60,7 +60,7 @@ public class Ctrl_Extension_CR_V3 implements Serializable {
                 DOCURECIBE = "Sin registro";
             }
 
-            String OBSERVACIONES = "-";
+            String OBSERVACIONES = "Sin registro.";
 
             String cadenasql = "INSERT INTO EXTENSION_CR_V3 ("
                     + "ID_DTE, "
